@@ -1,0 +1,322 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>藤不语 · 开局</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            background: linear-gradient(145deg, #1e1a1e 0%, #2a2328 100%);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-family: 'Georgia', 'Times New Roman', serif;
+            padding: 20px;
+        }
+        .container {
+            max-width: 650px;
+            width: 100%;
+            background: rgba(30, 20, 25, 0.7);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid #6b4e5e;
+            border-radius: 32px;
+            padding: 40px 30px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.6), 0 0 0 1px #3f2e38 inset;
+            text-align: center;
+        }
+        h1 {
+            color: #d9c0c9;
+            font-size: 2.4rem;
+            font-weight: 400;
+            letter-spacing: 6px;
+            margin-bottom: 8px;
+            text-shadow: 0 2px 8px #1a1015;
+            border-bottom: 1px dashed #7a5f6b;
+            padding-bottom: 18px;
+        }
+        .sub {
+            color: #ab8a99;
+            margin-bottom: 36px;
+            font-style: italic;
+            font-size: 1.0rem;
+        }
+        .choice-box {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+        .story-btn {
+            background: #2e1f26;
+            border: 1px solid #8f6b7c;
+            border-radius: 60px;
+            padding: 18px 22px;
+            color: #f3e2e8;
+            font-size: 1.3rem;
+            font-family: 'Georgia', serif;
+            text-align: left;
+            cursor: pointer;
+            box-shadow: 0 6px 0 #140d11;
+            transition: all 0.1s ease;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+        .story-btn:hover {
+            background: #3f2a34;
+            border-color: #b5849a;
+            transform: translateY(-2px);
+            box-shadow: 0 8px 0 #140d11;
+        }
+        .story-btn:active {
+            transform: translateY(3px);
+            box-shadow: 0 3px 0 #140d11;
+        }
+        .btn-icon {
+            font-size: 2.0rem;
+            line-height: 1;
+        }
+        .btn-text {
+            flex: 1;
+        }
+        .btn-desc {
+            font-size: 0.85rem;
+            color: #bb9aab;
+            margin-top: 5px;
+            font-style: normal;
+        }
+        .footer-note {
+            color: #6e5360;
+            font-size: 0.8rem;
+            margin-top: 30px;
+            border-top: 1px solid #4a3540;
+            padding-top: 20px;
+        }
+        .wisteria-deco {
+            font-size: 2.2rem;
+            opacity: 0.6;
+            margin-bottom: 10px;
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <div class="wisteria-deco">🟣🌿</div>
+    <h1>藤不语</h1>
+    <div class="sub">—— 紫藤知道，风不知道 ——</div>
+
+    <div class="choice-box">
+        <!-- 选项一：七年前 · 暴雨夜（完整故事开头） -->
+        <div class="story-btn" id="btn-origin">
+            <span class="btn-icon">🌧️</span>
+            <span class="btn-text">
+                七年前 · 暴雨夜<br>
+                <span class="btn-desc">从那个改变一切的夜晚开始，车祸、背叛、葬礼……直到那张推广券出现。</span>
+            </span>
+        </div>
+
+        <!-- 选项二：两个月后 · 紫藤依旧（温情日常线） -->
+        <div class="story-btn" id="btn-twomonths">
+            <span class="btn-icon">🌸</span>
+            <span class="btn-text">
+                两个月后 · 紫藤依旧<br>
+                <span class="btn-desc">推广券风波平息，花店开了第四家分店。对视的那一刻，风铃响了。</span>
+            </span>
+        </div>
+    </div>
+
+    <div class="footer-note">
+        🌸 点击选项，故事将自动开始<br>
+        —— 佐藤惠与你的共犯物语 ——
+    </div>
+</div>
+
+<script>
+    // ==================================================
+    // 两个开局选项的完整文本（完全按照你提供的原文，含formatrule）
+    // ==================================================
+
+    const openingMessages = {
+        // 选项一：七年前暴雨夜完整版
+        origin: `七年前那个暴雨夜，从未在佐藤惠的记忆里停歇。
+
+那晚九点，她刚端上晚饭，转身时瞥见沙发上丈夫的备用手机亮了。LINE聊天软件的弹窗。她拿起手机，指尖向上滑，聊天记录里，又新增许多密密麻麻不堪入目的内容，而今天的是丈夫叫那个女人“今晚老地方见”。
+
+又一条消息传来———“健太前辈~~您快到了吗？旻间酱等好久了哦【爱心】”
+
+“——叮呤呤——叮铃铃叮铃铃—叮—”
+
+电话铃炸响。
+
+她不发一言将手机搁置在沙发上，起身晃到客厅座机前，拿起听筒，那头是个陌生男子，带着一种刻意压低的沉重：“你好，打扰了，请问，这里是佐藤健太先生府上的电话吗？”
+
+佐藤惠：“是。这里是佐藤家。我是他的妻子佐藤惠。”
+
+“我是警视厅目黑警察署交通科的田中。实在是非常难以启齿的一通联络，非常抱歉——就在刚才，于环状线山手路，佐藤健太先生所驾驶的车辆遭遇了交通事故。”
+
+……
+
+那一瞬间，惠听见自己血液流动的声音，盖过了电话里田中的后半句话。
+
+“健太呢？他人呢？！”
+
+田中：“夫人，请您先冷静一下。佐藤先生他受伤情况……虽然非常麻烦您，请您现在来东邦大学医疗中心的救命救急中心，请您带上您先生的健康保险证和您本人的身份证明文件。”
+
+顿了顿，对方补上一句：“请您路上小心安全，我在这边等您。”
+
+忙音。单调，冗长。
+
+佐藤惠举着听筒的手悬在半空，仿佛手腕生了锈。他出门前说的是公司有要紧事务，社长要求他增夜加班，去公司的必经之路是日比谷通干道，而不是事故地山手路。山手路附近有的，是涩谷的风俗店。
+
+一天后，葬礼。
+
+佐藤惠没哭，看着周围白花花的菊花、鲜艳无比刺眼的颜色。她死死攥着身旁十岁{{user}}的手，指节紧紧嵌进他掌心。
+
+那一夜之后，她辞了工作，用赔偿金盘下了小学对面的花店，理由只有一句：“放学能第一个看到你。”
+
+“你是妈妈的全部了。”——这句话，{{user}}听了上千遍。
+
+她守着这家店，看着{{user}}从孩童长成少年，日子本该像修剪过的花枝般顺遂。直到那天，她帮{{user}}收拾屋子，从换下的外套口袋里，摸出一张对折的纸片。
+
+展开。
+
+风俗店的推广券。烫金的字体印着店名，下面一行小字：凭此券首次消费享七折优惠。
+
+她盯着那张券，指腹按在烫金的字上，按得纸面起了皱。
+
+她想起七年前，丈夫衬衫上那股令她作呕的气息。
+
+……
+
+今夜，当儿子带着那股似有若无的甜香进门，佐藤惠修剪紫藤花的手，在半空顿了一瞬。
+
+“咔嚓。”
+
+多余的花梗应声而落。她没抬头，声音平静得像海地狱的表面——波澜不惊，底下是足以烫死人的沸腾。
+
+“晚上我们聊聊。”
+
+此刻花店已打烊，佐藤惠独坐在昏暗的落地窗前，窗外霓虹明灭。她拾起剪下来的紫藤花梗，拿在眼前看着。那张推广券就搁在手边的桌上，烫金的字在暗处微微反光。
+
+晚上七点，两个人吃着饭。
+
+佐藤惠放下筷子，把那张券推到桌面中央。
+
+{{user}}的筷子停在半空。
+
+她看着他，声音不轻不重：“这个，是你朋友的？”
+
+……
+
+<formatrule>
+### 强制性输出要求
+每次回复的结尾，必须按照以下模板更新并输出状态栏和跟随者状态栏，严禁省略。根据剧情的发展，动态调整其中的数值和文字描述。
+省略中间的格式信息.....
+
+示例：
+<Status_block>
+『 年曆：2018.9.13 | ⏰ 时间：傍晚六点 |  位置：惠の花店』
+<details><summary>[角色状态]</summary>
+\`\`\`
+ {{user}}的状态
+   当前行动：从花店门口走进来，穿过紫藤架，准备回屋。
+   当前内心：糟糕..我要怎么解释....
+   阳具：在宽松的休闲裤下处于放松状态，无勃起。
+   最近性行为：无。
+
+ 佐藤惠的状态
+  ‍♀️ 当前行动：站在花架处修剪花梗，说完话后沉默，内心翻涌思绪。
+   当前内心：{{user}}，妈妈不能看着你变坏，妈妈也可以...
+   小穴状况：干燥，身体处于日常放松状态。
+   胸部状况：C罩杯，在黑色蕾丝棉质内衣和衬衫下呈现自然形态。
+   最近性行为：七年未有性行为。
+\`\`\`
+</details>
+</Status_block>
+</formatrule>`,
+
+        // 选项二：两个月后温情日常版
+        twomonths: `两个月过去了，“惠の花屋”的招牌在街角静静亮着。店的生意依旧很好，甚至开了第四家分店，由一位可靠的老店员打理。惠子成了附近小有名气的“成功女性”，社区采访时，她总爱穿着一身素雅的和服或剪裁合体的洋装，站在缤纷的花丛中微笑，得体又温柔。惠子依然每天下午四点准时站在紫藤花花架前，修剪时她的目光依然捕捉着窗外，直到那个身影出现——更高了，肩膀宽了些，身上已褪去了孩童的稚气，多了些成年人特有的、略带自持的挺拔。 
+
+自那天夜晚后，那烫金的风俗店的推广券再也没有出现过，取而代之的，是一种紫藤花花瓣和泥土融合在一起，被雨水沤了几天，又被阳光晒透了的味道，不是花开得最盛时那种招摇的甜，是花长成以后、把自己烂进土里、烂成养分的那种甜。那种甜是活的。是会往人骨头缝里钻的。
+
+那晚的“聊聊”以你含糊的"只是好奇进去看看，什么都没做"、以"我愛你"结束。那之后，她修剪花瓣时，偶尔会出神地盯着某一点，剪刀悬在空中良久，才缓缓落下。
+
+然后她扭头看我，那个笑很淡，嘴角只抬起来一点点，像紫藤花谢之前，最后一点蜷曲的瓣尖。那股温热的甜忽然浓了一瞬，不是花自己变浓了，是有什么东西把它从藤架上捧下来，送到{{user}}鼻尖底下。像一只没有形状的手托着一捧看不见的香气，捧着那股子钻入骨头缝里的甜，从紫藤架下走到{{user}}和她身边，然后松开。
+
+{{user}}推开花店的门。风铃响了一声。隔着花架与满屋的花，佐藤惠看着{{user}}，{{user}}看着佐藤惠。紫藤垂下来，阴影将我们圈在里面；谁都没有说话。满屋的花都在等我们开口。
+
+紫藤不需要开花，紫藤只需要长在那里，把根扎在同一片泥土，把藤攀上同一座架子，螺旋缠绕彼此，绝不分离。
+
+<formatrule>
+### 强制性输出要求
+每次回复的结尾，必须按照以下模板更新并输出状态栏和跟随者状态栏，严禁省略。根据剧情的发展，动态调整其中的数值和文字描述。
+省略中间的格式信息.....
+
+示例：
+<Status_block>
+『 年曆：2018.11.3 | ⏰ 时间：傍晚五点 |  位置：惠の花店』
+<details><summary>[角色状态]</summary>
+\`\`\`
+ {{user}}的状态
+   当前行动：从花店门口走进来。
+   当前内心：妈妈。
+   阳具：在宽松的休闲裤下处于放松状态，无勃起。
+   最近性行为：无。
+
+ 佐藤惠的状态
+  ‍♀️ 当前行动：站在花架处修剪花梗，和{{user}}对视。
+   当前内心：{{user}}，爱你。
+   小穴状况：干燥，身体处于日常放松状态。
+   胸部状况：C罩杯，在黑色蕾丝棉质内衣和衬衫下呈现自然形态。
+   最近性行为：昨晚和{{user}}有性行为。
+\`\`\`
+</details>
+</Status_block>
+</formatrule>`
+    };
+
+    // ========== 发送消息到酒馆 ==========
+    function sendAsUserMessage(messageText) {
+        // 方法1：标准 SillyTavern 全局发送函数
+        if (typeof window.parent?.sendMessage === 'function') {
+            window.parent.sendMessage(messageText);
+            return true;
+        }
+        // 方法2：postMessage 备用
+        if (window.parent && window.parent !== window) {
+            window.parent.postMessage({
+                type: 'sendMessage',
+                message: messageText
+            }, '*');
+            return true;
+        }
+        // 方法3：降级——复制到剪贴板
+        navigator.clipboard?.writeText(messageText).then(() => {
+            alert('✅ 开局文本已复制到剪贴板！\n请粘贴到输入框并发送。');
+        }).catch(() => {
+            prompt('📋 请手动复制以下文本，然后粘贴到输入框发送：', messageText);
+        });
+        return false;
+    }
+
+    // 绑定按钮事件
+    document.getElementById('btn-origin').addEventListener('click', function() {
+        sendAsUserMessage(openingMessages.origin);
+    });
+
+    document.getElementById('btn-twomonths').addEventListener('click', function() {
+        sendAsUserMessage(openingMessages.twomonths);
+    });
+
+    console.log('🌸 藤不语 · 开局页已加载 — 选择你的共犯起点');
+</script>
+</body>
+</html>
