@@ -1,0 +1,129 @@
+<div id="island-survival-board" class="survival-board-container">
+  <div class="env-status-bar">
+    <div class="env-item"><span class="env-icon">📅</span><span class="env-label">生存天数:</span><span class="env-val" data-path="世界/当前日期">--</span></div>
+    <div class="env-item"><span class="env-icon">🕒</span><span class="env-label">当前时间:</span><span class="env-val" data-path="世界/时间">--</span></div>
+    <div class="env-item"><span class="env-icon">🌤️</span><span class="env-label">荒岛天气:</span><span class="env-val" data-path="世界/天气">--</span></div>
+  </div>
+
+  <div class="cards-grid">
+    
+    <div class="char-card user-card">
+      <div class="char-header">
+        <span class="char-name">{{user}}</span>
+        <span class="char-identity">主角</span>
+      </div>
+      <div class="stats-grid" data-group="主角">
+        <div class="stat-item" data-field="体能"><div class="stat-label">⚡ 体能</div><div class="progress-bar"><div class="progress-fill bar-energy"></div></div><span class="stat-value">--</span></div>
+        <div class="stat-item" data-field="饱食度"><div class="stat-label">🍖 饱食</div><div class="progress-bar"><div class="progress-fill bar-food"></div></div><span class="stat-value">--</span></div>
+        <div class="stat-item" data-field="水分"><div class="stat-label">💧 水分</div><div class="progress-bar"><div class="progress-fill bar-water"></div></div><span class="stat-value">--</span></div>
+        <div class="stat-item" data-field="健康"><div class="stat-label">❤️ 健康</div><div class="progress-bar"><div class="progress-fill bar-health"></div></div><span class="stat-value">--</span></div>
+        <div class="stat-item" data-field="内心紧绷度"><div class="stat-label">🧠 压力</div><div class="progress-bar"><div class="progress-fill bar-stress"></div></div><span class="stat-value">--</span></div>
+        <div class="stat-item" data-field="衣物破损度"><div class="stat-label">👕 破损</div><div class="progress-bar"><div class="progress-fill bar-cloth"></div></div><span class="stat-value">--</span></div>
+        <div class="stat-item" data-field="晒伤程度"><div class="stat-label">☀️ 晒伤</div><div class="progress-bar"><div class="progress-fill bar-burn"></div></div><span class="stat-value">--</span></div>
+        <div class="stat-item" data-field="情绪状态"><div class="stat-label">🎭 情绪</div><span class="stat-badge">--</span></div>
+      </div>
+    </div>
+
+    <div class="char-card female-card">
+      <div class="char-header">
+        <span class="char-name">苏澜</span>
+        <span class="char-identity" style="background: rgba(236, 72, 153, 0.2); color: #f472b6;">母亲</span>
+      </div>
+      <div class="stats-grid" data-group="苏澜">
+        <div class="stat-item" data-field="体能"><div class="stat-label">⚡ 体能</div><div class="progress-bar"><div class="progress-fill bar-energy"></div></div><span class="stat-value">--</span></div>
+        <div class="stat-item" data-field="饱食度"><div class="stat-label">🍖 饱食</div><div class="progress-bar"><div class="progress-fill bar-food"></div></div><span class="stat-value">--</span></div>
+        <div class="stat-item" data-field="水分"><div class="stat-label">💧 水分</div><div class="progress-bar"><div class="progress-fill bar-water"></div></div><span class="stat-value">--</span></div>
+        <div class="stat-item" data-field="健康"><div class="stat-label">❤️ 健康</div><div class="progress-bar"><div class="progress-fill bar-health"></div></div><span class="stat-value">--</span></div>
+        <div class="stat-item" data-field="内心紧绷度"><div class="stat-label">🧠 压力</div><div class="progress-bar"><div class="progress-fill bar-stress"></div></div><span class="stat-value">--</span></div>
+        <div class="stat-item" data-field="衣物破损度"><div class="stat-label">👕 破损</div><div class="progress-bar"><div class="progress-fill bar-cloth"></div></div><span class="stat-value">--</span></div>
+        <div class="stat-item" data-field="晒伤程度"><div class="stat-label">☀️ 晒伤</div><div class="progress-bar"><div class="progress-fill bar-burn"></div></div><span class="stat-value">--</span></div>
+        <div class="stat-item" data-field="情绪状态"><div class="stat-label">🎭 情绪</div><span class="stat-badge">--</span></div>
+      </div>
+    </div>
+
+    <div class="char-card female-card">
+      <div class="char-header">
+        <span class="char-name">周宁</span>
+        <span class="char-identity" style="background: rgba(168, 85, 247, 0.2); color: #c084fc;">姐姐</span>
+      </div>
+      <div class="stats-grid" data-group="周宁">
+        <div class="stat-item" data-field="体能"><div class="stat-label">⚡ 体能</div><div class="progress-bar"><div class="progress-fill bar-energy"></div></div><span class="stat-value">--</span></div>
+        <div class="stat-item" data-field="饱食度"><div class="stat-label">🍖 饱食</div><div class="progress-bar"><div class="progress-fill bar-food"></div></div><span class="stat-value">--</span></div>
+        <div class="stat-item" data-field="水分"><div class="stat-label">💧 水分</div><div class="progress-bar"><div class="progress-fill bar-water"></div></div><span class="stat-value">--</span></div>
+        <div class="stat-item" data-field="健康"><div class="stat-label">❤️ 健康</div><div class="progress-bar"><div class="progress-fill bar-health"></div></div><span class="stat-value">--</span></div>
+        <div class="stat-item" data-field="内心紧绷度"><div class="stat-label">🧠 压力</div><div class="progress-bar"><div class="progress-fill bar-stress"></div></div><span class="stat-value">--</span></div>
+        <div class="stat-item" data-field="衣物破损度"><div class="stat-label">👕 破损</div><div class="progress-bar"><div class="progress-fill bar-cloth"></div></div><span class="stat-value">--</span></div>
+        <div class="stat-item" data-field="晒伤程度"><div class="stat-label">☀️ 晒伤</div><div class="progress-bar"><div class="progress-fill bar-burn"></div></div><span class="stat-value">--</span></div>
+        <div class="stat-item" data-field="情绪状态"><div class="stat-label">🎭 情绪</div><span class="stat-badge">--</span></div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<style>
+  .survival-board-container { font-family: system-ui, -apple-system, sans-serif; background: rgba(20, 25, 35, 0.65) !important; backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px); border: 1px solid rgba(255, 255, 255, 0.08); border-radius: 16px; padding: 14px; margin: 18px auto; max-width: 1000px; color: #f1f5f9; box-shadow: 0 12px 40px rgba(0,0,0,0.6); }
+  .env-status-bar { display: flex; justify-content: space-around; flex-wrap: wrap; gap: 12px; background: rgba(0, 0, 0, 0.4); border-radius: 10px; padding: 8px 16px; margin-bottom: 14px; border: 1px solid rgba(255,255,255,0.03); }
+  .env-item { display: flex; align-items: center; gap: 6px; font-size: 13px; }
+  .env-label { color: #94a3b8; }
+  .env-val { color: #38bdf8; font-weight: bold; }
+  .cards-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(290px, 1fr)); gap: 14px; }
+  .char-card { background: rgba(30, 41, 59, 0.45); border: 1px solid rgba(255, 255, 255, 0.05); border-radius: 12px; padding: 12px 14px; box-shadow: inset 0 1px 0 rgba(255,255,255,0.05); }
+  .user-card { background: rgba(14, 116, 144, 0.12); border-color: rgba(6, 182, 212, 0.2); }
+  .char-header { display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid rgba(255, 255, 255, 0.06); padding-bottom: 8px; margin-bottom: 10px; }
+  .char-name { font-size: 16px; font-weight: 700; color: #ffffff; text-shadow: 0 2px 4px rgba(0,0,0,0.2); }
+  .char-identity { font-size: 11px; font-weight: 600; padding: 2px 8px; background: rgba(6, 182, 212, 0.2); border-radius: 6px; color: #22d3ee; }
+  .stats-grid { display: flex; flex-direction: column; gap: 6px; }
+  .stat-item { display: flex; align-items: center; justify-content: space-between; font-size: 12.5px; height: 22px; }
+  .stat-label { width: 70px; color: #cbd5e1; font-weight: 500; }
+  .progress-bar { flex-grow: 1; height: 7px; background: rgba(0,0,0,0.5); border-radius: 4px; margin: 0 12px; overflow: hidden; border: 1px solid rgba(255,255,255,0.02); }
+  .progress-fill { height: 100%; width: 0%; border-radius: 4px; transition: width 0.4s cubic-bezier(0.4, 0, 0.2, 1); }
+  
+  .bar-energy { background: linear-gradient(90deg, #e11d48, #fb7185); }
+  .bar-food { background: linear-gradient(90deg, #ea580c, #f97316); }
+  .bar-water { background: linear-gradient(90deg, #0284c7, #38bdf8); }
+  .bar-health { background: linear-gradient(90deg, #16a34a, #4ade80); }
+  .bar-stress { background: linear-gradient(90deg, #7c3aed, #a78bfa); }
+  .bar-cloth { background: linear-gradient(90deg, #475569, #94a3b8); }
+  .bar-burn { background: linear-gradient(90deg, #b91c1c, #f87171); }
+
+  .stat-value { width: 28px; text-align: right; font-family: ui-monospace, monospace; font-weight: 600; color: #f1f5f9; }
+  .stat-badge { padding: 2px 8px; border-radius: 6px; font-size: 11.5px; background: rgba(255,255,255,0.08); color: #e2e8f0; border: 1px solid rgba(255,255,255,0.05); font-weight: 500; }
+</style>
+
+<script type="module">
+  function refreshSurvivalBoard() {
+    const currentVars = typeof getAllVariables === 'function' ? getAllVariables() : (window.Mvu?.variables || window.Tavern?.variables || {});
+    
+    document.querySelectorAll('.env-val').forEach(el => {
+      const path = el.dataset.path;
+      if (path && currentVars[path] !== undefined) el.textContent = currentVars[path];
+    });
+
+    ['主角', '苏澜', '周宁'].forEach(groupName => {
+      const targetGrid = document.querySelector(`.stats-grid[data-group="${groupName}"]`);
+      if (!targetGrid) return;
+      
+      targetGrid.querySelectorAll('.stat-item').forEach(row => {
+        const fieldName = row.dataset.field;
+        const targetValue = currentVars[`${groupName}/${fieldName}`];
+        if (targetValue === undefined) return;
+        
+        if (fieldName === '情绪状态') {
+          row.querySelector('.stat-badge').textContent = targetValue;
+        } else {
+          const numericValue = parseInt(targetValue, 10) || 0;
+          const fillBar = row.querySelector('.progress-fill');
+          if (fillBar) fillBar.style.width = numericValue + '%';
+          const textVal = row.querySelector('.stat-value');
+          if (textVal) textVal.textContent = numericValue;
+        }
+      });
+    });
+  }
+
+  document.addEventListener('VARIABLE_UPDATE_ENDED', refreshSurvivalBoard);
+  setInterval(refreshSurvivalBoard, 800);
+  setTimeout(refreshSurvivalBoard, 100);
+</script>
+
