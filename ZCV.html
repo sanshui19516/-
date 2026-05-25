@@ -1,0 +1,164 @@
+<div id="island-survival-board" class="survival-board-container">
+  <div class="env-status-bar">
+    <div class="env-item"><span class="env-icon">📅</span><span class="env-label">生存天数:</span><span class="env-val" id="mvu-world-date">第1天</span></div>
+    <div class="env-item"><span class="env-icon">🕒</span><span class="env-label">当前时间:</span><span class="env-val" id="mvu-world-time">正午</span></div>
+    <div class="env-item"><span class="env-icon">🌤️</span><span class="env-label">荒岛天气:</span><span class="env-val" id="mvu-world-weather">晴朗烈日</span></div>
+  </div>
+
+  <div class="cards-grid">
+    <div class="char-card user-card">
+      <div class="char-header">
+        <span class="char-name" id="mvu-player-name">{{user}}</span>
+        <span class="char-identity">主角</span>
+      </div>
+      <div class="stats-grid">
+        <div class="stat-item"><div class="stat-label">⚡ 体能</div><div class="progress-bar"><div id="bar-user-体能" class="progress-fill bar-energy" style="width: 90%;"></div></div><span id="val-user-体能" class="stat-value">90</span></div>
+        <div class="stat-item"><div class="stat-label">🍖 饱食</div><div class="progress-bar"><div id="bar-user-饱食度" class="progress-fill bar-food" style="width: 75%;"></div></div><span id="val-user-饱食度" class="stat-value">75</span></div>
+        <div class="stat-item"><div class="stat-label">💧 水分</div><div class="progress-bar"><div id="bar-user-水分" class="progress-fill bar-water" style="width: 70%;"></div></div><span id="val-user-水分" class="stat-value">70</span></div>
+        <div class="stat-item"><div class="stat-label">❤️ 健康</div><div class="progress-bar"><div id="bar-user-健康" class="progress-fill bar-health" style="width: 95%;"></div></div><span id="val-user-健康" class="stat-value">95</span></div>
+        <div class="stat-item"><div class="stat-label">🧠 压力</div><div class="progress-bar"><div id="bar-user-内心紧绷度" class="progress-fill bar-stress" style="width: 50%;"></div></div><span id="val-user-内心紧绷度" class="stat-value">50</span></div>
+        <div class="stat-item"><div class="stat-label">👕 破损</div><div class="progress-bar"><div id="bar-user-衣物破损度" class="progress-fill bar-cloth" style="width: 30%;"></div></div><span id="val-user-衣物破损度" class="stat-value">30</span></div>
+        <div class="stat-item"><div class="stat-label">☀️ 晒伤</div><div class="progress-bar"><div id="bar-user-晒伤程度" class="progress-fill bar-burn" style="width: 0%;"></div></div><span id="val-user-晒伤程度" class="stat-value">0</span></div>
+        <div class="stat-item"><div class="stat-label">🎭 情绪</div><span id="badge-user-情绪状态" class="stat-badge">警惕本能</span></div>
+      </div>
+    </div>
+
+    <div class="char-card female-card">
+      <div class="char-header">
+        <span class="char-name">苏澜</span>
+        <span class="char-identity" style="background: rgba(236, 72, 153, 0.2); color: #f472b6;">母亲</span>
+      </div>
+      <div class="stats-grid">
+        <div class="stat-item"><div class="stat-label">⚡ 体能</div><div class="progress-bar"><div id="bar-sulan-体能" class="progress-fill bar-energy" style="width: 30%;"></div></div><span id="val-sulan-体能" class="stat-value">30</span></div>
+        <div class="stat-item"><div class="stat-label">🍖 饱食</div><div class="progress-bar"><div id="bar-sulan-饱食度" class="progress-fill bar-food" style="width: 60%;"></div></div><span id="val-sulan-饱食度" class="stat-value">60</span></div>
+        <div class="stat-item"><div class="stat-label">💧 水分</div><div class="progress-bar"><div id="bar-sulan-水分" class="progress-fill bar-water" style="width: 50%;"></div></div><span id="val-sulan-水分" class="stat-value">50</span></div>
+        <div class="stat-item"><div class="stat-label">❤️ 健康</div><div class="progress-bar"><div id="bar-sulan-健康" class="progress-fill bar-health" style="width: 80%;"></div></div><span id="val-sulan-健康" class="stat-value">80</span></div>
+        <div class="stat-item"><div class="stat-label">🧠 压力</div><div class="progress-bar"><div id="bar-sulan-内心紧绷度" class="progress-fill bar-stress" style="width: 75%;"></div></div><span id="val-sulan-内心紧绷度" class="stat-value">75</span></div>
+        <div class="stat-item"><div class="stat-label">👕 破损</div><div class="progress-bar"><div id="bar-sulan-衣物破损度" class="progress-fill bar-cloth" style="width: 85%;"></div></div><span id="val-sulan-衣物破损度" class="stat-value">85</span></div>
+        <div class="stat-item"><div class="stat-label">☀️ 晒伤</div><div class="progress-bar"><div id="bar-sulan-晒伤程度" class="progress-fill bar-burn" style="width: 5%;"></div></div><span id="val-sulan-晒伤程度" class="stat-value">5</span></div>
+        <div class="stat-item"><div class="stat-label">🎭 情绪</div><span id="badge-sulan-情绪状态" class="stat-badge">昏迷虚弱</span></div>
+      </div>
+    </div>
+
+    <div class="char-card female-card">
+      <div class="char-header">
+        <span class="char-name">周宁</span>
+        <span class="char-identity" style="background: rgba(168, 85, 247, 0.2); color: #c084fc;">姐姐</span>
+      </div>
+      <div class="stats-grid">
+        <div class="stat-item"><div class="stat-label">⚡ 体能</div><div class="progress-bar"><div id="bar-zhouning-体能" class="progress-fill bar-energy" style="width: 35%;"></div></div><span id="val-zhouning-体能" class="stat-value">35</span></div>
+        <div class="stat-item"><div class="stat-label">🍖 饱食</div><div class="progress-bar"><div id="bar-zhouning-饱食度" class="progress-fill bar-food" style="width: 55%;"></div></div><span id="val-zhouning-饱食度" class="stat-value">55</span></div>
+        <div class="stat-item"><div class="stat-label">💧 水分</div><div class="progress-bar"><div id="bar-zhouning-水分" class="progress-fill bar-water" style="width: 45%;"></div></div><span id="val-zhouning-水分" class="stat-value">45</span></div>
+        <div class="stat-item"><div class="stat-label">❤️ 健康</div><div class="progress-bar"><div id="bar-zhouning-健康" class="progress-fill bar-health" style="width: 70%;"></div></div><span id="val-zhouning-健康" class="stat-value">70</span></div>
+        <div class="stat-item"><div class="stat-label">🧠 压力</div><div class="progress-bar"><div id="bar-zhouning-内心紧绷度" class="progress-fill bar-stress" style="width: 85%;"></div></div><span id="val-zhouning-内心紧绷度" class="stat-value">85</span></div>
+        <div class="stat-item"><div class="stat-label">👕 破损</div><div class="progress-bar"><div id="bar-zhouning-衣物破损度" class="progress-fill bar-cloth" style="width: 75%;"></div></div><span id="val-zhouning-衣物破损度" class="stat-value">75</span></div>
+        <div class="stat-item"><div class="stat-label">☀️ 晒伤</div><div class="progress-bar"><div id="bar-zhouning-晒伤程度" class="progress-fill bar-burn" style="width: 10%;"></div></div><span id="val-zhouning-晒伤程度" class="stat-value">10</span></div>
+        <div class="stat-item"><div class="stat-label">🎭 情绪</div><span id="badge-zhouning-情绪状态" class="stat-badge">昏迷紧绷</span></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<style>
+  /* 完美的非悬浮、响应式自适应毛玻璃皮肤（对应你第一张完美的图） */
+  .survival-board-container { font-family: system-ui, -apple-system, sans-serif; background: rgba(20, 25, 35, 0.65) !important; backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px); border: 1px solid rgba(255, 255, 255, 0.08); border-radius: 16px; padding: 14px; margin: 12px auto; max-width: 1000px; color: #f1f5f9; box-shadow: 0 12px 40px rgba(0,0,0,0.6); clear: both; box-sizing: border-box; width: 100%; }
+  .env-status-bar { display: flex; justify-content: space-around; flex-wrap: wrap; gap: 12px; background: rgba(0, 0, 0, 0.4); border-radius: 10px; padding: 8px 16px; margin-bottom: 14px; border: 1px solid rgba(255,255,255,0.03); }
+  .env-item { display: flex; align-items: center; gap: 6px; font-size: 13px; }
+  .env-label { color: #94a3b8; }
+  .env-val { color: #38bdf8; font-weight: bold; }
+  .cards-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(290px, 1fr)); gap: 14px; width: 100%; }
+  .char-card { background: rgba(30, 41, 59, 0.45); border: 1px solid rgba(255, 255, 255, 0.05); border-radius: 12px; padding: 12px 14px; box-shadow: inset 0 1px 0 rgba(255,255,255,0.05); display: block !important; box-sizing: border-box; }
+  .user-card { background: rgba(14, 116, 144, 0.12); border-color: rgba(6, 182, 212, 0.2); }
+  .char-header { display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid rgba(255, 255, 255, 0.06); padding-bottom: 8px; margin-bottom: 10px; }
+  .char-name { font-size: 16px; font-weight: 700; color: #ffffff; text-shadow: 0 2px 4px rgba(0,0,0,0.2); }
+  .char-identity { font-size: 11px; font-weight: 600; padding: 2px 8px; background: rgba(6, 182, 212, 0.2); border-radius: 6px; color: #22d3ee; }
+  .stats-grid { display: flex; flex-direction: column; gap: 6px; width: 100%; }
+  .stat-item { display: flex; align-items: center; justify-content: space-between; font-size: 12.5px; height: 22px; width: 100%; box-sizing: border-box; }
+  .stat-label { width: 65px; min-width: 65px; color: #cbd5e1; font-weight: 500; text-align: left; }
+  .progress-bar { flex-grow: 1; height: 7px; background: rgba(0,0,0,0.5); border-radius: 4px; margin: 0 12px; overflow: hidden; border: 1px solid rgba(255,255,255,0.02); position: relative; }
+  .progress-fill { height: 100%; width: 0%; border-radius: 4px; transition: width 0.3s ease-out; }
+  
+  .bar-energy { background: linear-gradient(90deg, #e11d48, #fb7185); }
+  .bar-food { background: linear-gradient(90deg, #ea580c, #f97316); }
+  .bar-water { background: linear-gradient(90deg, #0284c7, #38bdf8); }
+  .bar-health { background: linear-gradient(90deg, #16a34a, #4ade80); }
+  .bar-stress { background: linear-gradient(90deg, #7c3aed, #a78bfa); }
+  .bar-cloth { background: linear-gradient(90deg, #475569, #94a3b8); }
+  .bar-burn { background: linear-gradient(90deg, #b91c1c, #f87171); }
+
+  .stat-value { width: 28px; min-width: 28px; text-align: right; font-family: ui-monospace, monospace; font-weight: 600; color: #f1f5f9; }
+  .stat-badge { padding: 2px 8px; border-radius: 6px; font-size: 11.5px; background: rgba(255,255,255,0.08); color: #e2e8f0; border: 1px solid rgba(255,255,255,0.05); font-weight: 500; max-width: 90px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; text-align: center; }
+</style>
+
+<script>
+(function() {
+    // 采取原作者绝活：深度提取消隐斜杠与解构引擎
+    function getIslandVariable(vars, keyPath) {
+        if (!vars) return undefined;
+        if (vars[keyPath] !== undefined) return vars[keyPath];
+        if (vars["/" + keyPath] !== undefined) return vars["/" + keyPath];
+        
+        var chunks = keyPath.split('/');
+        if (chunks.length === 2 && vars[chunks[0]]) {
+            return vars[chunks[0]][chunks[1]];
+        }
+        return undefined;
+    }
+
+    // 采取原作者绝活：穿透酒馆底层抓真名
+    function fixUserRealName() {
+        try {
+            var myName = window.SillyTavern?.context?.user_name || window.user_name || "";
+            if (!myName || myName === "{{user}}") {
+                myName = document.getElementById('name_text')?.value || jQuery("#user_name").val() || jQuery(".user_name_text").text() || "主角";
+            }
+            jQuery("#mvu-player-name").text(myName);
+        } catch(e) {}
+    }
+
+    function syncIslandBoard() {
+        fixUserRealName();
+        
+        // 全通道路径捕捉酒馆大变量池
+        var pool = typeof getAllVariables === 'function' ? getAllVariables() : (window.Mvu?.variables || window.SillyTavern?.variables || window.Tavern?.variables || {});
+        
+        // 1. 世界变量独立同步与原作者同款初始默认值兜底
+        jQuery("#mvu-world-date").text(getIslandVariable(pool, "世界/当前日期") || "第1天");
+        jQuery("#mvu-world-time").text(getIslandVariable(pool, "世界/时间") || "正午");
+        jQuery("#mvu-world-weather").text(getIslandVariable(pool, "世界/天气") || "晴朗烈日");
+
+        // 2. 三位角色并列独立戳 ID 更新（借鉴原作者独立解耦逻辑，绝不发生中断死锁）
+        var groups = ['主角', '苏澜', '周宁'];
+        var idKeys = { '主角': 'user', '苏澜': 'sulan', '周宁': 'zhouning' };
+        var fields = ['体能', '饱食度', '水分', '健康', '内心紧绷度', '衣物破损度', '晒伤程度'];
+
+        groups.forEach(function(g) {
+            var k = idKeys[g];
+            
+            // 循环处理进度条数值
+            fields.forEach(function(f) {
+                var rawVal = getIslandVariable(pool, g + "/" + f);
+                if (rawVal !== undefined && rawVal !== null && rawVal !== '') {
+                    var num = parseInt(rawVal, 10);
+                    if (!isNaN(num)) {
+                        jQuery("#bar-" + k + "-" + f).css("width", num + "%");
+                        jQuery("#val-" + k + "-" + f).text(num);
+                    }
+                }
+            });
+
+            // 独立处理情绪文字标签
+            var emo = getIslandVariable(pool, g + "/情绪状态");
+            if (emo !== undefined && emo !== null && emo !== '') {
+                jQuery("#badge-" + k + "-情绪状态").text(emo);
+            }
+        });
+    }
+
+    // 采取原作者双保险触发引擎机制
+    document.addEventListener('VARIABLE_UPDATE_ENDED', syncIslandBoard);
+    setInterval(syncIslandBoard, 500);
+    syncIslandBoard();
+})();
+</script>
+
