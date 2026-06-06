@@ -1,0 +1,1236 @@
+<head>
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+    <style>
+
+        * {
+
+            margin: 0;
+
+            padding: 0;
+
+            box-sizing: border-box;
+
+        }
+
+
+
+        :root {
+
+            --sand-light: #d4c5a9;
+
+            --sand-dark: #aa9e85;
+
+            --ocean: #3a7ca5;
+
+            --ocean-light: #5a9fc9;
+
+            --wood: #8b6946;
+
+            --wood-light: #a8855e;
+
+            --leaf: #6b8c5c;
+
+            --leaf-light: #8aac79;
+
+            --danger: #c45a3b;
+
+            --text-dark: #2c2520;
+
+            --text-light: #e8e2d6;
+
+            --bg-glass: rgba(42, 38, 32, 0.75);
+
+            --card-bg: rgba(58, 52, 46, 0.7);
+
+        }
+
+
+
+        /* 根容器：防止溢出 */
+
+        body {
+
+            font-family: system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+
+            background: transparent;
+
+            margin: 0;
+
+            padding: 8px;
+
+            width: 100%;
+
+            max-width: 100vw;
+
+            overflow-x: hidden;
+
+            box-sizing: border-box;
+
+        }
+
+
+
+        /* 主面板容器：不超出屏幕 */
+
+        .survival-dashboard {
+
+            width: 100%;
+
+            max-width: 100%;
+
+            margin: 0 auto;
+
+            background: var(--bg-glass);
+
+            backdrop-filter: blur(12px);
+
+            border-radius: 24px;
+
+            border: 1px solid rgba(212, 197, 169, 0.3);
+
+            box-shadow: 0 12px 28px rgba(0, 0, 0, 0.4);
+
+            overflow-x: hidden;  /* 防止内部元素溢出 */
+
+            box-sizing: border-box;
+
+        }
+
+
+
+        /* 可折叠头部 */
+
+        .dashboard-header {
+
+            display: flex;
+
+            justify-content: space-between;
+
+            align-items: center;
+
+            padding: 12px 16px;
+
+            background: linear-gradient(135deg, var(--wood) 0%, var(--ocean) 100%);
+
+            cursor: pointer;
+
+            flex-wrap: wrap;
+
+            gap: 8px;
+
+        }
+
+
+
+        .header-title {
+
+            display: flex;
+
+            flex-wrap: wrap;
+
+            align-items: baseline;
+
+            gap: 6px;
+
+            flex: 1;
+
+            min-width: 0; /* 防止溢出 */
+
+        }
+
+
+
+        .title-text {
+
+            font-size: clamp(0.9rem, 5vw, 1.3rem);
+
+            font-weight: 700;
+
+            color: white;
+
+            white-space: nowrap;
+
+        }
+
+
+
+        .title-date {
+
+            font-size: 0.65rem;
+
+            color: var(--sand-light);
+
+            background: rgba(0, 0, 0, 0.4);
+
+            padding: 2px 6px;
+
+            border-radius: 20px;
+
+            white-space: nowrap;
+
+        }
+
+
+
+        .toggle-icon {
+
+            font-size: 1.2rem;
+
+            color: white;
+
+            transition: transform 0.3s;
+
+            flex-shrink: 0;
+
+        }
+
+
+
+        /* 折叠动画 */
+
+        .dashboard-header.collapsed .toggle-icon {
+
+            transform: rotate(-90deg);
+
+        }
+
+        .dashboard-content {
+
+            max-height: 10000px;
+
+            opacity: 1;
+
+            overflow: hidden;
+
+            transition: max-height 0.4s, opacity 0.2s, padding 0.2s;
+
+            padding: 12px;
+
+        }
+
+        .dashboard-content.collapsed {
+
+            max-height: 0;
+
+            opacity: 0;
+
+            padding: 0 12px;
+
+        }
+
+
+
+        /* 角色网格：默认单列，平板双列，电脑三列 */
+
+        .survival-grid {
+
+            display: grid;
+
+            grid-template-columns: 1fr;
+
+            gap: 12px;
+
+            margin-bottom: 16px;
+
+        }
+
+        @media (min-width: 600px) {
+
+            .survival-grid {
+
+                grid-template-columns: repeat(2, 1fr);
+
+            }
+
+        }
+
+        @media (min-width: 900px) {
+
+            .survival-grid {
+
+                grid-template-columns: repeat(3, 1fr);
+
+            }
+
+        }
+
+
+
+        /* 卡片样式 */
+
+        .survivor-card {
+
+            background: var(--card-bg);
+
+            backdrop-filter: blur(4px);
+
+            border-radius: 20px;
+
+            border: 1px solid rgba(212, 197, 169, 0.25);
+
+            overflow: hidden;
+
+            width: 100%;
+
+        }
+
+
+
+        .card-header {
+
+            display: flex;
+
+            align-items: center;
+
+            gap: 10px;
+
+            padding: 10px 12px;
+
+            border-bottom: 1px solid rgba(212, 197, 169, 0.2);
+
+            flex-wrap: wrap;
+
+        }
+
+
+
+        .avatar {
+
+            width: 44px;
+
+            height: 44px;
+
+            border-radius: 14px;
+
+            object-fit: cover;
+
+            border: 2px solid var(--sand-light);
+
+            flex-shrink: 0;
+
+        }
+
+
+
+        .name-badge {
+
+            flex: 1;
+
+            min-width: 80px;
+
+        }
+
+
+
+        .character-name {
+
+            font-size: 1rem;
+
+            font-weight: 700;
+
+            color: var(--sand-light);
+
+            word-break: keep-all;
+
+        }
+
+
+
+        .character-tag {
+
+            font-size: 0.6rem;
+
+            color: var(--text-light);
+
+            opacity: 0.8;
+
+        }
+
+
+
+        .emotion-badge {
+
+            background: rgba(0,0,0,0.5);
+
+            padding: 4px 8px;
+
+            border-radius: 40px;
+
+            font-size: 0.65rem;
+
+            text-align: center;
+
+            color: var(--text-light);
+
+            white-space: nowrap;
+
+        }
+
+
+
+        /* 数据区 */
+
+        .stats-area {
+
+            padding: 10px 12px;
+
+            display: flex;
+
+            flex-direction: column;
+
+            gap: 8px;
+
+        }
+
+
+
+        .stat-row {
+
+            display: flex;
+
+            align-items: center;
+
+            gap: 6px;
+
+            flex-wrap: wrap;
+
+        }
+
+
+
+        .stat-label {
+
+            width: 52px;
+
+            font-size: 0.65rem;
+
+            font-weight: 500;
+
+            color: var(--sand-light);
+
+            flex-shrink: 0;
+
+        }
+
+
+
+        .stat-bar-container {
+
+            flex: 1;
+
+            height: 5px;
+
+            background: rgba(0,0,0,0.5);
+
+            border-radius: 10px;
+
+            overflow: hidden;
+
+            min-width: 60px;
+
+        }
+
+
+
+        .stat-bar {
+
+            height: 100%;
+
+            width: 0%;
+
+            border-radius: 10px;
+
+            transition: width 0.3s;
+
+        }
+
+
+
+        .stat-value {
+
+            min-width: 28px;
+
+            text-align: right;
+
+            font-family: monospace;
+
+            font-size: 0.65rem;
+
+            font-weight: 600;
+
+            color: var(--text-light);
+
+        }
+
+
+
+        /* 进度条颜色 */
+
+        .bar-energy { background: linear-gradient(90deg, #e67e22, #f39c12); }
+
+        .bar-food { background: linear-gradient(90deg, #27ae60, #2ecc71); }
+
+        .bar-water { background: linear-gradient(90deg, #2980b9, #3498db); }
+
+        .bar-health { background: linear-gradient(90deg, #c0392b, #e74c3c); }
+
+        .bar-stress { background: linear-gradient(90deg, #8e44ad, #9b59b6); }
+
+        .bar-cloth { background: linear-gradient(90deg, #7f8c8d, #95a5a6); }
+
+        .bar-burn { background: linear-gradient(90deg, #d35400, #e67e22); }
+
+        .bar-lust { background: linear-gradient(90deg, #f472b6, #ec4899); }
+
+        .bar-moral { background: linear-gradient(90deg, #34d399, #10b981); }
+
+
+
+        /* 内心话 */
+
+        .inner-thought-row {
+
+            display: flex;
+
+            align-items: center;
+
+            gap: 6px;
+
+            background: rgba(0,0,0,0.2);
+
+            border-radius: 14px;
+
+            padding: 5px 8px;
+
+            margin-top: 6px;
+
+        }
+
+        .inner-thought-label {
+
+            width: 50px;
+
+            font-size: 0.6rem;
+
+            font-weight: 500;
+
+            color: #facc15;
+
+        }
+
+        .inner-thought-text {
+
+            flex: 1;
+
+            font-size: 0.65rem;
+
+            color: #e8e2d6;
+
+            font-style: italic;
+
+            word-break: break-word;
+
+        }
+
+
+
+        /* 背包 */
+
+        .backpack-section {
+
+            margin-top: 8px;
+
+            background: rgba(0,0,0,0.25);
+
+            border-radius: 18px;
+
+            padding: 10px 12px;
+
+        }
+
+        .backpack-title {
+
+            font-size: 0.8rem;
+
+            font-weight: 600;
+
+            color: var(--sand-light);
+
+            margin-bottom: 8px;
+
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+
+            padding-bottom: 4px;
+
+        }
+
+        .backpack-items {
+
+            display: flex;
+
+            flex-wrap: wrap;
+
+            gap: 6px;
+
+        }
+
+        .backpack-item {
+
+            background: rgba(42,38,32,0.7);
+
+            border-radius: 30px;
+
+            padding: 2px 8px;
+
+            font-size: 0.65rem;
+
+            color: #e8e2d6;
+
+            white-space: nowrap;
+
+        }
+
+        .backpack-empty {
+
+            color: #94a3b8;
+
+            font-size: 0.7rem;
+
+        }
+
+
+
+        /* 警告闪烁 */
+
+        .stat-row.alert .stat-bar {
+
+            background: #ff3333 !important;
+
+            animation: alertBlink 0.6s infinite;
+
+        }
+
+        @keyframes alertBlink {
+
+            0% { filter: brightness(1); }
+
+            50% { filter: brightness(1.3); }
+
+            100% { filter: brightness(1); }
+
+        }
+
+
+
+        /* 防止任何溢出 */
+
+        img, div, span, .stats-area, .card-header {
+
+            max-width: 100%;
+
+            overflow-wrap: break-word;
+
+        }
+
+
+
+        /* 手机端进一步收缩 */
+
+        @media (max-width: 480px) {
+
+            body {
+
+                padding: 4px;
+
+            }
+
+            .stat-label {
+
+                width: 48px;
+
+                font-size: 0.6rem;
+
+            }
+
+            .stat-value {
+
+                min-width: 24px;
+
+                font-size: 0.6rem;
+
+            }
+
+            .emotion-badge {
+
+                font-size: 0.55rem;
+
+                padding: 3px 6px;
+
+            }
+
+            .title-date {
+
+                font-size: 0.55rem;
+
+            }
+
+            .avatar {
+
+                width: 38px;
+
+                height: 38px;
+
+            }
+
+            .character-name {
+
+                font-size: 0.9rem;
+
+            }
+
+            .backpack-item {
+
+                font-size: 0.6rem;
+
+            }
+
+        }
+
+    </style>
+
+
+
+    <script type="module">
+
+        $(function() {
+
+            function safeValue(obj, path, def = 0) {
+
+                const val = _.get(obj, path, def);
+
+                return (val !== undefined && val !== null) ? val : def;
+
+            }
+
+
+
+            function getItemIcon(itemName) {
+
+                const name = itemName.toLowerCase();
+
+                if (name.includes('鱼') || name.includes('烤鱼')) return '🐟';
+
+                if (name.includes('椰')) return '🥥';
+
+                if (name.includes('水') || name.includes('淡水')) return '💧';
+
+                if (name.includes('蟹') || name.includes('螃蟹')) return '🦀';
+
+                if (name.includes('贝')) return '🐚';
+
+                if (name.includes('果')) return '🥥';
+
+                if (name.includes('肉')) return '🍖';
+
+                return '📦';
+
+            }
+
+
+
+            function renderBackpack(backpack) {
+
+                const $container = $('#backpack-items');
+
+                if (!$container.length) return;
+
+                if (!backpack || Object.keys(backpack).length === 0) {
+
+                    $container.html('<div class="backpack-empty">暂无物品</div>');
+
+                    return;
+
+                }
+
+                let html = '';
+
+                for (const [item, qty] of Object.entries(backpack)) {
+
+                    const icon = getItemIcon(item);
+
+                    html += `<span class="backpack-item">${icon} ${item}: ${qty}</span>`;
+
+                }
+
+                $container.html(html);
+
+            }
+
+
+
+            function updateDashboard() {
+
+                try {
+
+                    const allVars = typeof getAllVariables === 'function' ? getAllVariables() : {};
+
+                    const statData = _.get(allVars, 'stat_data', {});
+
+                    
+
+                    const world = _.get(statData, '世界', {});
+
+                    $('#mvu-world-date').text(safeValue(world, '当前日期', '第1天'));
+
+                    $('#mvu-world-time').text(safeValue(world, '时间', '正午'));
+
+                    $('#mvu-world-weather').text(safeValue(world, '天气', '晴朗烈日'));
+
+                    $('#mvu-world-location').text(safeValue(world, '地点', '沙滩'));
+
+                    
+
+                    let userName = _.get(statData, 'user.姓名', '');
+
+                    if (!userName || userName === '') {
+
+                        userName = window.SillyTavern?.context?.user_name || window.user_name || '{{user}}';
+
+                    }
+
+                    if (userName && $('#user-name').text() !== userName) {
+
+                        $('#user-name').text(userName);
+
+                    }
+
+                    
+
+                    // 头像支持
+
+                    const avatarUrl = _.get(statData, 'user.头像', null);
+
+                    if (avatarUrl) {
+
+                        $('#avatar-user').attr('src', avatarUrl);
+
+                    }
+
+                    
+
+                    const roles = [
+
+                        { key: 'user', nameKey: 'user', avatarId: 'avatar-user', nameId: 'user-name', emotionId: 'user-emotion' },
+
+                        { key: '苏澜', nameKey: '苏澜', avatarId: 'avatar-sulan', nameId: 'sulan-name', emotionId: 'sulan-emotion' },
+
+                        { key: '周宁', nameKey: '周宁', avatarId: 'avatar-zhouning', nameId: 'zhouning-name', emotionId: 'zhouning-emotion' }
+
+                    ];
+
+                    
+
+                    const survivalFields = ['体能', '饱食度', '水分', '健康', '内心紧绷度', '衣物破损度', '晒伤程度'];
+
+                    const positiveFields = ['体能', '饱食度', '水分', '健康'];
+
+                    const negativeFields = ['内心紧绷度', '晒伤程度'];
+
+                    
+
+                    roles.forEach(role => {
+
+                        const roleData = _.get(statData, role.key, {});
+
+                        const emotion = safeValue(roleData, '情绪状态', '');
+
+                        if (emotion) $(`#${role.emotionId}`).text(emotion);
+
+                        
+
+                        survivalFields.forEach(field => {
+
+                            let val = safeValue(roleData, field, null);
+
+                            if (val !== null && val !== undefined && val !== '') {
+
+                                const num = Number(val);
+
+                                if (!isNaN(num)) {
+
+                                    const percent = Math.min(100, Math.max(0, num));
+
+                                    let barId, valId;
+
+                                    if (role.key === 'user') {
+
+                                        barId = `#bar-user-${field}`;
+
+                                        valId = `#val-user-${field}`;
+
+                                    } else {
+
+                                        barId = `#bar-${role.key}-${field}`;
+
+                                        valId = `#val-${role.key}-${field}`;
+
+                                    }
+
+                                    $(barId).css('width', `${percent}%`);
+
+                                    $(valId).text(Math.floor(num));
+
+                                    
+
+                                    const $row = $(barId).closest('.stat-row');
+
+                                    let isAlert = false;
+
+                                    if (positiveFields.includes(field)) {
+
+                                        isAlert = num <= 10;
+
+                                    } else if (negativeFields.includes(field)) {
+
+                                        isAlert = num >= 90;
+
+                                    }
+
+                                    if (field !== '衣物破损度') {
+
+                                        $row.toggleClass('alert', isAlert);
+
+                                    } else {
+
+                                        $row.removeClass('alert');
+
+                                    }
+
+                                }
+
+                            }
+
+                        });
+
+                        
+
+                        let lust = safeValue(roleData, '情欲值', 0);
+
+                        lust = Math.min(100, Math.max(0, Number(lust)));
+
+                        let lustBarId, lustValId;
+
+                        if (role.key === 'user') {
+
+                            lustBarId = '#bar-user-情欲值';
+
+                            lustValId = '#val-user-情欲值';
+
+                        } else {
+
+                            lustBarId = `#bar-${role.key}-情欲值`;
+
+                            lustValId = `#val-${role.key}-情欲值`;
+
+                        }
+
+                        $(lustBarId).css('width', `${lust}%`);
+
+                        $(lustValId).text(Math.floor(lust));
+
+                        
+
+                        let moral = safeValue(roleData, '道德值', null);
+
+                        if (moral === null || moral === undefined) moral = 100 - lust;
+
+                        moral = Math.min(100, Math.max(0, Number(moral)));
+
+                        let moralBarId, moralValId;
+
+                        if (role.key === 'user') {
+
+                            moralBarId = '#bar-user-道德值';
+
+                            moralValId = '#val-user-道德值';
+
+                        } else {
+
+                            moralBarId = `#bar-${role.key}-道德值`;
+
+                            moralValId = `#val-${role.key}-道德值`;
+
+                        }
+
+                        $(moralBarId).css('width', `${moral}%`);
+
+                        $(moralValId).text(Math.floor(moral));
+
+                        
+
+                        let innerThought = safeValue(roleData, '内心话', '');
+
+                        if (innerThought) {
+
+                            let thoughtId = role.key === 'user' ? '#user-inner-thought' : `#${role.key}-inner-thought`;
+
+                            $(thoughtId).text(innerThought);
+
+                        }
+
+                    });
+
+                    
+
+                    const backpack = _.get(statData, 'user.背包', {});
+
+                    renderBackpack(backpack);
+
+                } catch (e) {
+
+                    console.error('状态栏更新出错:', e);
+
+                }
+
+            }
+
+
+
+            function initCollapse() {
+
+                const $header = $('#dashboard-header');
+
+                const $content = $('#dashboard-content');
+
+                $header.off('click').on('click', function() {
+
+                    $header.toggleClass('collapsed');
+
+                    $content.toggleClass('collapsed');
+
+                });
+
+            }
+
+
+
+            async function init() {
+
+                if (typeof waitGlobalInitialized === 'function') await waitGlobalInitialized('Mvu');
+
+                updateDashboard();
+
+                initCollapse();
+
+                setInterval(updateDashboard, 1500);
+
+                $(document).on('VARIABLE_UPDATE_ENDED', updateDashboard);
+
+            }
+
+
+
+            if (typeof errorCatched === 'function') $(errorCatched(init));
+
+            else $(init);
+
+        });
+
+    </script>
+
+</head>
+
+<body>
+
+<div class="survival-dashboard">
+
+    <div class="dashboard-header" id="dashboard-header">
+
+        <div class="header-title">
+
+            <span class="title-text">🏝️ 潮汐间的守望</span>
+
+            <span class="title-date" id="mvu-world-date">第1天</span>
+
+            <span class="title-date" id="mvu-world-time">正午</span>
+
+            <span class="title-date" id="mvu-world-weather">晴朗烈日</span>
+
+            <span class="title-date" id="mvu-world-location">沙滩</span>
+
+        </div>
+
+        <div class="toggle-icon">▼</div>
+
+    </div>
+
+
+
+    <div class="dashboard-content" id="dashboard-content">
+
+        <div class="survival-grid">
+
+            <!-- 主角卡片 -->
+
+            <div class="survivor-card">
+
+                <div class="card-header">
+
+                    <img class="avatar" id="avatar-user" src="https://testingcf.jsdelivr.net/gh/sanshui19516/-@main/Screenshot_20260529_031603.jpg" onerror="this.src='data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%20100%20100%22%3E%3Crect%20width%3D%22100%22%20height%3D%22100%22%20fill%3D%22%238b6946%22%2F%3E%3Ctext%20x%3D%2250%22%20y%3D%2255%22%20text-anchor%3D%22middle%22%20fill%3D%22%23e8e2d6%22%20font-size%3D%2230%22%3E👤%3C%2Ftext%3E%3C%2Fsvg%3E';">
+
+                    <div class="name-badge">
+
+                        <div class="character-name" id="user-name">{{user}}</div>
+
+                        <div class="character-tag">守护者</div>
+
+                    </div>
+
+                    <div class="emotion-badge" id="user-emotion">-</div>
+
+                </div>
+
+                <div class="stats-area">
+
+                    <div class="stat-row"><span class="stat-label">⚡ 体能</span><div class="stat-bar-container"><div class="stat-bar bar-energy" id="bar-user-体能"></div></div><span class="stat-value" id="val-user-体能">--</span></div>
+
+                    <div class="stat-row"><span class="stat-label">🍖 饱食</span><div class="stat-bar-container"><div class="stat-bar bar-food" id="bar-user-饱食度"></div></div><span class="stat-value" id="val-user-饱食度">--</span></div>
+
+                    <div class="stat-row"><span class="stat-label">💧 水分</span><div class="stat-bar-container"><div class="stat-bar bar-water" id="bar-user-水分"></div></div><span class="stat-value" id="val-user-水分">--</span></div>
+
+                    <div class="stat-row"><span class="stat-label">❤️ 健康</span><div class="stat-bar-container"><div class="stat-bar bar-health" id="bar-user-健康"></div></div><span class="stat-value" id="val-user-健康">--</span></div>
+
+                    <div class="stat-row"><span class="stat-label">🧠 紧绷</span><div class="stat-bar-container"><div class="stat-bar bar-stress" id="bar-user-内心紧绷度"></div></div><span class="stat-value" id="val-user-内心紧绷度">--</span></div>
+
+                    <div class="stat-row"><span class="stat-label">👕 破损</span><div class="stat-bar-container"><div class="stat-bar bar-cloth" id="bar-user-衣物破损度"></div></div><span class="stat-value" id="val-user-衣物破损度">--</span></div>
+
+                    <div class="stat-row"><span class="stat-label">☀️ 晒伤</span><div class="stat-bar-container"><div class="stat-bar bar-burn" id="bar-user-晒伤程度"></div></div><span class="stat-value" id="val-user-晒伤程度">--</span></div>
+
+                    <div class="stat-row"><span class="stat-label">💕 情欲</span><div class="stat-bar-container"><div class="stat-bar bar-lust" id="bar-user-情欲值"></div></div><span class="stat-value" id="val-user-情欲值">--</span></div>
+
+                    <div class="stat-row"><span class="stat-label">⚖️ 道德</span><div class="stat-bar-container"><div class="stat-bar bar-moral" id="bar-user-道德值"></div></div><span class="stat-value" id="val-user-道德值">--</span></div>
+
+                    <div class="inner-thought-row"><span class="inner-thought-label">💭 内心话</span><span class="inner-thought-text" id="user-inner-thought">——</span></div>
+
+                </div>
+
+            </div>
+
+
+
+            <!-- 苏澜卡片 -->
+
+            <div class="survivor-card">
+
+                <div class="card-header">
+
+                    <img class="avatar" id="avatar-sulan" src="https://testingcf.jsdelivr.net/gh/sanshui19516/-@main/Avatar_1778817354103.jpg" onerror="this.src='data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%20100%20100%22%3E%3Crect%20width%3D%22100%22%20height%3D%22100%22%20fill%3D%22%238b6946%22%2F%3E%3Ctext%20x%3D%2250%22%20y%3D%2255%22%20text-anchor%3D%22middle%22%20fill%3D%22%23e8e2d6%22%20font-size%3D%2230%22%3E👩%3C%2Ftext%3E%3C%2Fsvg%3E';">
+
+                    <div class="name-badge">
+
+                        <div class="character-name" id="sulan-name">苏澜</div>
+
+                        <div class="character-tag">母亲</div>
+
+                    </div>
+
+                    <div class="emotion-badge" id="sulan-emotion">-</div>
+
+                </div>
+
+                <div class="stats-area">
+
+                    <div class="stat-row"><span class="stat-label">⚡ 体能</span><div class="stat-bar-container"><div class="stat-bar bar-energy" id="bar-苏澜-体能"></div></div><span class="stat-value" id="val-苏澜-体能">--</span></div>
+
+                    <div class="stat-row"><span class="stat-label">🍖 饱食</span><div class="stat-bar-container"><div class="stat-bar bar-food" id="bar-苏澜-饱食度"></div></div><span class="stat-value" id="val-苏澜-饱食度">--</span></div>
+
+                    <div class="stat-row"><span class="stat-label">💧 水分</span><div class="stat-bar-container"><div class="stat-bar bar-water" id="bar-苏澜-水分"></div></div><span class="stat-value" id="val-苏澜-水分">--</span></div>
+
+                    <div class="stat-row"><span class="stat-label">❤️ 健康</span><div class="stat-bar-container"><div class="stat-bar bar-health" id="bar-苏澜-健康"></div></div><span class="stat-value" id="val-苏澜-健康">--</span></div>
+
+                    <div class="stat-row"><span class="stat-label">🧠 紧绷</span><div class="stat-bar-container"><div class="stat-bar bar-stress" id="bar-苏澜-内心紧绷度"></div></div><span class="stat-value" id="val-苏澜-内心紧绷度">--</span></div>
+
+                    <div class="stat-row"><span class="stat-label">👕 破损</span><div class="stat-bar-container"><div class="stat-bar bar-cloth" id="bar-苏澜-衣物破损度"></div></div><span class="stat-value" id="val-苏澜-衣物破损度">--</span></div>
+
+                    <div class="stat-row"><span class="stat-label">☀️ 晒伤</span><div class="stat-bar-container"><div class="stat-bar bar-burn" id="bar-苏澜-晒伤程度"></div></div><span class="stat-value" id="val-苏澜-晒伤程度">--</span></div>
+
+                    <div class="stat-row"><span class="stat-label">💕 情欲</span><div class="stat-bar-container"><div class="stat-bar bar-lust" id="bar-苏澜-情欲值"></div></div><span class="stat-value" id="val-苏澜-情欲值">--</span></div>
+
+                    <div class="stat-row"><span class="stat-label">⚖️ 道德</span><div class="stat-bar-container"><div class="stat-bar bar-moral" id="bar-苏澜-道德值"></div></div><span class="stat-value" id="val-苏澜-道德值">--</span></div>
+
+                    <div class="inner-thought-row"><span class="inner-thought-label">💭 内心话</span><span class="inner-thought-text" id="苏澜-inner-thought">——</span></div>
+
+                </div>
+
+            </div>
+
+
+
+            <!-- 周宁卡片 -->
+
+            <div class="survivor-card">
+
+                <div class="card-header">
+
+                    <img class="avatar" id="avatar-zhouning" src="https://testingcf.jsdelivr.net/gh/sanshui19516/-@main/Avatar_1778817356747.jpg" onerror="this.src='data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%20100%20100%22%3E%3Crect%20width%3D%22100%22%20height%3D%22100%22%20fill%3D%22%238b6946%22%2F%3E%3Ctext%20x%3D%2250%22%20y%3D%2255%22%20text-anchor%3D%22middle%22%20fill%3D%22%23e8e2d6%22%20font-size%3D%2230%22%3E👧%3C%2Ftext%3E%3C%2Fsvg%3E';">
+
+                    <div class="name-badge">
+
+                        <div class="character-name" id="zhouning-name">周宁</div>
+
+                        <div class="character-tag">姐姐</div>
+
+                    </div>
+
+                    <div class="emotion-badge" id="zhouning-emotion">-</div>
+
+                </div>
+
+                <div class="stats-area">
+
+                    <div class="stat-row"><span class="stat-label">⚡ 体能</span><div class="stat-bar-container"><div class="stat-bar bar-energy" id="bar-周宁-体能"></div></div><span class="stat-value" id="val-周宁-体能">--</span></div>
+
+                    <div class="stat-row"><span class="stat-label">🍖 饱食</span><div class="stat-bar-container"><div class="stat-bar bar-food" id="bar-周宁-饱食度"></div></div><span class="stat-value" id="val-周宁-饱食度">--</span></div>
+
+                    <div class="stat-row"><span class="stat-label">💧 水分</span><div class="stat-bar-container"><div class="stat-bar bar-water" id="bar-周宁-水分"></div></div><span class="stat-value" id="val-周宁-水分">--</span></div>
+
+                    <div class="stat-row"><span class="stat-label">❤️ 健康</span><div class="stat-bar-container"><div class="stat-bar bar-health" id="bar-周宁-健康"></div></div><span class="stat-value" id="val-周宁-健康">--</span></div>
+
+                    <div class="stat-row"><span class="stat-label">🧠 紧绷</span><div class="stat-bar-container"><div class="stat-bar bar-stress" id="bar-周宁-内心紧绷度"></div></div><span class="stat-value" id="val-周宁-内心紧绷度">--</span></div>
+
+                    <div class="stat-row"><span class="stat-label">👕 破损</span><div class="stat-bar-container"><div class="stat-bar bar-cloth" id="bar-周宁-衣物破损度"></div></div><span class="stat-value" id="val-周宁-衣物破损度">--</span></div>
+
+                    <div class="stat-row"><span class="stat-label">☀️ 晒伤</span><div class="stat-bar-container"><div class="stat-bar bar-burn" id="bar-周宁-晒伤程度"></div></div><span class="stat-value" id="val-周宁-晒伤程度">--</span></div>
+
+                    <div class="stat-row"><span class="stat-label">💕 情欲</span><div class="stat-bar-container"><div class="stat-bar bar-lust" id="bar-周宁-情欲值"></div></div><span class="stat-value" id="val-周宁-情欲值">--</span></div>
+
+                    <div class="stat-row"><span class="stat-label">⚖️ 道德</span><div class="stat-bar-container"><div class="stat-bar bar-moral" id="bar-周宁-道德值"></div></div><span class="stat-value" id="val-周宁-道德值">--</span></div>
+
+                    <div class="inner-thought-row"><span class="inner-thought-label">💭 内心话</span><span class="inner-thought-text" id="周宁-inner-thought">——</span></div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+
+        <!-- 背包 -->
+
+        <div class="backpack-section">
+
+            <div class="backpack-title"><span>🎒</span> 背包</div>
+
+            <div id="backpack-items" class="backpack-items"><div class="backpack-empty">暂无物品</div></div>
+
+        </div>
+
+    </div>
+
+</div>
+
+</body>
+
