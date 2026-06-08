@@ -1,0 +1,867 @@
+<!DOCTYPE html>
+
+<html lang="zh">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+
+    <title>母与子 · 开局</title>
+
+    <style>
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+
+            background: linear-gradient(160deg, #2a1a18 0%, #1e1210 30%, #2e1e1a 60%, #3a2218 100%);
+
+            min-height: 100vh;
+
+            display: flex;
+
+            justify-content: center;
+
+            align-items: center;
+
+            font-family: 'Georgia', 'Times New Roman', serif;
+
+            padding: 16px;
+
+        }
+
+        .container {
+
+            max-width: 520px;
+
+            width: 100%;
+
+            background: rgba(30, 15, 12, 0.75);
+
+            backdrop-filter: blur(14px);
+
+            border: 1px solid rgba(180, 130, 100, 0.4);
+
+            border-radius: 32px;
+
+            padding: 32px 24px 28px;
+
+            box-shadow: 0 20px 50px rgba(0,0,0,0.6), 0 0 0 1px rgba(120, 80, 50, 0.2) inset;
+
+            text-align: center;
+
+        }
+
+        .title {
+
+            color: #e8d0b8;
+
+            font-size: 1.6rem;
+
+            font-weight: 400;
+
+            letter-spacing: 10px;
+
+            margin-bottom: 4px;
+
+            animation: glowPulseWarm 3s ease-in-out infinite;
+
+        }
+
+        @keyframes glowPulseWarm {
+
+            0%, 100% {
+
+                text-shadow: 0 0 10px rgba(220, 170, 120, 0.3), 0 0 20px rgba(220, 170, 120, 0.15);
+
+            }
+
+            50% {
+
+                text-shadow: 0 0 20px rgba(240, 200, 140, 0.6), 0 0 40px rgba(220, 170, 120, 0.35), 0 0 60px rgba(200, 150, 100, 0.2);
+
+            }
+
+        }
+
+        .glow-text {
+
+            animation: glowPulseWarm 3s ease-in-out infinite;
+
+        }
+
+        .title-sub {
+
+            color: #c8a090;
+
+            font-size: 0.78rem;
+
+            letter-spacing: 4px;
+
+            margin-bottom: 6px;
+
+            font-style: italic;
+
+            opacity: 0.8;
+
+        }
+
+        .title-author {
+
+            color: #b89080;
+
+            font-size: 0.7rem;
+
+            letter-spacing: 2px;
+
+            margin-bottom: 18px;
+
+            opacity: 0.7;
+
+        }
+
+        .title-author span {
+
+            color: #d0b0a0;
+
+            font-weight: bold;
+
+        }
+
+        .divider {
+
+            border: none;
+
+            border-top: 1px dashed rgba(180, 130, 100, 0.3);
+
+            margin: 0 0 18px 0;
+
+        }
+
+        .info-block {
+
+            background: rgba(25, 12, 8, 0.5);
+
+            border: 1px solid rgba(150, 100, 70, 0.3);
+
+            border-radius: 18px;
+
+            padding: 14px 14px;
+
+            margin-bottom: 10px;
+
+            text-align: left;
+
+        }
+
+        .info-label {
+
+            color: #d0b0a0;
+
+            font-size: 0.75rem;
+
+            font-weight: bold;
+
+            letter-spacing: 2px;
+
+            margin-bottom: 6px;
+
+            padding-bottom: 4px;
+
+            border-bottom: 1px dotted rgba(150, 100, 70, 0.25);
+
+        }
+
+        .info-list {
+
+            list-style: none;
+
+            padding: 0;
+
+        }
+
+        .info-list li {
+
+            color: #c0a090;
+
+            font-size: 0.72rem;
+
+            line-height: 1.7;
+
+            padding-left: 12px;
+
+            position: relative;
+
+        }
+
+        .info-list li::before {
+
+            content: "·";
+
+            position: absolute;
+
+            left: 0;
+
+            color: #b89080;
+
+            font-weight: bold;
+
+        }
+
+        .tag-allow { color: #a0c8a0; }
+
+        .tag-warn { color: #c89090; }
+
+        .tag-note { color: #c8b898; }
+
+        .choice-box {
+
+            display: flex;
+
+            flex-direction: row;
+
+            justify-content: center;
+
+            gap: 10px;
+
+            margin: 22px 0 18px;
+
+        }
+
+        .story-link {
+
+            flex: 1;
+
+            background: rgba(50, 20, 12, 0.7);
+
+            border: 1px solid rgba(180, 120, 80, 0.5);
+
+            border-radius: 24px;
+
+            padding: 16px 8px;
+
+            color: #e8d0b8;
+
+            text-decoration: none;
+
+            box-shadow: 0 4px 0 rgba(30, 10, 5, 0.6);
+
+            transition: all 0.1s ease;
+
+            text-align: center;
+
+            display: block;
+
+            cursor: pointer;
+
+        }
+
+        .story-link:active {
+
+            transform: translateY(2px);
+
+            box-shadow: 0 2px 0 rgba(30, 10, 5, 0.6);
+
+        }
+
+        .btn-icon {
+
+            font-size: 1.8rem;
+
+            display: block;
+
+            margin-bottom: 6px;
+
+        }
+
+        .btn-title {
+
+            font-size: 1rem;
+
+            font-weight: bold;
+
+            margin-bottom: 4px;
+
+            color: #f0d8c8;
+
+        }
+
+        .btn-desc {
+
+            font-size: 0.65rem;
+
+            color: #c8a090;
+
+            line-height: 1.3;
+
+        }
+
+        .footer-note {
+
+            color: #9a7a6a;
+
+            font-size: 0.7rem;
+
+            margin-top: 14px;
+
+            padding-top: 12px;
+
+            border-top: 1px solid rgba(150, 100, 70, 0.2);
+
+            letter-spacing: 1px;
+
+            line-height: 1.6;
+
+        }
+
+        .footer-deco {
+
+            font-size: 0.8rem;
+
+            opacity: 0.8;
+
+            margin-bottom: 6px;
+
+            letter-spacing: 2px;
+
+        }
+
+        .footer-line {
+
+            display: block;
+
+        }
+
+
+
+        .title-wrapper {
+
+            position: relative;
+
+            margin-bottom: 18px;
+
+            border-radius: 28px;
+
+            overflow: hidden;
+
+            border: 1px solid rgba(180, 120, 80, 0.5);
+
+            box-shadow: 0 4px 12px rgba(0,0,0,0.4);
+
+        }
+
+        .title-bg {
+
+            position: absolute;
+
+            top: 0;
+
+            left: 0;
+
+            width: 100%;
+
+            height: 100%;
+
+            background-size: cover;
+
+            background-position: center 30%;
+
+            background-repeat: no-repeat;
+
+        }
+
+        .title-overlay-dark {
+
+            position: absolute;
+
+            top: 0;
+
+            left: 0;
+
+            width: 100%;
+
+            height: 100%;
+
+            background: rgba(15, 5, 3, 0.5);
+
+        }
+
+        .title-content {
+
+            position: relative;
+
+            z-index: 2;
+
+            padding: 28px 16px 26px;
+
+            text-align: center;
+
+        }
+
+        .title-content .title,
+
+        .title-content .title-sub,
+
+        .title-content .title-author {
+
+            text-shadow: 0 2px 8px rgba(0,0,0,0.7);
+
+        }
+
+        .title-content .title-author {
+
+            margin-bottom: 0;
+
+        }
+
+
+
+        /* ========== 角色CG展示卡片 ========== */
+
+        .cg-card {
+
+            background: rgba(25, 12, 8, 0.5);
+
+            border: 1px solid rgba(150, 100, 70, 0.3);
+
+            border-radius: 18px;
+
+            padding: 14px 14px 10px;
+
+            margin-bottom: 10px;
+
+            text-align: center;
+
+        }
+
+        .cg-card .cg-label {
+
+            color: #d0b0a0;
+
+            font-size: 0.75rem;
+
+            font-weight: bold;
+
+            letter-spacing: 2px;
+
+            margin-bottom: 10px;
+
+            padding-bottom: 6px;
+
+            border-bottom: 1px dotted rgba(150, 100, 70, 0.25);
+
+        }
+
+        .cg-card .cg-image {
+
+            width: 100%;
+
+            max-width: 400px;
+
+            height: auto;
+
+            border-radius: 14px;
+
+            box-shadow: 0 6px 20px rgba(0,0,0,0.5), 0 0 0 1px rgba(150, 100, 70, 0.2);
+
+            margin-bottom: 8px;
+
+        }
+
+        .cg-card .cg-caption {
+
+            color: #9a7a6a;
+
+            font-size: 0.65rem;
+
+            font-style: italic;
+
+            letter-spacing: 2px;
+
+            opacity: 0.8;
+
+        }
+
+
+
+        @media (max-width: 640px) {
+
+            body {
+
+                padding: 8px;
+
+                align-items: flex-start;
+
+                padding-top: 12px;
+
+            }
+
+            .container {
+
+                max-width: 100%;
+
+                border-radius: 24px;
+
+                padding: 20px 12px 18px;
+
+            }
+
+            .title-wrapper {
+
+                border-radius: 20px;
+
+                margin-bottom: 12px;
+
+            }
+
+            .title-content {
+
+                padding: 20px 10px 18px;
+
+            }
+
+            .title {
+
+                font-size: 1.3rem;
+
+                letter-spacing: 6px;
+
+            }
+
+            .title-sub {
+
+                font-size: 0.7rem;
+
+                letter-spacing: 2px;
+
+            }
+
+            .info-block {
+
+                padding: 10px 10px;
+
+            }
+
+            .info-label {
+
+                font-size: 0.7rem;
+
+            }
+
+            .info-list li {
+
+                font-size: 0.68rem;
+
+                line-height: 1.6;
+
+            }
+
+            .choice-box {
+
+                flex-direction: column;
+
+                gap: 8px;
+
+                margin: 16px 0 12px;
+
+            }
+
+            .story-link {
+
+                padding: 14px 8px;
+
+            }
+
+            .btn-icon {
+
+                font-size: 1.5rem;
+
+            }
+
+            .btn-title {
+
+                font-size: 0.9rem;
+
+            }
+
+            .footer-note {
+
+                font-size: 0.65rem;
+
+                margin-top: 10px;
+
+                padding-top: 10px;
+
+            }
+
+            .cg-card .cg-image {
+
+                max-width: 100%;
+
+            }
+
+        }
+
+    </style>
+
+</head>
+
+<body>
+
+<div class="container">
+
+
+
+    <div class="title-wrapper">
+
+        <div class="title-bg" style="background-image: url('https://testingcf.jsdelivr.net/gh/sanshui19516/-@main/IMG_20260529_062318.jpg');"></div>
+
+        <div class="title-overlay-dark"></div>
+
+        <div class="title-content">
+
+            <div class="title">敞开的秘密</div>
+
+            <div class="title-sub">—— 妈妈爱你 ——</div>
+
+            <div class="title-author">作者：<span>三年的水</span></div>
+
+        </div>
+
+    </div>
+
+
+
+    <hr class="divider">
+
+
+
+    <div class="info-block">
+
+        <div class="info-label">📡 发布信息</div>
+
+        <ul class="info-list">
+
+            <li>🛑 仅发布于 <span style="color:#d0b0a0;">Discord 类脑</span></li>
+
+            <li>🛑 作者：<span style="color:#d0b0a0;">三年的水</span></li>
+
+        </ul>
+
+    </div>
+
+
+
+    <div class="info-block">
+
+        <div class="info-label">📋 授权说明</div>
+
+        <ul class="info-list">
+
+            <li><span class="tag-allow">✅ 允许二改（授权即可）</span></li>
+
+            <li><span class="tag-allow">✅ 二改后需标注出处</span></li>
+
+            <li><span class="tag-warn">❌ 禁止商用</span></li>
+
+            <li><span class="tag-warn">❌ 禁止墙内二传</span></li>
+
+        </ul>
+
+    </div>
+
+
+
+    <div class="info-block">
+
+        <div class="info-label">📝 本卡包含</div>
+
+        <ul class="info-list">
+
+            <li>简介</li>
+
+            <li>人物介绍</li>
+
+            <li>开场白</li>
+
+            <li>致谢信息</li>
+
+        </ul>
+
+    </div>
+
+
+
+    <div class="info-block">
+
+        <div class="info-label">🛑 使用说明</div>
+
+        <ul class="info-list">
+
+            <li>导入角色卡到 SillyTavern</li>
+
+            <li>提示词模板开启</li>
+
+            <li>加载MVU</li>
+
+            <li>开始对话体验</li>
+
+        </ul>
+
+    </div>
+
+
+
+    <div class="info-block">
+
+        <div class="info-label">❇️ 额外说明</div>
+
+        <ul class="info-list">
+
+            <li><span class="tag-note">❇️ 多多反馈</span></li>
+
+            <li><span class="tag-note">❇️ 现代都市 · 母子日常 · 隐秘情感</span></li>
+
+            <li><span class="tag-note">❇️ 感谢您游玩此卡</span></li>
+
+        </ul>
+
+    </div>
+
+
+
+    <div class="info-block">
+
+        <div class="info-label">⚠️ 禁止商用・公益声明 ⚠️</div>
+
+        <ul class="info-list" style="list-style: none; padding-left: 0;">
+
+            <li><span class="tag-note">本角色卡为作者"三年的水"免费分享的公益作品，仅供个人娱乐与创作交流使用。</span></li>
+
+            <li><span class="tag-note">严禁任何形式的商业用途，包括转卖、收费下载、打包售卖或用于盈利性直播/视频。</span></li>
+
+            <li><span class="tag-note">如通过付费渠道获得，请立即退款并举报贩卖者，维护创作者与您自身的权益。</span></li>
+
+            <li><span class="tag-note">感谢您的支持与理解。—— 作者：三年的水</span></li>
+
+       </ul>
+
+   </div>
+
+
+
+    <!-- ========== 角色CG展示卡片（新增） ========== -->
+
+    <div class="cg-card">
+
+        <div class="cg-label">【 妈妈】（李婉清）· CG</div>
+
+        <img class="cg-image" src="https://testingcf.jsdelivr.net/gh/sanshui19516/-@main/Avatar_1780707414828.jpg" alt="李婉清CG">
+
+        <div class="cg-caption">—— 红色毛衣敞开，在沙发上等你回家 ——</div>
+
+    </div>
+
+
+
+    <div class="choice-box">
+
+        <div class="story-link" onclick="switchOpening(1)">
+
+            <span class="btn-icon">🚪</span>
+
+            <div class="btn-title">推开家门 · 放学后</div>
+
+            <div class="btn-desc">红色毛衣敞开、半裸的妈妈<br>在沙发上等你回来</div>
+
+        </div>
+
+    </div>
+
+
+
+    <div class="footer-note">
+
+        <div class="footer-deco glow-text">请多多评论</div>
+
+        <span class="footer-line glow-text">by 三年的水</span>
+
+    </div>
+
+
+
+</div>
+
+
+
+<script>
+
+    async function switchOpening(swipeId) {
+
+        const clickedCard = event.currentTarget;
+
+        clickedCard.style.opacity = '0.6';
+
+        clickedCard.style.pointerEvents = 'none';
+
+        try {
+
+            let messages;
+
+            try {
+
+                messages = await getChatMessages?.('0', { include_swipe: true });
+
+            } catch (e) {
+
+                const context = window.SillyTavern?.getContext?.();
+
+                messages = context?.chat?.messages;
+
+            }
+
+            if (!messages || messages.length === 0) throw new Error('没有找到聊天消息。');
+
+            const userMessage = messages[0];
+
+            if (!userMessage.swipes) throw new Error('第一条消息没有滑动条。');
+
+            if (userMessage.swipes.length <= swipeId) throw new Error(`滑动条 ${swipeId} 不存在。`);
+
+            const targetSwipe = userMessage.swipes[swipeId];
+
+            const setChatMessage = window.setChatMessage || window.SillyTavern?.getContext?.()?.setChatMessage;
+
+            if (typeof setChatMessage === 'function') {
+
+                await setChatMessage(targetSwipe, 0, { swipe_id: swipeId, refresh: 'display_and_render_current' });
+
+            } else if (typeof userMessage.setSwipe === 'function') {
+
+                userMessage.setSwipe(swipeId);
+
+            }
+
+        } catch (error) {
+
+            console.error('切换失败:', error);
+
+        } finally {
+
+            clickedCard.style.opacity = '1';
+
+            clickedCard.style.pointerEvents = 'auto';
+
+        }
+
+    }
+
+</script>
+
+
+
+</body>
+
+      </html>
