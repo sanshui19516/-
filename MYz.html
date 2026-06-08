@@ -1,0 +1,1263 @@
+<!DOCTYPE html>
+
+<html lang="zh-CN">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+    <title>故事情节状态</title>
+
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <link href="https://cdn.jsdelivr.net/npm/font-awesome@4.7.0/css/font-awesome.min.css" rel="stylesheet">
+
+    <script src="https://cdn.jsdelivr.net/npm/js-yaml@4.1.0/dist/js-yaml.min.js"></script>
+
+    <script>
+
+        tailwind.config = {
+
+            theme: {
+
+                extend: {
+
+                    colors: {
+
+                        primary: '#c084fc',
+
+                        secondary: '#2d2447',
+
+                        dark: '#1a142c',
+
+                        pink: {
+
+                            50: '#fdf2f8',
+
+                            100: '#fce7f3',
+
+                            200: '#fbcfe8',
+
+                            300: '#f9a8d4',
+
+                            400: '#f472b6',
+
+                            500: '#ec4899',
+
+                            600: '#db2777',
+
+                            700: '#be185d',
+
+                            800: '#9d174d',
+
+                            900: '#831843',
+
+                        }
+
+                    },
+
+                    fontFamily: {
+
+                        sans: ['Inter', 'system-ui', 'sans-serif'],
+
+                        serif: ['Georgia', 'Cambria', 'serif'],
+
+                    },
+
+                }
+
+            }
+
+        }
+
+    </script>
+
+    <style type="text/tailwindcss">
+
+        @layer utilities {
+
+            .card-hover {
+
+                transition: transform 0.2s, box-shadow 0.2s;
+
+            }
+
+            .card-hover:hover {
+
+                transform: translateY(-2px);
+
+                box-shadow: 0 10px 25px -5px rgba(192, 132, 252, 0.2), 0 8px 10px -6px rgba(192, 132, 252, 0.2);
+
+            }
+
+            .theme-transition {
+
+                transition: background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease;
+
+            }
+
+            .character-card h3 {
+
+                color: white !important;
+
+            }
+
+            .character-card li {
+
+                color: white !important;
+
+            }
+
+            .character-card .text-gray-400 {
+
+                color: rgba(255, 255, 255, 0.8) !important;
+
+            }
+
+
+
+            /* 黑夜模式（默认） */
+
+            .night-mode .status-block {
+
+                background-color: #1a142c;
+
+                border-color: rgba(192, 132, 252, 0.3);
+
+            }
+
+            .night-mode .status-block .bg-gradient-to-r {
+
+                background: linear-gradient(to right, rgba(192, 132, 252, 0.2), rgba(192, 132, 252, 0.05));
+
+            }
+
+            .night-mode .status-block .bg-gradient-to-b {
+
+                background: linear-gradient(to bottom, #1a142c, rgba(192, 132, 252, 0.05));
+
+            }
+
+            .night-mode .text-gray-300,
+
+            .night-mode .text-gray-400,
+
+            .night-mode .text-gray-500 {
+
+                color: #d1c4e9 !important;
+
+            }
+
+            .night-mode .border-gray-700\/30,
+
+            .night-mode .border-gray-700\/20 {
+
+                border-color: rgba(192, 132, 252, 0.3) !important;
+
+            }
+
+            .night-mode .character-card {
+
+                background-color: #2d2447;
+
+                border-color: rgba(192, 132, 252, 0.3);
+
+            }
+
+            .night-mode .character-card h3,
+
+            .night-mode .character-card li,
+
+            .night-mode .character-card .text-gray-400 {
+
+                color: #f3e5f5 !important;
+
+            }
+
+            .night-mode .border-l-2 {
+
+                border-color: rgba(192, 132, 252, 0.6) !important;
+
+            }
+
+            .night-mode h3.text-primary,
+
+            .night-mode .text-primary,
+
+            .night-mode .fa {
+
+                color: #c084fc !important;
+
+            }
+
+            .night-mode .card-hover:hover {
+
+                box-shadow: 0 10px 25px -5px rgba(192, 132, 252, 0.3), 0 8px 10px -6px rgba(192, 132, 252, 0.2);
+
+            }
+
+            .night-mode .theme-btn.active {
+
+                background-color: #c084fc;
+
+                color: white;
+
+            }
+
+            .night-mode .theme-btn:not(.active):hover {
+
+                background-color: rgba(192, 132, 252, 0.2);
+
+            }
+
+
+
+            /* 粉色模式 */
+
+            .pink-mode .status-block {
+
+                background-color: #fff0f5;
+
+                border-color: #fbcfe8;
+
+                box-shadow: 0 2px 12px rgba(236, 72, 153, 0.1);
+
+            }
+
+            .pink-mode .status-block .bg-gradient-to-r {
+
+                background: linear-gradient(to right, rgba(236, 72, 153, 0.1), rgba(236, 72, 153, 0.03));
+
+            }
+
+            .pink-mode .status-block .bg-gradient-to-b {
+
+                background: linear-gradient(to bottom, #fff0f5, rgba(236, 72, 153, 0.03));
+
+            }
+
+            .pink-mode .text-gray-300,
+
+            .pink-mode .text-gray-400,
+
+            .pink-mode .text-gray-500 {
+
+                color: #831843 !important;
+
+            }
+
+            .pink-mode .border-gray-700\/30,
+
+            .pink-mode .border-gray-700\/20 {
+
+                border-color: #fbcfe8 !important;
+
+            }
+
+            .pink-mode .character-card {
+
+                background-color: #ffffff;
+
+                border-color: #fbcfe8;
+
+            }
+
+            .pink-mode .character-card h3,
+
+            .pink-mode .character-card li,
+
+            .pink-mode .character-card .text-gray-400 {
+
+                color: #831843 !important;
+
+            }
+
+            .pink-mode .border-l-2 {
+
+                border-color: #f472b6 !important;
+
+            }
+
+            .pink-mode h3.text-primary,
+
+            .pink-mode .text-primary,
+
+            .pink-mode .fa {
+
+                color: #db2777 !important;
+
+            }
+
+            .pink-mode .card-hover:hover {
+
+                box-shadow: 0 10px 25px -5px rgba(236, 72, 153, 0.2), 0 8px 10px -6px rgba(236, 72, 153, 0.1);
+
+            }
+
+            .pink-mode .theme-btn.active {
+
+                background-color: #db2777;
+
+                color: white;
+
+                border-color: #db2777;
+
+            }
+
+            .pink-mode .theme-btn:not(.active):hover {
+
+                background-color: #fce7f3;
+
+            }
+
+
+
+            .theme-btn {
+
+                transition: all 0.2s ease;
+
+                width: 28px;
+
+                height: 28px;
+
+                display: flex;
+
+                align-items: center;
+
+                justify-content: center;
+
+                padding: 0;
+
+                color: #b1a5c9;
+
+            }
+
+            .theme-btn.active {
+
+                color: white;
+
+                border-color: currentColor;
+
+            }
+
+            .theme-btn:not(.active):hover {
+
+                background-color: rgba(192, 132, 252, 0.1);
+
+                color: #e0d6f2;
+
+            }
+
+
+
+            #options-list li {
+
+                cursor: pointer;
+
+                transition: all 0.2s ease;
+
+            }
+
+            #options-list li:hover {
+
+                background-color: rgba(192, 132, 252, 0.1);
+
+                transform: translateX(2px);
+
+            }
+
+        }
+
+    </style>
+
+</head>
+
+<body>
+
+    <script id="yaml-data-source" type="text/yaml">
+
+$1
+
+</script>
+
+
+
+    <div class="container mx-auto px-3 py-4 max-w-3xl">
+
+        <div class="status-block mb-4 rounded-2xl shadow-lg overflow-hidden border theme-transition night-mode">
+
+            <div class="bg-gradient-to-r from-primary/20 to-primary/5 p-4 rounded-t-2xl border-b border-gray-700/20 theme-transition">
+
+                <div class="flex flex-col items-stretch md:flex-row md:justify-between md:items-center gap-2 md:gap-3">
+
+                    <div class="flex items-center justify-center md:justify-start text-gray-300 text-sm md:text-base">
+
+                        <i class="fa fa-bookmark text-primary mr-2"></i>
+
+                        <span class="font-medium" id="status-bar-title">加载中...</span>
+
+                    </div>
+
+                    <div class="flex flex-wrap items-center justify-center gap-x-3 gap-y-1 text-xs md:text-sm text-gray-300">
+
+                        <div class="flex items-center break-words max-w-full">
+
+                            <span class="emoji mr-1.5"></span>
+
+                            <span id="location-display" class="break-words">加载中...</span>
+
+                        </div>
+
+                        <div class="flex items-center break-words max-w-full">
+
+                            <span class="emoji mr-1.5"></span>
+
+                            <span id="time-display" class="break-words">加载中...</span>
+
+                        </div>
+
+                        <div class="flex items-center text-xs opacity-80 break-words">
+
+                            <span>作者：三年的水</span>
+
+                        </div>
+
+                    </div>
+
+                    <div class="flex justify-center md:justify-end space-x-1">
+
+                        <button data-theme="night" class="theme-btn active rounded-full border border-gray-700/50" title="黑夜模式">
+
+                            <i class="fa fa-moon-o"></i>
+
+                        </button>
+
+                        <button data-theme="pink" class="theme-btn rounded-full border border-gray-700/50" title="粉色模式">
+
+                            <i class="fa fa-heart-o"></i>
+
+                        </button>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+
+
+            <div class="border-t border-gray-700/20 theme-transition">
+
+                <details class="w-full group">
+
+                    <summary class="w-full px-4 py-3 font-semibold cursor-pointer flex justify-between items-center list-none hover:bg-primary/10 transition-colors theme-transition">
+
+                        <span class="text-gray-300 flex items-center">
+
+                            <i class="fa fa-users text-primary mr-2"></i>角色状态详情
+
+                        </span>
+
+                        <i class="fa fa-chevron-down text-primary transition-transform duration-300 group-open:rotate-180"></i>
+
+                    </summary>
+
+                    <div id="characters-container" class="p-3 space-y-3 overflow-hidden transition-all duration-300">
+
+                        <div class="flex justify-center py-8">
+
+                            <div class="animate-spin rounded-full h-8 w-8 border-t-2 border-b-2 border-primary"></div>
+
+                        </div>
+
+                    </div>
+
+                </details>
+
+            </div>
+
+
+
+            <div class="border-t border-gray-700/20 bg-gradient-to-b from-dark to-primary/10 rounded-b-2xl theme-transition">
+
+                <h3 class="px-4 pt-3 font-bold text-primary flex items-center text-sm md:text-base">
+
+                    <i class="fa fa-list-alt mr-2"></i>
+
+                    <span id="action-owner">加载中...</span>的行动选项
+
+                </h3>
+
+                <div id="options-container" class="px-4 pb-4">
+
+                    <ul id="options-list" class="list-none space-y-2 text-sm pl-1 py-2">
+
+                        <li class="text-gray-400">
+
+                            <div class="flex items-center">
+
+                                <div class="animate-spin rounded-full h-4 w-4 border-t-2 border-b-2 border-primary mr-2"></div>
+
+                                加载选项中...
+
+                            </div>
+
+                        </li>
+
+                    </ul>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+
+    <script>
+
+        const triggerQuickReply = (text) => {
+
+            if (!text || ['…', '...'].includes(text.trim()) || text.trim().length === 0) return;
+
+            if (typeof triggerSlash === 'function') {
+
+                triggerSlash(`/send ${text}|/trigger`);
+
+            } else {
+
+                console.log('SillyTavern environment not detected. Would send:', text);
+
+            }
+
+        };
+
+
+
+        document.addEventListener('DOMContentLoaded', () => {
+
+            initThemeToggle();
+
+            const storyRenderer = new StoryRenderer('yaml-data-source');
+
+            storyRenderer.init();
+
+
+
+            document.getElementById('options-container').addEventListener('click', (e) => {
+
+                if (e.target.tagName === 'LI' && e.target.closest('#options-list')) {
+
+                    const optionText = e.target.textContent.trim();
+
+                    triggerQuickReply(optionText);
+
+                    const originalBg = e.target.style.backgroundColor;
+
+                    e.target.style.backgroundColor = 'rgba(192, 132, 252, 0.2)';
+
+                    setTimeout(() => {
+
+                        e.target.style.backgroundColor = originalBg;
+
+                    }, 300);
+
+                }
+
+            });
+
+        });
+
+
+
+        function initThemeToggle() {
+
+            const themeButtons = document.querySelectorAll('.theme-btn');
+
+            const bodyElement = document.body;
+
+            const savedTheme = localStorage.getItem('storyTheme') || 'night';
+
+            switchToTheme(savedTheme);
+
+
+
+            themeButtons.forEach(button => {
+
+                button.addEventListener('click', () => {
+
+                    const theme = button.getAttribute('data-theme');
+
+                    switchToTheme(theme);
+
+                    localStorage.setItem('storyTheme', theme);
+
+                });
+
+            });
+
+
+
+            function switchToTheme(theme) {
+
+                bodyElement.classList.remove('night-mode', 'pink-mode');
+
+                if (theme === 'night') bodyElement.classList.add('night-mode');
+
+                else if (theme === 'pink') bodyElement.classList.add('pink-mode');
+
+
+
+                themeButtons.forEach(btn => {
+
+                    if (btn.getAttribute('data-theme') === theme) btn.classList.add('active');
+
+                    else btn.classList.remove('active');
+
+                });
+
+            }
+
+        }
+
+
+
+        class StoryRenderer {
+
+            constructor(dataSourceId) {
+
+                this.dataSourceId = dataSourceId;
+
+                this.yamlData = null;
+
+                this.rawYamlContent = "";
+
+                this.rootNode = null;
+
+                this.initElements();
+
+            }
+
+
+
+            initElements() {
+
+                this.elements = {
+
+                    statusBarTitle: document.getElementById('status-bar-title'),
+
+                    timeDisplay: document.getElementById('time-display'),
+
+                    locationDisplay: document.getElementById('location-display'),
+
+                    charactersContainer: document.getElementById('characters-container'),
+
+                    actionOwner: document.getElementById('action-owner'),
+
+                    optionsList: document.getElementById('options-list')
+
+                };
+
+            }
+
+
+
+            init() {
+
+                try {
+
+                    this.loadYamlFromScriptTag();
+
+                    this.findRootNode();
+
+                    this.renderAll();
+
+                    this.setupEventListeners();
+
+                } catch (error) {
+
+                    this.handleError(error);
+
+                }
+
+            }
+
+
+
+            loadYamlFromScriptTag() {
+
+                const scriptElement = document.getElementById(this.dataSourceId);
+
+                if (!scriptElement) throw new Error('未找到YAML数据源');
+
+                let raw = scriptElement.textContent || scriptElement.innerText || '';
+
+                if (typeof raw !== 'string') raw = String(raw);
+
+                this.rawYamlContent = raw.trim();
+
+                if (!this.rawYamlContent) throw new Error('YAML内容为空');
+
+                try {
+
+                    this.yamlData = jsyaml.load(this.rawYamlContent);
+
+                } catch (e) {
+
+                    throw new Error(`YAML解析错误: ${e.message}`);
+
+                }
+
+                if (!this.yamlData || Object.keys(this.yamlData).length === 0) throw new Error('YAML解析失败');
+
+            }
+
+
+
+            extractEmojis(text) {
+
+                let str = (typeof text === 'string') ? text : String(text);
+
+                const emojiRegex = /[\u{1F600}-\u{1F64F}\u{1F300}-\u{1F5FF}\u{1F680}-\u{1F6FF}\u{1F1E0}-\u{1F1FF}\u{2600}-\u{26FF}\u{2700}-\u{27BF}]/gu;
+
+                return str.match(emojiRegex) || [];
+
+            }
+
+
+
+            // 不再使用 getEmojiForField，避免重复显示
+
+            // 保留函数以防其他地方调用，但改为返回空字符串
+
+            getEmojiForField(fieldName) {
+
+                return '';
+
+            }
+
+
+
+            findRootNode() {
+
+                const rootNodeNames = Object.keys(this.yamlData);
+
+                if (rootNodeNames.length === 0) throw new Error('无根节点');
+
+                this.rootNode = rootNodeNames[0];
+
+                this.elements.statusBarTitle.textContent = this.formatNodeName(this.rootNode);
+
+            }
+
+
+
+            formatNodeName(name) {
+
+                return name;
+
+            }
+
+
+
+            renderAll() {
+
+                if (!this.rootNode || !this.yamlData[this.rootNode]) throw new Error('无效根节点');
+
+                const rootData = this.yamlData[this.rootNode];
+
+                this.renderHeaderInfo(rootData);
+
+                this.renderCharacters(rootData);
+
+                this.renderActionOptions(rootData);
+
+            }
+
+
+
+            renderHeaderInfo(rootData) {
+
+                const dateTimeField = this.findFieldByKeywords(rootData, ['日期', '时间', 'datetime', 'time']);
+
+                const locationField = this.findFieldByKeywords(rootData, ['地点', '位置', 'location', 'place']);
+
+
+
+                if (dateTimeField) {
+
+                    let dt = rootData[dateTimeField];
+
+                    if (typeof dt !== 'string') dt = String(dt);
+
+                    this.elements.timeDisplay.textContent = dt;
+
+                    // 从值中提取emoji显示在旁边的span中（可选，但保留原生行为）
+
+                    const timeEmoji = this.extractFirstEmoji(dt);
+
+                    const timeContainer = this.elements.timeDisplay.parentNode;
+
+                    const timeEmojiSpan = timeContainer ? timeContainer.querySelector('.emoji') : null;
+
+                    if (timeEmojiSpan) timeEmojiSpan.textContent = timeEmoji;
+
+                } else {
+
+                    this.elements.timeDisplay.textContent = '时间未知';
+
+                }
+
+                if (locationField) {
+
+                    let loc = rootData[locationField];
+
+                    if (typeof loc !== 'string') loc = String(loc);
+
+                    this.elements.locationDisplay.textContent = loc;
+
+                    const locationEmoji = this.extractFirstEmoji(loc);
+
+                    const locContainer = this.elements.locationDisplay.parentNode;
+
+                    const locEmojiSpan = locContainer ? locContainer.querySelector('.emoji') : null;
+
+                    if (locEmojiSpan) locEmojiSpan.textContent = locationEmoji;
+
+                } else {
+
+                    this.elements.locationDisplay.textContent = '地点未知';
+
+                }
+
+            }
+
+
+
+            // 辅助：提取字符串中第一个emoji
+
+            extractFirstEmoji(text) {
+
+                const match = text.match(/[\u{1F600}-\u{1F64F}\u{1F300}-\u{1F5FF}\u{1F680}-\u{1F6FF}\u{1F1E0}-\u{1F1FF}\u{2600}-\u{26FF}\u{2700}-\u{27BF}]/u);
+
+                return match ? match[0] : '';
+
+            }
+
+
+
+            findFieldByKeywords(data, keywords) {
+
+                if (!data || typeof data !== 'object') return null;
+
+                const fields = Object.keys(data);
+
+                for (const field of fields) {
+
+                    for (const keyword of keywords) {
+
+                        if (field.toLowerCase().includes(keyword.toLowerCase())) return field;
+
+                    }
+
+                }
+
+                return null;
+
+            }
+
+
+
+            renderCharacters(rootData) {
+
+                const userListField = this.findFieldByKeywords(rootData, ['用户', '角色', '列表', 'user', 'role', 'list']);
+
+                const userList = userListField && Array.isArray(rootData[userListField]) ? rootData[userListField] : [];
+
+                this.elements.charactersContainer.innerHTML = '';
+
+                if (userList.length === 0) {
+
+                    this.elements.charactersContainer.innerHTML = this.createEmptyState('没有角色数据');
+
+                    return;
+
+                }
+
+                userList.forEach(userItem => {
+
+                    let userData = userItem;
+
+                    if (typeof userItem === 'object' && userItem !== null) {
+
+                        const userField = this.findFieldByKeywords(userItem, ['用户', 'user', '角色', 'role']);
+
+                        if (userField) userData = userItem[userField];
+
+                    }
+
+                    const card = this.createCharacterCard(userData);
+
+                    if (card) this.elements.charactersContainer.appendChild(card);
+
+                });
+
+            }
+
+
+
+            createCharacterCard(userData) {
+
+                if (!userData || typeof userData !== 'object') return null;
+
+                const card = document.createElement('div');
+
+                card.className = 'bg-dark rounded-xl border border-gray-700/30 p-3.5 shadow-sm card-hover character-card theme-transition';
+
+
+
+                const nameField = this.findFieldByKeywords(userData, ['名字', '姓名', '名称', 'name']);
+
+                let userName = nameField ? userData[nameField] : '未知角色';
+
+                if (typeof userName !== 'string') userName = String(userName);
+
+                // 从名字中提取第一个emoji（用于没有头像时）
+
+                const nameEmoji = this.extractFirstEmoji(userName);
+
+                const cleanName = userName.replace(/[\u{1F600}-\u{1F64F}\u{1F300}-\u{1F5FF}\u{1F680}-\u{1F6FF}\u{1F1E0}-\u{1F1FF}\u{2600}-\u{26FF}\u{2700}-\u{27BF}]/gu, '').trim();
+
+
+
+                let avatarUrl = null;
+
+                if (userData.头像 && userData.头像.startsWith('http')) {
+
+                    avatarUrl = userData.头像;
+
+                }
+
+
+
+                const title = document.createElement('h3');
+
+                title.className = 'font-bold text-lg mb-2 pb-1 border-b border-gray-700/30 theme-transition flex items-center gap-2';
+
+                
+
+                if (avatarUrl) {
+
+                    const img = document.createElement('img');
+
+                    img.src = avatarUrl;
+
+                    img.className = 'w-24 h-auto rounded-lg object-cover';
+
+                    img.alt = cleanName;
+
+                    img.style.maxHeight = '96px';
+
+                    img.style.width = 'auto';
+
+                    title.appendChild(img);
+
+                } else {
+
+                    // 无头像时显示名字中的第一个emoji（或默认图标）
+
+                    const emojiSpan = document.createElement('span');
+
+                    emojiSpan.textContent = nameEmoji ? nameEmoji + ' ' : '👤 ';
+
+                    title.appendChild(emojiSpan);
+
+                }
+
+                title.appendChild(document.createTextNode(` ${cleanName}的状态`));
+
+                card.appendChild(title);
+
+
+
+                const attributesList = document.createElement('ul');
+
+                attributesList.className = 'space-y-2 text-sm';
+
+                card.appendChild(attributesList);
+
+
+
+                Object.keys(userData).forEach(key => {
+
+                    if (key === nameField || key === '头像') return;
+
+                    const attrItem = this.createAttributeItem(key, userData[key]);
+
+                    if (attrItem) attributesList.appendChild(attrItem);
+
+                });
+
+                return card;
+
+            }
+
+
+
+            // 核心修改：每个属性只显示一个emoji（来自字段值的开头），不显示字段名的额外emoji
+
+            createAttributeItem(key, value) {
+
+                const item = document.createElement('li');
+
+                // 不再使用 getEmojiForField，而是从值的字符串中提取第一个emoji
+
+                let valueStr = '';
+
+                let emojiForValue = '';
+
+                
+
+                const valueToString = (v) => {
+
+                    if (v === null || v === undefined) return '';
+
+                    if (typeof v === 'string') return v;
+
+                    if (typeof v === 'number') return String(v);
+
+                    if (Array.isArray(v)) {
+
+                        return v.map(item => valueToString(item)).filter(s => s).join(', ');
+
+                    }
+
+                    if (typeof v === 'object') {
+
+                        if (v.性行为) return valueToString(v.性行为);
+
+                        const keys = Object.keys(v);
+
+                        if (keys.length === 1) return valueToString(v[keys[0]]);
+
+                        return JSON.stringify(v).replace(/[{}"]/g, '');
+
+                    }
+
+                    return String(v);
+
+                };
+
+
+
+                // 处理不同类型的值
+
+                if (Array.isArray(value)) {
+
+                    const displayValue = value.map(v => valueToString(v)).filter(s => s).join('，');
+
+                    if (displayValue) {
+
+                        item.innerHTML = `<span class="font-medium text-primary">${key}:</span> ${displayValue}`;
+
+                    } else {
+
+                        item.innerHTML = `<span class="font-medium text-primary">${key}:</span> 无`;
+
+                    }
+
+                    return item;
+
+                } 
+
+                else if (typeof value === 'object' && value !== null) {
+
+                    const subList = document.createElement('ul');
+
+                    subList.className = 'list-disc list-inside ml-4 mt-1 space-y-1 text-gray-400 theme-transition';
+
+                    Object.keys(value).forEach(subKey => {
+
+                        let subVal = value[subKey];
+
+                        const subText = valueToString(subVal);
+
+                        if (subText) {
+
+                            const li = document.createElement('li');
+
+                            li.innerHTML = `${subKey}: ${subText}`;
+
+                            subList.appendChild(li);
+
+                        }
+
+                    });
+
+                    if (subList.children.length > 0) {
+
+                        item.innerHTML = `<span class="font-medium text-primary">${key}:</span>`;
+
+                        item.appendChild(subList);
+
+                    } else {
+
+                        item.innerHTML = `<span class="font-medium text-primary">${key}:</span> 无`;
+
+                    }
+
+                    return item;
+
+                }
+
+                else if (value !== null && value !== undefined) {
+
+                    let rawValue = valueToString(value);
+
+                    // 提取值的第一个emoji
+
+                    const firstEmojiMatch = rawValue.match(/[\u{1F600}-\u{1F64F}\u{1F300}-\u{1F5FF}\u{1F680}-\u{1F6FF}\u{1F1E0}-\u{1F1FF}\u{2600}-\u{26FF}\u{2700}-\u{27BF}]/u);
+
+                    if (firstEmojiMatch) {
+
+                        emojiForValue = firstEmojiMatch[0];
+
+                        // 移除值中的这个emoji，避免重复显示
+
+                        rawValue = rawValue.replace(firstEmojiMatch[0], '').trim();
+
+                    }
+
+                    const cleanValue = rawValue;
+
+                    if (emojiForValue) {
+
+                        item.innerHTML = `<span class="font-medium text-primary">${key}:</span> ${emojiForValue} ${cleanValue}`;
+
+                    } else {
+
+                        item.innerHTML = `<span class="font-medium text-primary">${key}:</span> ${cleanValue}`;
+
+                    }
+
+                    return item;
+
+                }
+
+                return null;
+
+            }
+
+
+
+            renderActionOptions(rootData) {
+
+                const actionOptionsField = this.findFieldByKeywords(rootData, ['行动', '选项', 'action', 'option']);
+
+                const actionOptions = actionOptionsField && typeof rootData[actionOptionsField] === 'object' ? rootData[actionOptionsField] : {};
+
+                const ownerField = this.findFieldByKeywords(actionOptions, ['名字', '姓名', '所有者', 'owner', 'name']);
+
+                let ownerName = ownerField ? actionOptions[ownerField] : '未知角色';
+
+                if (typeof ownerName !== 'string') ownerName = String(ownerName);
+
+                const ownerEmojis = this.extractEmojis(ownerName);
+
+                const cleanOwner = ownerName.replace(/[\u{1F600}-\u{1F64F}\u{1F300}-\u{1F5FF}\u{1F680}-\u{1F6FF}\u{1F1E0}-\u{1F1FF}\u{2600}-\u{26FF}\u{2700}-\u{27BF}]/gu, '').trim();
+
+                this.elements.actionOwner.innerHTML = `${ownerEmojis.length > 0 ? ownerEmojis[0] + ' ' : ''}${cleanOwner}`;
+
+
+
+                const optionsField = this.findFieldByKeywords(actionOptions, ['选项', '选择', 'option', 'choice']);
+
+                const options = optionsField && Array.isArray(actionOptions[optionsField]) ? actionOptions[optionsField] : [];
+
+                this.elements.optionsList.innerHTML = '';
+
+                if (options.length === 0) {
+
+                    this.elements.optionsList.innerHTML = this.createEmptyState('没有可用选项');
+
+                    return;
+
+                }
+
+                options.forEach(opt => {
+
+                    const optStr = String(opt);
+
+                    const optEmojis = this.extractEmojis(optStr);
+
+                    const cleanOpt = optStr.replace(/^\d+\.\s*/, '').replace(/[\u{1F600}-\u{1F64F}\u{1F300}-\u{1F5FF}\u{1F680}-\u{1F6FF}\u{1F1E0}-\u{1F1FF}\u{2600}-\u{26FF}\u{2700}-\u{27BF}]/gu, '').trim();
+
+                    const li = document.createElement('li');
+
+                    li.className = 'pl-2 py-1 border-l-2 border-primary/30 ml-1 hover:border-primary/70 transition-colors text-gray-300 theme-transition';
+
+                    li.innerHTML = `${optEmojis.length > 0 ? optEmojis[0] + ' ' : ''}${cleanOpt}`;
+
+                    this.elements.optionsList.appendChild(li);
+
+                });
+
+            }
+
+
+
+            createEmptyState(msg) {
+
+                return `<div class="text-center py-4 text-gray-500"><i class="fa fa-info-circle mr-1"></i>${msg}</div>`;
+
+            }
+
+
+
+            setupEventListeners() {
+
+                const details = document.querySelector('details');
+
+                const content = this.elements.charactersContainer;
+
+                content.style.maxHeight = '0';
+
+                details.addEventListener('toggle', () => {
+
+                    if (details.open) {
+
+                        setTimeout(() => content.style.maxHeight = content.scrollHeight + 'px', 10);
+
+                    } else {
+
+                        content.style.maxHeight = '0';
+
+                    }
+
+                });
+
+                details.open = false;
+
+            }
+
+
+
+            handleError(err) {
+
+                console.error(err);
+
+                this.elements.charactersContainer.innerHTML = `<div class="bg-red-900/20 border border-red-800/30 text-red-400 px-4 py-3 rounded">加载失败: ${err.message}</div>`;
+
+            }
+
+        }
+
+    </script>
+
+</body>
+
+</html>
