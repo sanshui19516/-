@@ -1,0 +1,445 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>苏念 · 一个算累了的普通人</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            background: #0f1217;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-family: 'Cormorant Garamond', 'Times New Roman', serif;
+            padding: 20px;
+        }
+        .container {
+            max-width: 580px;
+            width: 100%;
+            background: rgba(18, 22, 28, 0.92);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(160, 180, 200, 0.25);
+            border-radius: 32px;
+            padding: 24px 28px 28px;
+            box-shadow: 0 20px 40px -12px rgba(0,0,0,0.5), 0 0 0 1px rgba(180, 200, 220, 0.08) inset;
+        }
+        .hero-section {
+            position: relative;
+            margin-bottom: 28px;
+            border-radius: 24px;
+            overflow: hidden;
+            border: 1px solid rgba(180, 200, 210, 0.3);
+            box-shadow: 0 6px 18px rgba(0,0,0,0.3);
+        }
+        .hero-bg {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: url('https://testingcf.jsdelivr.net/gh/sanshui19516/-@main/IMG_20260529_062318.jpg');
+            background-size: cover;
+            background-position: center 30%;
+            background-repeat: no-repeat;
+            filter: grayscale(0.3) brightness(0.45) contrast(1.1);
+        }
+        .hero-overlay-dark {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: radial-gradient(circle at 70% 30%, rgba(0,0,0,0.3), rgba(5,10,18,0.75));
+        }
+        .hero-content {
+            position: relative;
+            z-index: 2;
+            padding: 48px 24px 36px;
+            text-align: center;
+        }
+        .main-title {
+            font-size: clamp(2rem, 6vw, 2.6rem);
+            font-weight: 500;
+            letter-spacing: 2px;
+            color: #e2dccd;
+            text-shadow: 0 2px 8px rgba(0,0,0,0.4);
+            margin-bottom: 6px;
+        }
+        .sub-line {
+            font-size: 0.75rem;
+            letter-spacing: 4px;
+            color: #b9c8da;
+            border-top: 1px dashed rgba(180, 200, 220, 0.3);
+            display: inline-block;
+            padding-top: 10px;
+            margin-top: 8px;
+            font-style: italic;
+        }
+        .info-block {
+            background: rgba(15, 25, 32, 0.6);
+            border: 1px solid rgba(150, 175, 190, 0.25);
+            border-radius: 18px;
+            padding: 14px 18px;
+            margin-bottom: 14px;
+        }
+        .info-label {
+            color: #b0c8da;
+            font-size: 0.7rem;
+            font-weight: 500;
+            letter-spacing: 2px;
+            margin-bottom: 8px;
+            padding-bottom: 4px;
+            border-bottom: 1px dotted rgba(150, 175, 190, 0.3);
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+        .info-list {
+            list-style: none;
+            padding: 0;
+        }
+        .info-list li {
+            color: #c0d0dd;
+            font-size: 0.72rem;
+            line-height: 1.65;
+            padding-left: 14px;
+            position: relative;
+            margin-bottom: 5px;
+        }
+        .info-list li::before { content: "—"; position: absolute; left: 0; color: #9abcd0; font-weight: 400; }
+        .character-spotlight {
+            display: flex;
+            align-items: center;
+            gap: 18px;
+            background: rgba(8, 16, 24, 0.65);
+            border: 1px solid rgba(160, 185, 205, 0.35);
+            border-radius: 28px;
+            padding: 14px 18px;
+            margin: 18px 0 14px;
+            backdrop-filter: blur(4px);
+        }
+        .spotlight-avatar {
+            width: 70px;
+            height: 70px;
+            border-radius: 35px;
+            object-fit: cover;
+            border: 2px solid #b8cfdf;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+            flex-shrink: 0;
+        }
+        .spotlight-text { flex: 1; }
+        .spotlight-name {
+            font-size: 1.25rem;
+            font-weight: 600;
+            color: #e2dccd;
+            letter-spacing: 1px;
+        }
+        .spotlight-desc {
+            font-size: 0.7rem;
+            color: #b0c4d4;
+            line-height: 1.45;
+            margin-top: 6px;
+        }
+        .choice-box {
+            display: flex;
+            flex-direction: row;
+            justify-content: center;
+            gap: 12px;
+            margin: 26px 0 18px;
+        }
+        .story-link {
+            flex: 1;
+            background: rgba(30, 45, 58, 0.7);
+            border: 1px solid rgba(160, 190, 210, 0.5);
+            border-radius: 40px;
+            padding: 14px 6px;
+            color: #e0decf;
+            text-decoration: none;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.15s ease;
+            backdrop-filter: blur(2px);
+        }
+        .story-link:active { transform: translateY(2px); background: rgba(40, 60, 75, 0.85); }
+        .btn-icon { font-size: 1.6rem; margin-bottom: 6px; display: block; }
+        .btn-title { font-size: 0.9rem; font-weight: 600; letter-spacing: 2px; color: #dee2db; }
+        .btn-desc { font-size: 0.62rem; color: #9eb7c7; }
+        .footer-note {
+            color: #8aa2b2;
+            font-size: 0.68rem;
+            margin-top: 18px;
+            padding-top: 14px;
+            border-top: 1px solid rgba(130, 165, 185, 0.2);
+            text-align: center;
+            line-height: 1.6;
+        }
+        .footer-deco { font-size: 0.75rem; margin-bottom: 8px; letter-spacing: 3px; color: #b7cfdf; }
+        .glow-text { animation: softPulse 4s infinite ease-in-out; }
+        @keyframes softPulse {
+            0%, 100% { opacity: 0.7; text-shadow: 0 0 4px rgba(180,210,230,0.2); }
+            50% { opacity: 1; text-shadow: 0 0 12px rgba(200,225,245,0.4); }
+        }
+        @media (max-width: 520px) {
+            .container { padding: 20px 18px 24px; }
+            .hero-content { padding: 38px 18px 28px; }
+            .character-spotlight { gap: 14px; padding: 12px 14px; }
+            .spotlight-avatar { width: 58px; height: 58px; }
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <div class="hero-section">
+        <div class="hero-bg"></div>
+        <div class="hero-overlay-dark"></div>
+        <div class="hero-content">
+            <div class="main-title">苏念</div>
+            <div class="sub-line">—— 一个算累了的普通人 ——</div>
+        </div>
+    </div>
+
+    <div class="info-block">
+        <div class="info-label">📡 发布信息</div>
+        <ul class="info-list"><li>🛡️ 仅发布于 <span style="color:#c8dae6;">Discord · 类脑 · SillyTavern</span></li><li>✍️ 作者：<span style="color:#c8dae6;">三年的水</span></li></ul>
+    </div>
+    <div class="info-block">
+        <div class="info-label">📋 授权说明</div>
+        <ul class="info-list"><li><span style="color:#b8dcb0;">✅ 允许二改（注明出处即可）</span></li><li><span style="color:#b8dcb0;">✅ 二改后需标注原作</span></li><li><span style="color:#e0aa8a;">❌ 禁止商用</span></li><li><span style="color:#e0aa8a;">❌ 禁止墙内二次传播</span></li></ul>
+    </div>
+    <div class="character-spotlight">
+        <img class="spotlight-avatar" src="https://testingcf.jsdelivr.net/gh/sanshui19516/-@main/Avatar_1780972819517.jpg" alt="苏念" onerror="this.src='data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%20100%20100%22%3E%3Crect%20width%3D%22100%22%20height%3D%22100%22%20fill%3D%22%234a5a6a%22%2F%3E%3Ctext%20x%3D%2250%22%20y%3D%2255%22%20text-anchor%3D%22middle%22%20fill%3D%22%23b0c4d4%22%20font-size%3D%2230%22%3E苏%3C%2Ftext%3E%3C%2Fsvg%3E';">
+        <div class="spotlight-text"><div class="spotlight-name">苏念 · 一个算累了的普通人</div><div class="spotlight-desc">「 脑子里太吵了。不是头痛，是想把什么东西按停。 」</div></div>
+    </div>
+    <div class="info-block">
+        <div class="info-label">📝 本卡包含</div>
+        <ul class="info-list"><li>完整世界观 / 哲学思辨线</li><li>苏念人设档案 + 行为细节集</li><li>三种哲学阶段（康德 / 边沁 / 尼采式疲惫）</li><li>开篇“课后空教室”场景 — 相遇即边界</li><li>伦理冲突案例 + 多分支走向</li></ul>
+    </div>
+    <div class="info-block">
+        <div class="info-label">📡 使用说明</div>
+        <ul class="info-list"><li>1. 导入角色卡到 SillyTavern</li><li>2. 确保正则 / MVU 按需加载</li><li>3. 开场白已置入默认滑动 / 建议保留第一条作为起点</li><li>4. 与她相处时，不必追问答案，只需沉默或慢问</li></ul>
+    </div>
+    <div class="choice-box">
+        <div class="story-link" onclick="switchOpening(1)">
+            <span class="btn-icon">🕯️</span>
+            <div class="btn-title">课后 · 空教室</div>
+            <div class="btn-desc">所有人走了，她还坐在那里。<br>她没有在等谁，只是在让声音沉淀。</div>
+        </div>
+    </div>
+    <div class="footer-note">
+        <div class="footer-deco glow-text">⚖️ 公益 · 请勿商用 ⚖️</div>
+        <span>本角色卡为「三年的水」免费分享的公益作品，仅供个人娱乐与创作交流。<br>严禁任何形式的商业用途。如通过付费渠道获得，请立即举报贩卖者。</span>
+    </div>
+</div>
+
+<script>
+    async function switchOpening(swipeId) {
+        const clickedCard = event.currentTarget;
+        clickedCard.style.opacity = '0.6';
+        clickedCard.style.pointerEvents = 'none';
+        try {
+            let messages;
+            try {
+                messages = await getChatMessages?.('0', { include_swipe: true });
+            } catch (e) {
+                const context = window.SillyTavern?.getContext?.();
+                messages = context?.chat?.messages;
+            }
+            if (!messages || messages.length === 0) throw new Error('没有找到聊天消息。');
+            const userMessage = messages[0];
+            if (!userMessage.swipes) throw new Error('第一条消息没有滑动条。');
+            if (userMessage.swipes.length <= swipeId) throw new Error(`滑动条 ${swipeId} 不存在。`);
+            const targetSwipe = userMessage.swipes[swipeId];
+            const setChatMessage = window.setChatMessage || window.SillyTavern?.getContext?.()?.setChatMessage;
+            if (typeof setChatMessage === 'function') {
+                await setChatMessage(targetSwipe, 0, { swipe_id: swipeId, refresh: 'display_and_render_current' });
+            } else if (typeof userMessage.setSwipe === 'function') {
+                userMessage.setSwipe(swipeId);
+            }
+        } catch (error) {
+            console.error('切换失败:', error);
+        } finally {
+            clickedCard.style.opacity = '1';
+            clickedCard.style.pointerEvents = 'auto';
+        }
+    }
+</script>
+
+<!-- 入场开幕动画 -->
+<style>
+    @keyframes introFadeOut { 0% { opacity: 1; visibility: visible; } 100% { opacity: 0; visibility: hidden; } }
+    .intro-overlay {
+        position: fixed !important;
+        top: 0 !important;
+        left: 0 !important;
+        width: 100vw !important;
+        height: 100vh !important;
+        background: #010a13 !important;
+        z-index: 2147483647 !important;
+        margin: 0 !important;
+        padding: 0 !important;
+        overflow: hidden !important;
+        pointer-events: auto !important;
+        font-family: 'Noto Serif SC', 'Georgia', serif !important;
+    }
+    .intro-overlay::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: radial-gradient(circle at center, rgba(20,80,130,0.15) 0%, #010a13 95%);
+        pointer-events: none;
+    }
+    .intro-image {
+        position: absolute;
+        left: -150vw;
+        width: min(65vw, 680px);
+        max-width: 88vw;
+        border-radius: 28px;
+        box-shadow: 0 25px 40px rgba(0,0,0,0.5), 0 0 0 1px rgba(210,220,235,0.2) inset;
+        transition: left 0.7s cubic-bezier(0.2,0.9,0.4,1.1);
+        pointer-events: none;
+        will-change: left;
+        object-fit: cover;
+    }
+    /* 第二张图片：从头到尾滚动旋转，持续7.7秒 */
+    .intro-image.second {
+        border-radius: 0;
+        box-shadow: none;
+        transition: none;
+        animation: windmillRoll 7.7s ease-in-out forwards;
+    }
+    @keyframes windmillRoll {
+        0% { left: -30%; transform: translateY(-50%) rotate(0deg); opacity: 1; }
+        100% { left: 120%; transform: translateY(-50%) rotate(1080deg); opacity: 0; }
+    }
+    .intro-text {
+        position: absolute;
+        bottom: 12%;
+        left: 0;
+        right: 0;
+        text-align: center;
+        opacity: 0;
+        transform: translateY(30px);
+        transition: opacity 0.6s ease, transform 0.6s ease;
+        pointer-events: none;
+        color: #eee7da;
+        text-shadow: 0 2px 12px rgba(0,0,0,0.7);
+        z-index: 20;
+    }
+    .intro-title-main {
+        font-family: 'Cormorant Garamond', 'Georgia', serif;
+        font-size: clamp(2rem, 7vw, 4rem);
+        font-weight: 400;
+        letter-spacing: 2px;
+        background: linear-gradient(135deg, #e6ddc4, #cbaf7c);
+        -webkit-background-clip: text;
+        background-clip: text;
+        color: transparent;
+    }
+    .intro-title-sub {
+        font-family: 'Cormorant Garamond', serif;
+        font-size: clamp(0.9rem, 3.5vw, 1.4rem);
+        letter-spacing: 4px;
+        margin-top: 8px;
+        color: #cddddf;
+    }
+    .intro-author {
+        font-size: clamp(0.7rem, 2vw, 1rem);
+        opacity: 0.8;
+        margin-top: 10px;
+        color: #b6c7cf;
+    }
+    .intro-fade-out { animation: introFadeOut 0.8s forwards !important; }
+</style>
+
+<script>
+    (function() {
+        if (document.querySelector('.intro-overlay')) return;
+        const overlay = document.createElement('div');
+        overlay.className = 'intro-overlay';
+
+        const imgUrls = [
+            'https://testingcf.jsdelivr.net/gh/sanshui19516/-@main/Avatar_1781507443535.png',
+            'https://testingcf.jsdelivr.net/gh/sanshui19516/-@main/%E5%B1%8F%E5%B9%95%E6%88%AA%E5%9B%BE%202026-06-15%20152602.png',
+            'https://testingcf.jsdelivr.net/gh/sanshui19516/-@main/Avatar_1781519450705.png'
+        ];
+        const images = [];
+        for (let i = 0; i < 3; i++) {
+            const img = document.createElement('img');
+            img.className = 'intro-image';
+            if (i === 1) img.classList.add('second');
+            img.src = imgUrls[i];
+            img.alt = `intro-${i+1}`;
+            img.style.zIndex = 10 + i;
+            overlay.appendChild(img);
+            images.push(img);
+        }
+
+        const textDiv = document.createElement('div');
+        textDiv.className = 'intro-text';
+        textDiv.innerHTML = `<div class="intro-title-main">苏 念</div><div class="intro-title-sub">—— 一个算累了的普通人 ——</div><div class="intro-author">· 伦理学教室 · 与沉默无关的声音 ·</div>`;
+        overlay.appendChild(textDiv);
+        document.body.insertBefore(overlay, document.body.firstChild);
+
+        function resizeOverlay() {
+            if (overlay.classList.contains('intro-fade-out')) return;
+            overlay.style.width = window.innerWidth + 'px';
+            overlay.style.height = window.innerHeight + 'px';
+        }
+        window.addEventListener('resize', resizeOverlay);
+        resizeOverlay();
+
+        // 第一张图片：100ms 滑入居中
+        setTimeout(() => {
+            if (images[0]) {
+                images[0].style.left = '50%';
+                images[0].style.transform = 'translateX(-50%) translateY(-50%)';
+                images[0].style.top = '35%';
+            }
+        }, 100);
+
+        // 文字：1200ms 渐显
+        setTimeout(() => {
+            textDiv.style.opacity = '1';
+            textDiv.style.transform = 'translateY(0)';
+        }, 1200);
+
+        // 第二张图片：立即设置垂直居中，动画已自动开始
+        if (images[1]) images[1].style.top = '50%';
+
+        // 第三张图片：4500ms 左下方固定
+        setTimeout(() => {
+            if (images[2]) {
+                images[2].style.left = '15%';
+                images[2].style.transform = 'translateY(-50%)';
+                images[2].style.top = '75%';
+            }
+        }, 4500);
+
+        // 整体淡出：7800ms 开始
+        setTimeout(() => {
+            overlay.classList.add('intro-fade-out');
+            overlay.addEventListener('animationend', function onEnd(e) {
+                if (e.animationName === 'introFadeOut') {
+                    overlay.removeEventListener('animationend', onEnd);
+                    if (overlay.parentNode) overlay.parentNode.removeChild(overlay);
+                    window.removeEventListener('resize', resizeOverlay);
+                    document.documentElement.style.overflow = '';
+                    document.body.style.overflow = '';
+                }
+            });
+            setTimeout(() => {
+                if (overlay.parentNode) overlay.parentNode.removeChild(overlay);
+                window.removeEventListener('resize', resizeOverlay);
+                document.documentElement.style.overflow = '';
+                document.body.style.overflow = '';
+            }, 8600);
+        }, 7800);
+    })();
+</script>
+</body>
+  </html>
