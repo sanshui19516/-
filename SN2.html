@@ -1,0 +1,1036 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <title>苏念 · 哲学怪物 · 灵境箴言</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;14..32,400;14..32,500;14..32,600&family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400&display=swap" rel="stylesheet">
+    <style>
+        /* ===== 全局重置 ===== */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            background: transparent;
+            font-family: 'Inter', system-ui, -apple-system, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px 16px;
+            min-height: 100%;
+            position: relative;
+        }
+
+        /* ===== 背景粒子画布（底层） ===== */
+        #particle-canvas {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 0;
+            opacity: 0.35;
+        }
+
+        /* ===== 情绪粒子画布（第二层） ===== */
+        #emotion-particle-canvas {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 1;
+            opacity: 0.6;
+        }
+
+        /* ===== 叙事呼吸条（最顶层） ===== */
+        .narrative-breath-bar {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 2px;
+            background: linear-gradient(90deg, transparent, rgba(200, 180, 150, 0.3), rgba(200, 180, 150, 0.6), rgba(200, 180, 150, 0.3), transparent);
+            z-index: 9999;
+            animation: breathPulse 4s ease-in-out infinite;
+            pointer-events: none;
+        }
+        @keyframes breathPulse {
+            0%, 100% { opacity: 0.2; transform: scaleX(0.9); }
+            50% { opacity: 0.8; transform: scaleX(1); }
+        }
+
+        /* ===== 翻转闪光容器 ===== */
+        #flash-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 9998;
+            opacity: 0;
+            transition: opacity 0.1s ease;
+            border-radius: 0;
+        }
+
+        /* ===== 主卡片容器 ===== */
+        .philosophy-card {
+            position: relative;
+            z-index: 2;
+            max-width: 540px;
+            width: 100%;
+            margin: 0 auto;
+            perspective: 2000px;
+        }
+        .flip-inner {
+            position: relative;
+            width: 100%;
+            transition: transform 0.8s cubic-bezier(0.23, 1, 0.32, 1);
+            transform-style: preserve-3d;
+            border-radius: 48px;
+        }
+        .philosophy-card.flipped .flip-inner {
+            transform: rotateY(180deg);
+        }
+
+        /* ===== 卡片正反面通用 ===== */
+        .card-side {
+            position: relative;
+            width: 100%;
+            backface-visibility: hidden;
+            background: radial-gradient(ellipse at 30% 20%, rgba(18, 12, 28, 0.92), rgba(8, 4, 16, 0.96));
+            backdrop-filter: blur(22px);
+            border-radius: 48px;
+            border: 1px solid rgba(170, 140, 95, 0.45);
+            box-shadow: 0 30px 45px -15px rgba(0, 0, 0, 0.7), 0 0 0 0.8px rgba(180, 150, 100, 0.2) inset;
+            padding: 30px 26px;
+            transition: border-color 1.2s ease, box-shadow 1.2s ease;
+        }
+
+        /* ===== 哲思渐变色驱动（通过父容器 .stage-0/1/2/3） ===== */
+        .stage-0 .card-side {
+            border-color: rgba(180, 160, 140, 0.5);
+            box-shadow: 0 30px 45px -15px rgba(0,0,0,0.7), 0 0 20px rgba(180,160,140,0.08);
+        }
+        .stage-1 .card-side {
+            border-color: rgba(219, 180, 75, 0.6);
+            box-shadow: 0 30px 45px -15px rgba(0,0,0,0.7), 0 0 30px rgba(219,180,75,0.15);
+        }
+        .stage-2 .card-side {
+            border-color: rgba(108, 143, 199, 0.6);
+            box-shadow: 0 30px 45px -15px rgba(0,0,0,0.7), 0 0 30px rgba(108,143,199,0.15);
+        }
+        .stage-3 .card-side {
+            border-color: rgba(184, 124, 219, 0.6);
+            box-shadow: 0 30px 45px -15px rgba(0,0,0,0.7), 0 0 30px rgba(184,124,219,0.15);
+        }
+
+        /* ===== 四角装饰 ===== */
+        .corner-decoration {
+            position: absolute;
+            width: 40px;
+            height: 40px;
+            border-style: solid;
+            border-color: rgba(180, 150, 100, 0.5);
+            pointer-events: none;
+            z-index: 5;
+        }
+        .corner-tl { top: 18px; left: 18px; border-width: 2px 0 0 2px; }
+        .corner-tr { top: 18px; right: 18px; border-width: 2px 2px 0 0; }
+        .corner-bl { bottom: 18px; left: 18px; border-width: 0 0 2px 2px; }
+        .corner-br { bottom: 18px; right: 18px; border-width: 0 2px 2px 0; }
+
+        .front { transform: rotateY(0deg); }
+        .back {
+            transform: rotateY(180deg);
+            position: absolute;
+            top: 0;
+            left: 0;
+            height: 100%;
+            overflow-y: auto;
+            padding-bottom: 40px;
+        }
+        .back::-webkit-scrollbar { width: 3px; }
+        .back::-webkit-scrollbar-track { background: rgba(170, 140, 95, 0.1); border-radius: 4px; }
+        .back::-webkit-scrollbar-thumb { background: rgba(170, 140, 95, 0.6); border-radius: 4px; }
+
+        /* ===== 顶部标识 ===== */
+        .stage-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: baseline;
+            margin-bottom: 28px;
+            flex-wrap: wrap;
+        }
+        .stage-tag {
+            font-family: 'Cormorant Garamond', serif;
+            font-weight: 600;
+            font-size: 0.9rem;
+            letter-spacing: 2px;
+            background: rgba(170, 140, 95, 0.18);
+            padding: 6px 18px;
+            border-radius: 60px;
+            color: #e2cfab;
+            border: 0.5px solid rgba(170, 140, 95, 0.6);
+            backdrop-filter: blur(4px);
+        }
+        .soul-mark {
+            font-size: 0.7rem;
+            font-weight: 300;
+            color: #a8926e;
+            letter-spacing: 2px;
+        }
+
+        /* ===== 数值容器 ===== */
+        .stats-vessel {
+            display: flex;
+            flex-direction: column;
+            gap: 26px;
+            margin: 20px 0 28px;
+        }
+        .stat-unit {
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+        }
+        .stat-legend {
+            display: flex;
+            justify-content: space-between;
+            font-size: 0.7rem;
+            font-weight: 500;
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+            color: #b8a07a;
+        }
+        .stat-value {
+            font-family: 'Cormorant Garamond', monospace;
+            font-size: 1.3rem;
+            font-weight: 600;
+            color: #f0e2ca;
+        }
+        .progress-bar {
+            background: rgba(0, 0, 0, 0.6);
+            border-radius: 60px;
+            height: 6px;
+            overflow: hidden;
+            box-shadow: inset 0 1px 3px rgba(0,0,0,0.5);
+        }
+        .progress-fill {
+            width: 0%;
+            height: 100%;
+            border-radius: 60px;
+            transition: width 0.7s cubic-bezier(0.22, 0.97, 0.36, 1);
+            position: relative;
+        }
+
+        /* ===== 被见证区域 ===== */
+        .witness-orb {
+            background: rgba(170, 140, 95, 0.12);
+            border-radius: 80px;
+            padding: 12px 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: baseline;
+            margin: 16px 0 18px;
+            backdrop-filter: blur(8px);
+            border: 0.5px solid rgba(170, 140, 95, 0.35);
+        }
+        .witness-orb span:first-child {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 0.9rem;
+            font-weight: 600;
+            letter-spacing: 2px;
+            background: linear-gradient(135deg, #ffe6b3, #e6c384);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            text-shadow: 0 0 8px rgba(230, 195, 132, 0.6);
+            position: relative;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+        }
+        .witness-orb span:first-child::before {
+            content: "「";
+            font-weight: 400;
+            opacity: 0.9;
+        }
+        .witness-orb span:first-child::after {
+            content: "」";
+            font-weight: 400;
+            opacity: 0.9;
+        }
+        .witness-orb .stat-value {
+            font-family: 'Cormorant Garamond', monospace;
+            font-size: 1.4rem;
+            font-weight: 700;
+            background: linear-gradient(135deg, #f9e6c2, #cfaa6e);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            text-shadow: 0 0 5px rgba(0,0,0,0.3);
+        }
+
+        /* ===== 哲学倾向图标 ===== */
+        .philo-ensemble {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 14px;
+            margin: 12px 0 10px;
+        }
+        .philo-icon {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            background: rgba(10, 8, 18, 0.75);
+            border-radius: 60px;
+            padding: 5px 14px 5px 12px;
+            font-size: 0.7rem;
+            font-weight: 500;
+            backdrop-filter: blur(5px);
+            border-left: 2px solid;
+            transition: all 0.2s;
+            cursor: default;
+        }
+        .philo-icon.kant { border-left-color: #dbb44b; color: #e9ce92; }
+        .philo-icon.bentham { border-left-color: #6c8fc7; color: #9bb8eb; }
+        .philo-icon.nietzsche { border-left-color: #b87cdb; color: #d6b0f0; }
+        .philo-icon.accompany { border-left-color: #5fb89b; color: #94d9bf; }
+        .pulse-glow {
+            animation: iconPulse 0.3s ease-out;
+        }
+        @keyframes iconPulse {
+            0% { text-shadow: 0 0 0 rgba(210, 180, 140, 0.7); transform: scale(1);}
+            50% { text-shadow: 0 0 8px currentColor; transform: scale(1.08);}
+            100% { text-shadow: 0 0 0; transform: scale(1);}
+        }
+
+        /* ===== 浮空数字 ===== */
+        .float-number {
+            position: absolute;
+            font-family: monospace;
+            font-size: 1rem;
+            font-weight: bold;
+            color: #e6c884;
+            pointer-events: none;
+            opacity: 0;
+            animation: floatUp 0.8s ease-out forwards;
+            z-index: 20;
+        }
+        @keyframes floatUp {
+            0% { opacity: 0.8; transform: translateY(0px);}
+            100% { opacity: 0; transform: translateY(-30px);}
+        }
+
+        /* ===== 翻转按钮 ===== */
+        .flip-btn {
+            background: rgba(170, 140, 95, 0.15);
+            border: 1px solid rgba(170, 140, 95, 0.5);
+            border-radius: 60px;
+            padding: 8px 24px;
+            font-size: 0.7rem;
+            font-weight: 500;
+            letter-spacing: 1px;
+            color: #dcccaa;
+            cursor: pointer;
+            transition: 0.2s;
+            display: inline-block;
+            backdrop-filter: blur(8px);
+        }
+        .flip-btn:hover {
+            background: rgba(170, 140, 95, 0.3);
+            transform: scale(0.96);
+            border-color: #d9bc84;
+            box-shadow: 0 0 8px rgba(170, 140, 95, 0.3);
+        }
+
+        /* ===== 模式切换按钮 ===== */
+        .mode-toggle {
+            text-align: center;
+            margin-top: 12px;
+        }
+        .mode-btn {
+            background: rgba(15, 12, 22, 0.85);
+            border: 0.5px solid rgba(170, 140, 95, 0.5);
+            border-radius: 40px;
+            padding: 4px 16px;
+            font-size: 0.6rem;
+            color: #b89a6b;
+            cursor: pointer;
+            transition: 0.2s;
+        }
+        .mode-btn:hover {
+            background: rgba(170, 140, 95, 0.2);
+            color: #e0caa0;
+        }
+
+        /* ===== 背面样式 ===== */
+        .back h4 {
+            font-family: 'Cormorant Garamond', serif;
+            font-weight: 500;
+            font-size: 1rem;
+            margin: 20px 0 12px;
+            color: #dbbc89;
+            letter-spacing: 1px;
+            border-left: 2px solid #dbbc89;
+            padding-left: 12px;
+        }
+        .virtue-wall {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin-bottom: 16px;
+        }
+        .virtue-tile {
+            background: rgba(170, 140, 95, 0.1);
+            border-radius: 32px;
+            padding: 6px 14px;
+            font-size: 0.7rem;
+            color: #c7b896;
+            backdrop-filter: blur(4px);
+        }
+        .event-gallery {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(105px,1fr));
+            gap: 8px;
+            max-height: 200px;
+            overflow-y: auto;
+        }
+        .event-chip {
+            background: rgba(0, 0, 0, 0.5);
+            border-radius: 20px;
+            padding: 5px 10px;
+            font-size: 0.65rem;
+            color: #b09a6e;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+        .event-chip::before {
+            content: "◈";
+            font-size: 0.7rem;
+            opacity: 0.7;
+        }
+
+        /* ===== 疲惫高亮呼吸 ===== */
+        .fatigue-high {
+            animation: breathGlow 1.2s ease-in-out infinite alternate;
+        }
+        @keyframes breathGlow {
+            0% { box-shadow: 0 0 2px rgba(170, 140, 95, 0.2), inset 0 0 2px rgba(170, 140, 95, 0.1);}
+            100% { box-shadow: 0 0 12px rgba(170, 140, 95, 0.5), inset 0 0 6px rgba(170, 140, 95, 0.3);}
+        }
+
+        /* ===== 敢做火花 ===== */
+        .action-spark {
+            position: relative;
+        }
+        .action-spark::after {
+            content: "✨";
+            position: absolute;
+            right: -20px;
+            top: -8px;
+            font-size: 12px;
+            animation: sparkFloat 0.6s ease-out;
+        }
+        @keyframes sparkFloat {
+            0% { opacity: 1; transform: translate(0,0);}
+            100% { opacity: 0; transform: translate(10px,-15px);}
+        }
+
+        /* ===== 黑暗模式 ===== */
+        body.dark-mode .card-side {
+            background: radial-gradient(ellipse at 30% 20%, rgba(6, 3, 12, 0.97), rgba(2, 1, 6, 0.99));
+            border-color: rgba(100, 80, 60, 0.6);
+            box-shadow: 0 20px 35px -10px black;
+        }
+        body.dark-mode .stage-tag,
+        body.dark-mode .philo-icon,
+        body.dark-mode .witness-orb {
+            background: rgba(0, 0, 0, 0.65);
+        }
+        body.dark-mode .flip-btn {
+            background: rgba(0, 0, 0, 0.55);
+        }
+
+        /* ===== 响应式 ===== */
+        @media (max-width: 600px) {
+            body { padding: 12px 8px; }
+            .card-side { padding: 20px 16px; border-radius: 32px; }
+            .stage-tag { font-size: 0.7rem; padding: 4px 12px; }
+            .stat-value { font-size: 1.1rem; }
+            .philo-icon { font-size: 0.6rem; padding: 3px 10px; }
+            .witness-orb { padding: 8px 14px; }
+            .back h4 { font-size: 0.85rem; }
+            .event-gallery { grid-template-columns: repeat(auto-fill, minmax(80px,1fr)); }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- ===== 背景粒子画布 ===== -->
+    <canvas id="particle-canvas"></canvas>
+
+    <!-- ===== 情绪粒子画布 ===== -->
+    <canvas id="emotion-particle-canvas"></canvas>
+
+    <!-- ===== 翻转闪光覆盖层 ===== -->
+    <div id="flash-overlay"></div>
+
+    <!-- ===== 叙事呼吸条 ===== -->
+    <div class="narrative-breath-bar"></div>
+
+    <!-- ===== 主卡片 ===== -->
+    <div class="philosophy-card" id="philosophyCard">
+        <div class="flip-inner">
+
+            <!-- ===== 正面 ===== -->
+            <div class="card-side front">
+                <div class="corner-decoration corner-tl"></div>
+                <div class="corner-decoration corner-tr"></div>
+                <div class="corner-decoration corner-bl"></div>
+                <div class="corner-decoration corner-br"></div>
+
+                <div class="stage-header">
+                    <div class="stage-tag" id="stageName">混乱期</div>
+                    <div class="soul-mark">✦ 作者·三年的水 ✦</div>
+                </div>
+
+                <div class="stats-vessel">
+                    <div class="stat-unit" id="fatigueUnit">
+                        <div class="stat-legend">
+                            <span>🌙 疲惫值</span>
+                            <span class="stat-value" id="fatigueVal">0</span>
+                        </div>
+                        <div class="progress-bar">
+                            <div class="progress-fill" id="fatigueFill" style="width:0%; background: linear-gradient(90deg, #b5914b, #8a6c3b);"></div>
+                        </div>
+                    </div>
+                    <div class="stat-unit" id="actionUnit">
+                        <div class="stat-legend">
+                            <span>⚡ 敢做指数</span>
+                            <span class="stat-value" id="actionVal">0</span>
+                        </div>
+                        <div class="progress-bar">
+                            <div class="progress-fill" id="actionFill" style="width:0%; background: linear-gradient(90deg, #6682b5, #415780);"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="witness-orb">
+                    <span>👁 被见证 · 回声</span>
+                    <span class="stat-value" id="witnessVal">0</span>
+                </div>
+
+                <div class="philo-ensemble" id="philoIcons">
+                    <div class="philo-icon kant" data-philo="kant">⚖️ 康德 · <span id="kantVal">0</span></div>
+                    <div class="philo-icon bentham" data-philo="bentham">📊 边沁 · <span id="benthamVal">0</span></div>
+                    <div class="philo-icon nietzsche" data-philo="nietzsche">🌀 尼采 · <span id="nietzscheVal">0</span></div>
+                    <div class="philo-icon accompany" data-philo="accompany">🤝 陪伴 · <span id="accompanyVal">0</span></div>
+                </div>
+
+                <div style="display:flex; justify-content:center; gap:12px; flex-wrap:wrap;">
+                    <div class="flip-btn" id="flipToBack">📜 翻转 · 窥探幽微</div>
+                </div>
+
+                <div class="mode-toggle">
+                    <div class="mode-btn" id="darkModeToggle">◈ 凝视深渊 ◈</div>
+                </div>
+
+                <div style="text-align:center; font-size:0.55rem; margin-top: 12px; opacity:0.5;">轻触卡片 / 按钮 翻转</div>
+            </div>
+
+            <!-- ===== 背面 ===== -->
+            <div class="card-side back">
+                <div class="corner-decoration corner-tl"></div>
+                <div class="corner-decoration corner-tr"></div>
+                <div class="corner-decoration corner-bl"></div>
+                <div class="corner-decoration corner-br"></div>
+
+                <h4>📿 善行之痕</h4>
+                <div class="virtue-wall" id="virtueWall"></div>
+
+                <h4>⛓️ 事件刻印</h4>
+                <div class="event-gallery" id="eventGallery"></div>
+
+                <div style="display:flex; justify-content:center; margin-top: 32px;">
+                    <div class="flip-btn" id="flipToFront">✨ 归返 · 直面灵知</div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+<script>
+    (function() {
+        'use strict';
+
+        // ============================================================
+        // 1. 背景粒子系统（原有）
+        // ============================================================
+        const canvas = document.getElementById('particle-canvas');
+        let ctx = canvas.getContext('2d');
+        let particles = [];
+        let animationId = null;
+
+        function resizeCanvas() {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+        }
+
+        function initParticles() {
+            particles = [];
+            for (let i = 0; i < 60; i++) {
+                particles.push({
+                    x: Math.random() * canvas.width,
+                    y: Math.random() * canvas.height,
+                    radius: Math.random() * 2 + 1,
+                    alpha: Math.random() * 0.4 + 0.1,
+                    speedX: (Math.random() - 0.5) * 0.3,
+                    speedY: (Math.random() - 0.5) * 0.2,
+                });
+            }
+        }
+
+        function drawParticles() {
+            if (!ctx) return;
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            for (let p of particles) {
+                ctx.beginPath();
+                ctx.arc(p.x, p.y, p.radius, 0, Math.PI * 2);
+                ctx.fillStyle = 'rgba(170, 140, 95, ' + p.alpha + ')';
+                ctx.fill();
+                p.x += p.speedX;
+                p.y += p.speedY;
+                if (p.x < 0) p.x = canvas.width;
+                if (p.x > canvas.width) p.x = 0;
+                if (p.y < 0) p.y = canvas.height;
+                if (p.y > canvas.height) p.y = 0;
+            }
+            animationId = requestAnimationFrame(drawParticles);
+        }
+
+        function startParticles() {
+            resizeCanvas();
+            initParticles();
+            drawParticles();
+        }
+        window.addEventListener('resize', function() {
+            resizeCanvas();
+            initParticles();
+        });
+        startParticles();
+
+        // ============================================================
+        // 2. 情绪粒子系统（新增）
+        // ============================================================
+        const emotionCanvas = document.getElementById('emotion-particle-canvas');
+        let eCtx = emotionCanvas.getContext('2d');
+        let emotionParticles = [];
+        let emotionAnimId = null;
+        window._fatigueCache = 20;
+        window._actionCache = 30;
+
+        function resizeEmotionCanvas() {
+            emotionCanvas.width = window.innerWidth;
+            emotionCanvas.height = window.innerHeight;
+        }
+
+        function initEmotionParticles() {
+            emotionParticles = [];
+            for (let i = 0; i < 80; i++) {
+                emotionParticles.push({
+                    x: Math.random() * emotionCanvas.width,
+                    y: Math.random() * emotionCanvas.height,
+                    radius: Math.random() * 2.5 + 0.5,
+                    speedX: (Math.random() - 0.5) * 0.4,
+                    speedY: (Math.random() - 0.5) * 0.4,
+                    baseAlpha: Math.random() * 0.3 + 0.1,
+                    color: Math.random() > 0.6 ? 'golden' : 'default'
+                });
+            }
+        }
+
+        function drawEmotionParticles() {
+            if (!eCtx) return;
+            eCtx.clearRect(0, 0, emotionCanvas.width, emotionCanvas.height);
+
+            var fatigue = window._fatigueCache || 20;
+            var action = window._actionCache || 30;
+            var fatigueFactor = Math.min(1, fatigue / 100);
+            var actionFactor = Math.min(1, action / 100);
+
+            for (var i = 0; i < emotionParticles.length; i++) {
+                var p = emotionParticles[i];
+                var alphaOffset = fatigueFactor * 0.3;
+                var sizeOffset = 1 + actionFactor * 0.8;
+                var color;
+
+                if (p.color === 'golden') {
+                    color = 'rgba(230, 200, 150, ' + (p.baseAlpha + alphaOffset * 0.5) + ')';
+                    if (actionFactor > 0.5) {
+                        eCtx.shadowColor = 'rgba(230, 200, 150, 0.3)';
+                        eCtx.shadowBlur = 8;
+                    } else {
+                        eCtx.shadowBlur = 0;
+                    }
+                } else {
+                    color = 'rgba(180, 170, 190, ' + (p.baseAlpha + alphaOffset * 0.3) + ')';
+                    eCtx.shadowBlur = 0;
+                }
+
+                eCtx.beginPath();
+                eCtx.arc(p.x, p.y, p.radius * sizeOffset, 0, Math.PI * 2);
+                eCtx.fillStyle = color;
+                eCtx.fill();
+
+                p.x += p.speedX * (1 + actionFactor * 0.5);
+                p.y += p.speedY * (1 + actionFactor * 0.5);
+                if (p.x < 0) p.x = emotionCanvas.width;
+                if (p.x > emotionCanvas.width) p.x = 0;
+                if (p.y < 0) p.y = emotionCanvas.height;
+                if (p.y > emotionCanvas.height) p.y = 0;
+            }
+
+            // 动态调整金色粒子比例
+            var goldRatio = 0.2 + actionFactor * 0.5;
+            for (var j = 0; j < emotionParticles.length; j++) {
+                if (Math.random() < 0.01) {
+                    emotionParticles[j].color = Math.random() < goldRatio ? 'golden' : 'default';
+                }
+            }
+
+            emotionAnimId = requestAnimationFrame(drawEmotionParticles);
+        }
+
+        function startEmotionParticles() {
+            resizeEmotionCanvas();
+            initEmotionParticles();
+            drawEmotionParticles();
+        }
+        window.addEventListener('resize', function() {
+            resizeEmotionCanvas();
+            initEmotionParticles();
+        });
+        startEmotionParticles();
+
+        // ============================================================
+        // 3. 翻转闪光特效
+        // ============================================================
+        var flashOverlay = document.getElementById('flash-overlay');
+        var flashTimeout = null;
+
+        function triggerPhilosophicalFlash(color, intensity) {
+            intensity = intensity || 0.3;
+            flashOverlay.style.background = 'radial-gradient(circle at center, ' + color + ' ' + (intensity * 100) + '%, transparent 80%)';
+            flashOverlay.style.opacity = '1';
+            if (flashTimeout) clearTimeout(flashTimeout);
+            flashTimeout = setTimeout(function() {
+                flashOverlay.style.opacity = '0';
+            }, 200);
+        }
+
+        // ============================================================
+        // 4. 酒馆变量绑定 & UI更新
+        // ============================================================
+        var stageNames = { 0: '混乱期', 1: '规则期', 2: '计算期', 3: '累了期' };
+        var prevFatigue = 20;
+        var prevAction = 30;
+        window._lastStageEnd = [false, false, false, false];
+
+        function createFloatNumber(parent, value, color) {
+            color = color || '#e6c884';
+            var rect = parent.getBoundingClientRect();
+            var span = document.createElement('div');
+            span.className = 'float-number';
+            span.innerText = '±' + Math.abs(value).toFixed(1);
+            span.style.color = color;
+            span.style.left = (rect.left + rect.width / 2 - 20) + 'px';
+            span.style.top = rect.top + 'px';
+            document.body.appendChild(span);
+            setTimeout(function() { span.remove(); }, 800);
+        }
+
+        function updateStageClass(stage) {
+            var card = document.getElementById('philosophyCard');
+            if (!card) return;
+            for (var i = 0; i <= 3; i++) {
+                card.classList.remove('stage-' + i);
+            }
+            card.classList.add('stage-' + stage);
+        }
+
+        function updateUI(statData) {
+            if (!statData) return;
+            var su = statData.苏念 || {};
+            if (!su) return;
+
+            // ---- 思辨阶段 ----
+            var stage = Math.floor(su.思辨阶段 || 0);
+            var stageElem = document.getElementById('stageName');
+            if (stageElem) stageElem.innerText = stageNames[stage] || '混乱期';
+            updateStageClass(stage);
+
+            // ---- 疲惫值 ----
+            var fatigue = Number(su.疲惫值 || 20);
+            fatigue = Math.min(100, Math.max(0, fatigue));
+            var fatigueVal = document.getElementById('fatigueVal');
+            if (fatigueVal) fatigueVal.innerText = fatigue.toFixed(1);
+            var fatigueFill = document.getElementById('fatigueFill');
+            if (fatigueFill) fatigueFill.style.width = fatigue + '%';
+            if (Math.abs(fatigue - prevFatigue) > 0.2 && fatigue !== prevFatigue) {
+                var fatigueUnit = document.getElementById('fatigueUnit');
+                if (fatigueUnit) {
+                    createFloatNumber(fatigueUnit, fatigue - prevFatigue, fatigue > prevFatigue ? '#df8f6e' : '#7fbf8a');
+                }
+                if (fatigue >= 75) {
+                    var fu = document.getElementById('fatigueUnit');
+                    if (fu) fu.classList.add('fatigue-high');
+                } else {
+                    var fu2 = document.getElementById('fatigueUnit');
+                    if (fu2) fu2.classList.remove('fatigue-high');
+                }
+            }
+            prevFatigue = fatigue;
+            window._fatigueCache = fatigue;
+
+            // ---- 敢做指数 ----
+            var action = Number(su.敢做指数 || 30);
+            action = Math.min(100, Math.max(0, action));
+            var actionVal = document.getElementById('actionVal');
+            if (actionVal) actionVal.innerText = action.toFixed(1);
+            var actionFill = document.getElementById('actionFill');
+            if (actionFill) actionFill.style.width = action + '%';
+            if (Math.abs(action - prevAction) > 0.2 && action !== prevAction) {
+                var actionUnit = document.getElementById('actionUnit');
+                if (actionUnit) {
+                    createFloatNumber(actionUnit, action - prevAction, action > prevAction ? '#e6ae5e' : '#7c99dd');
+                }
+                if (action - prevAction > 3) {
+                    var au = document.getElementById('actionUnit');
+                    if (au) {
+                        au.classList.add('action-spark');
+                        setTimeout(function() { au.classList.remove('action-spark'); }, 600);
+                    }
+                }
+            }
+            prevAction = action;
+            window._actionCache = action;
+
+            // ---- 被见证次数 ----
+            var witnessed = Number(su.被见证次数 || 0);
+            var wv = document.getElementById('witnessVal');
+            if (wv) wv.innerText = witnessed.toFixed(1);
+
+            // ---- 哲学倾向 ----
+            var kantVal = document.getElementById('kantVal');
+            if (kantVal) kantVal.innerText = su.康德倾向 || 0;
+            var benthamVal = document.getElementById('benthamVal');
+            if (benthamVal) benthamVal.innerText = su.边沁倾向 || 0;
+            var nietzscheVal = document.getElementById('nietzscheVal');
+            if (nietzscheVal) nietzscheVal.innerText = su.尼采倾向 || 0;
+            var accompanyVal = document.getElementById('accompanyVal');
+            if (accompanyVal) accompanyVal.innerText = su.陪伴倾向 || 0;
+
+            // ---- 倾向脉冲特效 ----
+            var philoMap = ['康德倾向', '边沁倾向', '尼采倾向', '陪伴倾向'];
+            var ids = ['kantVal', 'benthamVal', 'nietzscheVal', 'accompanyVal'];
+            for (var pi = 0; pi < ids.length; pi++) {
+                var newVal = su[philoMap[pi]] || 0;
+                var oldSpan = document.getElementById(ids[pi]);
+                if (oldSpan && oldSpan.dataset.prev !== undefined && parseInt(oldSpan.dataset.prev) !== newVal && newVal > 0) {
+                    var parentDiv = oldSpan.closest('.philo-icon');
+                    if (parentDiv) {
+                        parentDiv.classList.add('pulse-glow');
+                        setTimeout(function() {
+                            if (parentDiv) parentDiv.classList.remove('pulse-glow');
+                        }, 400);
+                    }
+                }
+                if (oldSpan) oldSpan.dataset.prev = newVal;
+            }
+
+            // ---- 阶段末闪光检测 ----
+            var stageEndKeys = ['阶段0末已触发', '阶段1末已触发', '阶段2末已触发', '阶段3末已触发'];
+            var colors = ['#dbb44b', '#6c8fc7', '#b87cdb', '#5fb89b'];
+            for (var si = 0; si < stageEndKeys.length; si++) {
+                if (su[stageEndKeys[si]] === 1 && !window._lastStageEnd[si]) {
+                    triggerPhilosophicalFlash(colors[si], 0.4);
+                    window._lastStageEnd[si] = true;
+                }
+                if (su[stageEndKeys[si]] === 0) {
+                    window._lastStageEnd[si] = false;
+                }
+            }
+
+            // ---- 善行记录 ----
+            var virtues = [
+                { name: '帮过阿姨', key: '帮过阿姨' },
+                { name: '保留纸条', key: '保留过纸条' },
+                { name: '举报作弊', key: '举报过作弊' },
+                { name: '作证过', key: '作证过' },
+                { name: '给老人捐款', key: '给老人捐过款' },
+                { name: '尝试不做', key: '尝试不做选择', special: function(v) { return v === 1 ? '阻止' : v === 2 ? '不动' : v === 3 ? '闭眼' : '未记录'; } }
+            ];
+            var virtueWall = document.getElementById('virtueWall');
+            if (virtueWall) {
+                var vhtml = '';
+                for (var vi = 0; vi < virtues.length; vi++) {
+                    var v = virtues[vi];
+                    var val = su[v.key] || 0;
+                    var display = val;
+                    if (v.special) {
+                        display = v.special(val);
+                    } else if (val === 1) {
+                        display = '✓';
+                    } else if (val === 0 && v.key !== '尝试不做选择') {
+                        display = '✗';
+                    }
+                    vhtml += '<span class="virtue-tile">' + v.name + ' · ' + display + '</span>';
+                }
+                virtueWall.innerHTML = vhtml;
+            }
+
+            // ---- 事件刻印 ----
+            var eventKeys = [
+                '事件0_1', '事件0_2', '事件0_3', '事件0_4',
+                '事件1_1', '事件1_2', '事件1_3', '事件1_4',
+                '事件2_1', '事件2_2', '事件2_3', '事件2_4', '事件2_5',
+                '事件3_1', '事件3_2', '事件3_3', '事件3_4'
+            ];
+            var done = [];
+            for (var ei = 0; ei < eventKeys.length; ei++) {
+                if (su[eventKeys[ei]] === 1) {
+                    done.push(eventKeys[ei]);
+                }
+            }
+            var gallery = document.getElementById('eventGallery');
+            if (gallery) {
+                if (done.length === 0) {
+                    gallery.innerHTML = '<div class="event-chip" style="grid-column:span 2;">◈ 尚未留下刻痕 ◈</div>';
+                } else {
+                    var ghtml = '';
+                    for (var di = 0; di < done.length; di++) {
+                        ghtml += '<div class="event-chip">🔸 ' + done[di] + '</div>';
+                    }
+                    gallery.innerHTML = ghtml;
+                }
+            }
+        }
+
+        // ============================================================
+        // 5. 变量获取与监听
+        // ============================================================
+        function fetchVariables() {
+            try {
+                if (typeof getAllVariables === 'function') {
+                    var all = getAllVariables();
+                    if (all && all.stat_data) {
+                        updateUI(all.stat_data);
+                    }
+                }
+            } catch (e) { /* ignore */ }
+        }
+
+        // 监听酒馆消息渲染事件
+        if (typeof SillyTavern !== 'undefined' && SillyTavern.eventSource) {
+            SillyTavern.eventSource.on('message-rendered', function(event) {
+                var d = event && event.detail;
+                if (d && d.data && d.data.stat_data) {
+                    updateUI(d.data.stat_data);
+                } else if (d && d.stat_data) {
+                    updateUI(d.stat_data);
+                } else {
+                    fetchVariables();
+                }
+            });
+        } else {
+            fetchVariables();
+            setInterval(fetchVariables, 3000);
+        }
+
+        // 初始加载
+        (function initLoad() {
+            try {
+                if (typeof getCurrentMessageId === 'function' && typeof getChatMessages === 'function') {
+                    var mid = getCurrentMessageId();
+                    if (mid) {
+                        getChatMessages(mid).then(function(msgs) {
+                            if (msgs && msgs.length && msgs[0] && msgs[0].data && msgs[0].data.stat_data) {
+                                updateUI(msgs[0].data.stat_data);
+                            }
+                        });
+                    }
+                }
+            } catch (e) { /* ignore */ }
+            fetchVariables();
+        })();
+
+        // ============================================================
+        // 6. 翻转控制
+        // ============================================================
+        var card = document.getElementById('philosophyCard');
+        var flipToBack = document.getElementById('flipToBack');
+        var flipToFront = document.getElementById('flipToFront');
+
+        if (flipToBack) {
+            flipToBack.addEventListener('click', function(e) {
+                e.stopPropagation();
+                card.classList.add('flipped');
+            });
+        }
+        if (flipToFront) {
+            flipToFront.addEventListener('click', function(e) {
+                e.stopPropagation();
+                card.classList.remove('flipped');
+            });
+        }
+        if (card) {
+            card.addEventListener('click', function(e) {
+                if (!e.target.closest('.flip-btn') && !e.target.closest('.mode-btn')) {
+                    card.classList.toggle('flipped');
+                }
+            });
+        }
+
+        // ============================================================
+        // 7. 黑暗模式切换
+        // ============================================================
+        var darkBtn = document.getElementById('darkModeToggle');
+        if (darkBtn) {
+            darkBtn.addEventListener('click', function() {
+                document.body.classList.toggle('dark-mode');
+                darkBtn.innerText = document.body.classList.contains('dark-mode') ? '◈ 归还光明 ◈' : '◈ 凝视深渊 ◈';
+            });
+        }
+
+        // ============================================================
+        // 8. 填充输入框工具（供选项调用）
+        // ============================================================
+        window.fillInput = function(text) {
+            try {
+                var ta = document.querySelector('#send_textarea') || (window.parent && window.parent.document.querySelector('#send_textarea'));
+                if (ta) {
+                    ta.value = text;
+                    ta.dispatchEvent(new Event('input', { bubbles: true }));
+                    ta.focus();
+                }
+            } catch (e) { /* ignore */ }
+        };
+
+        // ============================================================
+        // 9. 对外暴露更新函数（便于调试）
+        // ============================================================
+        window.updateSUNStatus = updateUI;
+
+        console.log('[苏念·状态栏] 完整增强版已加载。');
+        console.log('[增强模块] 背景粒子 ✓ 情绪粒子 ✓ 哲思渐变色 ✓ 转折闪光 ✓ 叙事呼吸条 ✓');
+
+    })();
+</script>
+</body>
+</html>
