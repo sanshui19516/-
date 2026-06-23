@@ -23,13 +23,12 @@
   <div class="title">桜の花は四季の移ろいを彩る。</div>
   <div class="gallery-container" id="gallery"></div>
   <div class="content-box">
-      <!-- ⭐️ 这里用占位符替代了原本的 $1 -->
       <div class="text-display" id="main-content">{{AI_CONTENT}}</div>
       <div class="sub-title">Forbidden Love</div>
   </div>
   <div class="status-bar">[ 回廊流光 · 紫夜樱霞 ]</div>
 
-  <!-- 把画廊的JS也完整带上 -->
+  <!-- 画廊内置的 JS -->
   <script>
     var gallery = document.getElementById('gallery');
     var originalImages = ["https://testingcf.jsdelivr.net/gh/sanshui19516/-@main/1.jpg","https://testingcf.jsdelivr.net/gh/sanshui19516/-@main/2.jpg","https://testingcf.jsdelivr.net/gh/sanshui19516/-@main/3.jpg","https://testingcf.jsdelivr.net/gh/sanshui19516/-@main/4.jpg","https://testingcf.jsdelivr.net/gh/sanshui19516/-@main/5.jpg","https://testingcf.jsdelivr.net/gh/sanshui19516/-@main/6.jpg","https://testingcf.jsdelivr.net/gh/sanshui19516/-@main/7.jpg","https://testingcf.jsdelivr.net/gh/sanshui19516/-@main/8.jpg"];
@@ -50,6 +49,25 @@
     gallery.addEventListener('pointerup', stopDragging); gallery.addEventListener('pointercancel', stopDragging);
     function animate() { if (!isDragging) { velocity *= INERTIA_DAMPING; targetScroll += velocity; if (Math.abs(velocity) < 0.01) velocity = 0; } targetScroll = Math.max(0, Math.min(targetScroll, gallery.scrollWidth - gallery.clientWidth)); handleInfiniteScroll(); currentScroll = lerp(currentScroll, targetScroll, SCROLL_SMOOTHING); gallery.scrollLeft = currentScroll; for (var i = 0; i < images.length; i++) { var offset = (cachedContainerCenter - cachedItemsCenters[i]) / 5; offset = Math.max(-50, Math.min(50, offset)); images[i].style.transform = 'translate(calc(-50% + ' + offset.toFixed(1) + 'px), -50%)'; } updateItemsCenters(); animationId = requestAnimationFrame(animate); }
     setTimeout(function() { updateItemsCenters(); targetScroll = (gallery.scrollWidth - gallery.clientWidth) / 2; currentScroll = targetScroll; gallery.scrollLeft = currentScroll; animate(); }, 150);
-  <\/script>
+  </script>
+
+  <!-- 🟢 新增：自适应高度汇报脚本 -->
+  <script>
+    // 负责把当前页面实际高度告诉外部 iframe，让黑框自适应拉伸
+    function syncHeightToParent() {
+        var h = Math.max(document.documentElement.scrollHeight, document.body.scrollHeight);
+        window.parent.postMessage({ height: h + 4 }, '*');
+    }
+    if (typeof MutationObserver !== 'undefined') {
+        var observer = new MutationObserver(syncHeightToParent);
+        observer.observe(document.body, { attributes: true, childList: true, subtree: true });
+    }
+    window.addEventListener('DOMContentLoaded', syncHeightToParent);
+    window.addEventListener('load', function() { 
+        syncHeightToParent(); 
+        setTimeout(syncHeightToParent, 100); 
+    });
+    window.addEventListener('resize', syncHeightToParent);
+  </script>
 </body>
 </html>
