@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <link href="https://fonts.googleapis.com/css2?family=Limelight&family=Noto+Serif+JP:wght@400;700&family=Noto+Sans+JP:wght@400;700&display=swap" rel="stylesheet">
+  <style>
+    * { margin:0; padding:0; box-sizing:border-box; -webkit-touch-callout:none; -webkit-user-select:none; user-select:none; }
+    body { background-color: #F5EEF3; background-image: radial-gradient(rgba(180, 120, 200, 0.05) 1px, transparent 1px), radial-gradient(circle at 65% 30%, #FFD1DC 0%, #E8D3E8 70%, #F5EEF3 100%); background-size: 16px 16px, 100% 100%; display:flex; flex-direction:column; height: auto; padding: 14px; overflow: hidden; margin:0; font-family: 'Noto Sans JP', -apple-system, BlinkMacSystemFont, sans-serif; }
+    .title { font-family: "Limelight", "Noto Serif JP", serif; font-size:4.5vw; color: #FFFFFF; text-shadow: 0 0 30px rgba(255, 105, 180, 0.5), 0 0 50px rgba(160, 100, 200, 0.4); text-align:right; padding-right:5px; opacity:0.95; pointer-events:none; letter-spacing:2px; line-height:1.2; flex-shrink:0; }
+    .gallery-container { display:flex; overflow-x:hidden; padding:10px 0; gap:12px; touch-action: pan-y; width:100%; flex-shrink:0; height: 180px; }
+    .gallery-item { position:relative; flex:0 0 240px; height:100%; border-radius:10px; overflow:hidden; box-shadow:0 6px 20px rgba(160, 100, 200, 0.25); will-change:transform; cursor: grab; }
+    .gallery-item:active { cursor: grabbing; }
+    .gallery-item img { position:absolute; top:50%; left:50%; width:115%; height:100%; object-fit:cover; transform:translate(-50%, -50%); will-change:transform; pointer-events: none; }
+    .content-box { flex: 1; display:flex; flex-direction:column; padding:14px; background: rgba(255, 255, 255, 0.35); backdrop-filter:blur(20px); -webkit-backdrop-filter:blur(20px); border-radius:12px; border: 1px solid rgba(255, 255, 255, 0.9); box-shadow: inset 0 2px 4px rgba(255, 255, 255, 0.8), inset 0 -2px 6px rgba(180, 120, 200, 0.3), 0 8px 32px rgba(180, 120, 200, 0.2); margin:6px 0; height: auto; overflow: hidden; }
+    .text-display { font-size:1rem; line-height:1.8; color: #503D4A; font-family:'Georgia','Noto Serif SC',serif; letter-spacing:0.5px; white-space:pre-wrap; word-break:break-word; -webkit-user-select:text; user-select:text; }
+    .sub-title { font-family: "Limelight", "Noto Sans JP", sans-serif; font-size:1.2rem; color: #C786A8; text-shadow: 0 0 20px rgba(180, 120, 200, 0.6), 0 1px 2px rgba(0,0,0,0.02); text-align:right; margin-top:10px; pointer-events:none; flex-shrink:0; }
+    .status-bar { width:100%; height:30px; padding:0 10px; background: rgba(245, 238, 243, 0.5); border-radius:6px; border:1px solid rgba(180, 120, 200, 0.3); display:flex; justify-content:center; align-items:center; color: #C786A8; font-size:11px; flex-shrink:0; margin-top: 4px; letter-spacing: 1px; backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px); }
+    @media (max-width:768px){ body { padding: 8px; } .title { font-size:7vw; } .gallery-container { height: 130px; gap:8px; } .gallery-item { flex:0 0 130px; border-radius:8px; } .content-box { padding: 10px; } .text-display { font-size:0.9rem; line-height:1.5; } .sub-title { font-size: 1rem; } }
+  </style>
+</head>
+<body>
+  <div class="title">桜の花は四季の移ろいを彩る。</div>
+  <div class="gallery-container" id="gallery"></div>
+  <div class="content-box">
+      <!-- ⭐️ 这里用占位符替代了原本的 $1 -->
+      <div class="text-display" id="main-content">{{AI_CONTENT}}</div>
+      <div class="sub-title">Forbidden Love</div>
+  </div>
+  <div class="status-bar">[ 回廊流光 · 紫夜樱霞 ]</div>
+
+  <!-- 把画廊的JS也完整带上 -->
+  <script>
+    var gallery = document.getElementById('gallery');
+    var originalImages = ["https://testingcf.jsdelivr.net/gh/sanshui19516/-@main/1.jpg","https://testingcf.jsdelivr.net/gh/sanshui19516/-@main/2.jpg","https://testingcf.jsdelivr.net/gh/sanshui19516/-@main/3.jpg","https://testingcf.jsdelivr.net/gh/sanshui19516/-@main/4.jpg","https://testingcf.jsdelivr.net/gh/sanshui19516/-@main/5.jpg","https://testingcf.jsdelivr.net/gh/sanshui19516/-@main/6.jpg","https://testingcf.jsdelivr.net/gh/sanshui19516/-@main/7.jpg","https://testingcf.jsdelivr.net/gh/sanshui19516/-@main/8.jpg"];
+    var SNAP_ENABLED = true, SNAP_DELAY = 200, SNAP_STRENGTH = 0.1, INERTIA_DAMPING = 0.90, SCROLL_SMOOTHING = 0.18, cloneCount = 3; var allItems = [];
+    function buildInfiniteGallery() { gallery.innerHTML = ''; allItems = []; for (var c = 0; c < cloneCount; c++) { originalImages.forEach(function(src) { var item = document.createElement('div'); item.className = 'gallery-item'; var img = document.createElement('img'); img.src = src; item.appendChild(img); gallery.appendChild(item); allItems.push(item); }); } } buildInfiniteGallery();
+    var targetScroll = 0, currentScroll = 0, velocity = 0, snapTimeout = null, isLooping = false, animationId = null; var items = Array.from(document.querySelectorAll('.gallery-item')); var images = items.map(function(item) { return item.querySelector('img'); }); var cachedContainerCenter = gallery.clientWidth / 2, cachedItemsCenters = new Array(items.length); var originalSetSize = originalImages.length;
+    function updateItemsCenters() { cachedContainerCenter = gallery.clientWidth / 2; var containerRect = gallery.getBoundingClientRect(); for (var i = 0; i < items.length; i++) { var rect = items[i].getBoundingClientRect(); cachedItemsCenters[i] = (rect.left - containerRect.left) + rect.width / 2; } }
+    function handleInfiniteScroll() { if (isLooping) return; var maxScroll = gallery.scrollWidth - gallery.clientWidth; if (maxScroll <= 0) return; var setWidth = getOriginalSetWidth(); var threshold = setWidth * 0.3; if (targetScroll > maxScroll - threshold) { isLooping = true; targetScroll -= setWidth; currentScroll = targetScroll; gallery.scrollLeft = currentScroll; requestAnimationFrame(function() { isLooping = false }); } else if (targetScroll < threshold) { isLooping = true; targetScroll += setWidth; currentScroll = targetScroll; gallery.scrollLeft = currentScroll; requestAnimationFrame(function() { isLooping = false }); } }
+    function getOriginalSetWidth() { if (items.length === 0) return 0; var firstItemRect = items[0].getBoundingClientRect(); var lastItemRect = items[originalSetSize - 1].getBoundingClientRect(); var gap = items.length > 1 ? (items[1].getBoundingClientRect().left - firstItemRect.right) : 12; return (lastItemRect.right - firstItemRect.left) + gap; }
+    function lerp(start, end, amt) { return start + (end - start) * amt; }
+    function triggerSnap() { if (!SNAP_ENABLED || Math.abs(velocity) > 0.5 || isDragging) return; updateItemsCenters(); var closest = 0, minDist = Infinity; for (var i = 0; i < items.length; i++) { var dist = Math.abs(cachedContainerCenter - cachedItemsCenters[i]); if (dist < minDist) { minDist = dist; closest = i; } } var rect = items[closest].getBoundingClientRect(); var containerRect = gallery.getBoundingClientRect(); var currentCenterPos = (rect.left - containerRect.left) + rect.width / 2; var targetPosition = targetScroll + (currentCenterPos - cachedContainerCenter); targetScroll = Math.max(0, Math.min(targetPosition, gallery.scrollWidth - gallery.clientWidth)); }
+    function resetSnap() { clearTimeout(snapTimeout); if (SNAP_ENABLED) snapTimeout = setTimeout(triggerSnap, SNAP_DELAY); }
+    window.addEventListener('wheel', function(e) { if (!e.target.closest('#gallery')) return; e.preventDefault(); velocity += e.deltaY * 0.4; resetSnap(); }, { passive: false });
+    var isDragging = false, startX = 0, startScroll = 0, lastMoveX = 0, lastMoveTime = 0;
+    gallery.addEventListener('pointerdown', function(e) { if(e.button !== 0 && e.pointerType === 'mouse') return; isDragging = true; startX = e.clientX; startScroll = targetScroll; lastMoveX = e.clientX; lastMoveTime = Date.now(); velocity = 0; clearTimeout(snapTimeout); gallery.setPointerCapture(e.pointerId); });
+    gallery.addEventListener('pointermove', function(e) { if (!isDragging) return; var now = Date.now(); var dx = startX - e.clientX; targetScroll = Math.max(0, Math.min(startScroll + dx, gallery.scrollWidth - gallery.clientWidth)); var timeDiff = now - lastMoveTime; if (timeDiff > 0 && timeDiff < 100) { velocity = ((lastMoveX - e.clientX) / timeDiff) * 10; } lastMoveX = e.clientX; lastMoveTime = now; });
+    var stopDragging = function(e) { if (!isDragging) return; isDragging = false; try { gallery.releasePointerCapture(e.pointerId); } catch(err){} if (Math.abs(velocity) < 1) { triggerSnap(); } else { resetSnap(); } };
+    gallery.addEventListener('pointerup', stopDragging); gallery.addEventListener('pointercancel', stopDragging);
+    function animate() { if (!isDragging) { velocity *= INERTIA_DAMPING; targetScroll += velocity; if (Math.abs(velocity) < 0.01) velocity = 0; } targetScroll = Math.max(0, Math.min(targetScroll, gallery.scrollWidth - gallery.clientWidth)); handleInfiniteScroll(); currentScroll = lerp(currentScroll, targetScroll, SCROLL_SMOOTHING); gallery.scrollLeft = currentScroll; for (var i = 0; i < images.length; i++) { var offset = (cachedContainerCenter - cachedItemsCenters[i]) / 5; offset = Math.max(-50, Math.min(50, offset)); images[i].style.transform = 'translate(calc(-50% + ' + offset.toFixed(1) + 'px), -50%)'; } updateItemsCenters(); animationId = requestAnimationFrame(animate); }
+    setTimeout(function() { updateItemsCenters(); targetScroll = (gallery.scrollWidth - gallery.clientWidth) / 2; currentScroll = targetScroll; gallery.scrollLeft = currentScroll; animate(); }, 150);
+  <\/script>
+</body>
+</html>
