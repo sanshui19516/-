@@ -122,7 +122,7 @@
         .toast-item { pointer-events:auto; background:var(--bg-glass); backdrop-filter:blur(20px); -webkit-backdrop-filter:blur(20px); border:1px solid var(--border-color); border-radius:12px; padding:8px 20px; font-size:0.75rem; color:var(--text-main); box-shadow:0 8px 32px rgba(0,0,0,0.4); animation:toastIn 0.4s cubic-bezier(0.34,1.56,0.64,1) forwards; max-width:90vw; font-weight:400; letter-spacing:0.5px; } .toast-item.out { animation:toastOut 0.35s ease forwards; }
         @keyframes toastIn { 0%{opacity:0;transform:translateY(-20px) scale(0.94);} 100%{opacity:1;transform:translateY(0) scale(1);} } @keyframes toastOut { 0%{opacity:1;transform:translateY(0) scale(1);} 100%{opacity:0;transform:translateY(-16px) scale(0.94);} }
         .revar-overlay { position:fixed; top:0; left:0; width:100vw; height:100vh; z-index:999998; background:rgba(0,0,0,0.35); backdrop-filter:blur(6px); -webkit-backdrop-filter:blur(6px); display:none; align-items:center; justify-content:center; animation:fadeIn 0.25s ease; } .revar-overlay.open { display:flex; }
-        .revar-popup { background:var(--bg-glass); backdrop-filter:blur(40px); -webkit-backdrop-filter:blur(40px); border:1px solid var(--border-color); border-radius:var(--radius-panel); padding:24px 28px 20px; max-width:340px; width:100%; box-shadow:0 20px 80px rgba(0,0,0,0.6); animation:scaleIn 0.3s cubic-bezier(0.34,1.56,0.64,1) forwards; text-align:center; } .revar-popup .title { font-size:0.85rem; font-weight:600; color:var(--text-main); letter-spacing:1px; margin-bottom:6px; } .revar-popup .desc { font-size:0.65rem; color:var(--text-secondary); margin-bottom:16px; line-height:1.6; } .revar-popup .btn-row { display:flex; gap:10px; justify-content:center; } .revar-popup .btn-row .btn { padding:7px 24px; border:1px solid var(--border-color); border-radius:var(--radius-btn); background:var(--bg-card); color:var(--text-main); font-size:0.7rem; font-family:inherit; cursor:pointer; transition:all var(--transition-fast); } .revar-popup .btn-row .btn:hover { border-color:var(--border-hover); background:var(--bg-card-hover); } .revar-popup .btn-row .btn.primary { background:var(--primary); color:#0e0a10; border-color:var(--primary); } .revar-popup .btn-row .btn.primary:hover { background:var(--primary-dim); } .revar-popup .btn-row .btn.cancel { opacity:0.5; } .revar-popup .btn-row .btn.cancel:hover { opacity:0.8; }
+        .revar-popup { background:var(--bg-glass); backdrop-filter:blur(40px); -webkit-backdrop-filter:blur(40px); border:1px solid var(--border-color); border-radius:var(--radius-panel); padding:24px 28px 20px; max-width:420px; width:100%; box-shadow:0 20px 80px rgba(0,0,0,0.6); animation:scaleIn 0.3s cubic-bezier(0.34,1.56,0.64,1) forwards; text-align:center; } .revar-popup .title { font-size:0.85rem; font-weight:600; color:var(--text-main); letter-spacing:1px; margin-bottom:6px; } .revar-popup .desc { font-size:0.65rem; color:var(--text-secondary); margin-bottom:16px; line-height:1.6; } .revar-popup .btn-row { display:flex; gap:10px; justify-content:center; flex-wrap:wrap; } .revar-popup .btn-row .btn { padding:7px 24px; border:1px solid var(--border-color); border-radius:var(--radius-btn); background:var(--bg-card); color:var(--text-main); font-size:0.7rem; font-family:inherit; cursor:pointer; transition:all var(--transition-fast); } .revar-popup .btn-row .btn:hover { border-color:var(--border-hover); background:var(--bg-card-hover); } .revar-popup .btn-row .btn.primary { background:var(--primary); color:#0e0a10; border-color:var(--primary); } .revar-popup .btn-row .btn.primary:hover { background:var(--primary-dim); } .revar-popup .btn-row .btn.cancel { opacity:0.5; } .revar-popup .btn-row .btn.cancel:hover { opacity:0.8; }
         @media (max-width:768px) {
             :root { --card-width:148px; --card-height:198px; --status-height-desktop:150px; --status-height-mobile:130px; --options-height-desktop:70px; --options-height-mobile:60px; }
             .drawer-extension.open { height:50vh; } .drawer-grid { grid-template-columns:1fr 1fr; gap:16px; } .drawer-grid .drawer-col:last-child { grid-column:1 / -1; } .gallery-grid { grid-template-columns:repeat(4,1fr); }
@@ -159,16 +159,20 @@
 </head>
 <body>
     <div class="toast-container" id="toastContainer"></div>
+
     <div class="revar-overlay" id="revarOverlay">
         <div class="revar-popup">
-            <div class="title">🔄 单独重roll变量</div>
-            <div class="desc">只重新计算变量变化，<br>不重新生成正文和选项。</div>
-            <div class="btn-row">
+            <div class="title">重roll选项</div>
+            <div class="desc">请选择要重新生成的内容</div>
+            <div class="btn-row" style="flex-wrap:wrap;gap:8px;">
+                <button class="btn primary" id="revarVariable">重roll变量</button>
+                <button class="btn" id="revarText" style="border-color:var(--primary);color:var(--primary);">重roll正文</button>
+                <button class="btn" id="revarAll" style="border-color:#f44336;color:#f44336;">重roll楼层</button>
                 <button class="btn cancel" id="revarCancel">取消</button>
-                <button class="btn primary" id="revarConfirm">确定重roll</button>
             </div>
         </div>
     </div>
+
     <div class="app-container" id="app">
         <nav class="navbar">
             <div class="navbar-brand">
@@ -186,7 +190,10 @@
                 <button class="nav-btn" id="settingsBtn"><svg class="nav-icon" viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M12 1v4m0 14v4m11-11h-4m-14 0H1m16.5-4.5l-2.8 2.8m-5.4 5.4l-2.8 2.8m0-11.4l2.8 2.8m5.4 5.4l2.8 2.8" stroke-width="1.6"/></svg></button>
             </div>
         </nav>
-        <div class="main-area" id="mainArea"><div class="story-text" id="storyText"><div class="loading-text">🌸 加载中...</div></div></div>
+
+        <div class="main-area" id="mainArea">
+            <div class="story-text" id="storyText"><div class="loading-text">🌸 加载中...</div></div>
+        </div>
         <div class="status-bar" id="statusBar">
             <div class="environment-bar" id="environmentBar">
                 <div class="env-item">
@@ -203,6 +210,7 @@
             <div class="cards-scroll" id="statusTrack"><div class="status-empty">✦ 状态栏加载中 ✦</div></div>
             <div class="drawer-extension" id="drawerExtension"><div class="drawer-handle" id="drawerHandle"><div class="bar"></div></div><div class="drawer-scroll" id="drawerContent"></div></div>
         </div>
+
         <div class="options-bar">
             <div class="options-grid" id="optionsGrid"></div>
             <div class="options-empty">等待选项...</div>
@@ -212,6 +220,7 @@
             </div>
         </div>
     </div>
+
     <div class="settings-overlay" id="settingsOverlay">
         <div class="settings-panel">
             <div class="settings-title"><span>⚙ 设置</span><button class="settings-close" id="settingsClose">✕</button></div>
@@ -222,6 +231,7 @@
             <div style="font-size:0.5rem;color:var(--text-dim);text-align:center;opacity:0.30;letter-spacing:1px;">配置保存在本地 · v1.0 (持久化)</div>
         </div>
     </div>
+
     <div class="image-overlay" id="imageOverlay"><img class="big-img" id="overlayImage" src="" alt="图库放大"></div>
     <script>
         (function() {
@@ -262,7 +272,9 @@
             const modelCount = $('#modelCount');
             const toastContainer = $('#toastContainer');
             const revarOverlay = $('#revarOverlay');
-            const revarConfirm = $('#revarConfirm');
+            const revarVariable = $('#revarVariable');
+            const revarText = $('#revarText');
+            const revarAll = $('#revarAll');
             const revarCancel = $('#revarCancel');
             const freeInputRow = $('#freeInputRow');
             const freeInputText = $('#freeInputText');
@@ -270,14 +282,14 @@
 
             // === 常量 ===
             const WORLD_BOOK_NAME = '兄妹禁忌';
-const ENTRIES = {
-    variableRules: '[mvu_update]变量更新规则',
-    variableList: '[mvu_update]变量列表',
-    variableFormat: '[mvu_update]变量输出格式',
-    variableEmphasis: '[mvu_update]变量输出强调',
-    singleFormat: '单API格式强调',
-    multiFormat: '多API正文格式'
-};
+            const ENTRIES = {
+                variableRules: '[mvu_update]变量更新规则',
+                variableList: '[mvu_update]变量列表',
+                variableFormat: '[mvu_update]变量输出格式',
+                variableEmphasis: '[mvu_update]变量输出强调',
+                singleFormat: '单API格式强调',
+                multiFormat: '多API正文格式'
+            };
             let currentMode = 'single';
             let isFullscreen = false;
             let isGenerating = false;
@@ -395,7 +407,6 @@ const ENTRIES = {
                 if(Object.keys(flat).some(k=>!k.includes('.'))) return flat;
                 const result={}; for(const [key,val] of Object.entries(flat)){ const parts=key.split('.'); let cur=result; for(let i=0;i<parts.length-1;i++){ if(!cur[parts[i]])cur[parts[i]]={}; cur=cur[parts[i]]; } cur[parts[parts.length-1]]=val; } return result;
             }
-            // 新增：flatten 函数（嵌套对象 → 扁平键值对）
             function flatten(obj, prefix='') {
                 const result = {};
                 for (const key in obj) {
@@ -485,7 +496,6 @@ const ENTRIES = {
             function openImageOverlay(url) { overlayImage.src=url; overlay.classList.add('open'); }
             function closeImageOverlay() { overlay.classList.remove('open'); setTimeout(()=>{ overlayImage.src=''; },400); }
 
-            // === fixImagePath ===
             function fixImagePath(path) {
                 const fixMap = {
                     '手牵着手':'手牵手','手牵着手散步':'手牵手','牵手散步':'手牵手','办公室喝咖啡':'办公室或她喝咖啡','办公室咖啡':'办公室或她喝咖啡',
@@ -504,36 +514,35 @@ const ENTRIES = {
                 if(isStreaming && streamingFullText){ const match=streamingFullText.match(/<content>([\s\S]*?)(?:<\/content>|$)/); content=match?match[1].trim():streamingFullText; }
                 else { content = parseContent(rawMessage) || rawMessage; }
                 const isMobile = window.innerWidth < 768;
-// 预处理：去掉 SFW_IMG / NSFW_IMG 标签内部的换行，避免正则匹配失败
-content = content.replace(/(<SFW_IMG>)([\s\S]*?)(<\/SFW_IMG>)/gi, (m, open, inner, close) => open + inner.replace(/\n/g, '') + close);
-content = content.replace(/(<NSFW_IMG>)([\s\S]*?)(<\/NSFW_IMG>)/gi, (m, open, inner, close) => open + inner.replace(/\n/g, '') + close);
+                content = content.replace(/(<SFW_IMG>)([\s\S]*?)(<\/SFW_IMG>)/gi, (m, open, inner, close) => open + inner.replace(/\n/g, '') + close);
+                content = content.replace(/(<NSFW_IMG>)([\s\S]*?)(<\/NSFW_IMG>)/gi, (m, open, inner, close) => open + inner.replace(/\n/g, '') + close);
                 content = content.replace(/【图片:(.*?)】/g, (match, filename) => {
                     return `<img src="https://cdn.jsdelivr.net/gh/sanshui19516/-@main/${encodeURIComponent(filename)}" style="max-width:100%;height:auto;border-radius:12px;display:block;margin:10px 0;" loading="lazy" decoding="async" />`;
                 });
-content = content.replace(/<SFW_IMG>(.*?)<\/SFW_IMG>/gi, (match, path) => {
-    let trimmedPath = path.trim();
-    trimmedPath = fixImagePath(trimmedPath);
-    const maxWidth = isMobile ? '800px' : '600px';
-    const width = isMobile ? '80%' : '100%';
-    return `<center><div style="max-width: ${maxWidth}; margin: 0 auto;">
-        <img src="https://gitlab.com/xinqing401/hucx/-/raw/main/%E5%85%B3%E4%BA%8E%E6%88%91%E4%BB%AC%E8%B6%8A%E7%95%8C%E7%9A%84%E9%82%A3%E4%BB%B6%E4%BA%8B/SFW/${encodeURIComponent(trimmedPath)}" 
-             style="width: ${width}; height: auto; border: 3px solid #333; border-radius: 8px; 
-                    box-shadow: 0 4px 8px rgba(0,0,0,0.2); padding: 5px; background: white; display: block;" 
-             loading="lazy" decoding="async" />
-    </div></center>`;
-});
-content = content.replace(/<NSFW_IMG>(.*?)<\/NSFW_IMG>/gi, (match, path) => {
-    let trimmedPath = path.trim();
-    trimmedPath = fixImagePath(trimmedPath);
-    const maxWidth = isMobile ? '800px' : '600px';
-    const width = isMobile ? '80%' : '100%';
-    return `<center><div style="max-width: ${maxWidth}; margin: 0 auto;">
-        <img src="https://gitlab.com/xinqing401/hucx/-/raw/main/%E5%85%B3%E4%BA%8E%E6%88%91%E4%BB%AC%E8%B6%8A%E7%95%8C%E7%9A%84%E9%82%A3%E4%BB%B6%E4%BA%8B/NSFW/${encodeURIComponent(trimmedPath)}" 
-             style="width: ${width}; height: auto; border: 3px solid #333; border-radius: 8px; 
-                    box-shadow: 0 4px 8px rgba(0,0,0,0.2); padding: 5px; background: white; display: block;" 
-             loading="lazy" decoding="async" />
-    </div></center>`;
-});
+                content = content.replace(/<SFW_IMG>(.*?)<\/SFW_IMG>/gi, (match, path) => {
+                    let trimmedPath = path.trim();
+                    trimmedPath = fixImagePath(trimmedPath);
+                    const maxWidth = isMobile ? '800px' : '600px';
+                    const width = isMobile ? '80%' : '100%';
+                    return `<center><div style="max-width: ${maxWidth}; margin: 0 auto;">
+                        <img src="https://gitlab.com/xinqing401/hucx/-/raw/main/%E5%85%B3%E4%BA%8E%E6%88%91%E4%BB%AC%E8%B6%8A%E7%95%8C%E7%9A%84%E9%82%A3%E4%BB%B6%E4%BA%8B/SFW/${encodeURIComponent(trimmedPath)}" 
+                             style="width: ${width}; height: auto; border: 3px solid #333; border-radius: 8px; 
+                                    box-shadow: 0 4px 8px rgba(0,0,0,0.2); padding: 5px; background: white; display: block;" 
+                             loading="lazy" decoding="async" />
+                    </div></center>`;
+                });
+                content = content.replace(/<NSFW_IMG>(.*?)<\/NSFW_IMG>/gi, (match, path) => {
+                    let trimmedPath = path.trim();
+                    trimmedPath = fixImagePath(trimmedPath);
+                    const maxWidth = isMobile ? '800px' : '600px';
+                    const width = isMobile ? '80%' : '100%';
+                    return `<center><div style="max-width: ${maxWidth}; margin: 0 auto;">
+                        <img src="https://gitlab.com/xinqing401/hucx/-/raw/main/%E5%85%B3%E4%BA%8E%E6%88%91%E4%BB%AC%E8%B6%8A%E7%95%8C%E7%9A%84%E9%82%A3%E4%BB%B6%E4%BA%8B/NSFW/${encodeURIComponent(trimmedPath)}" 
+                             style="width: ${width}; height: auto; border: 3px solid #333; border-radius: 8px; 
+                                    box-shadow: 0 4px 8px rgba(0,0,0,0.2); padding: 5px; background: white; display: block;" 
+                             loading="lazy" decoding="async" />
+                    </div></center>`;
+                });
                 storyText.innerHTML = content + (isStreaming ? '<span class="streaming-cursor"></span>' : '');
                 if(!isStreamingUpdate) {
                     const options = parseOptions(rawMessage);
@@ -544,23 +553,17 @@ content = content.replace(/<NSFW_IMG>(.*?)<\/NSFW_IMG>/gi, (match, path) => {
                 }
                 mainArea.scrollTop = isStreamingUpdate ? mainArea.scrollHeight : 0;
             }
-            // ============================================================
-            // renderStatusBar（支持外部传入变量 + 酒馆兜底读取）
-            // ============================================================
-            let lastVariablesHash = '';
 
+            // === renderStatusBar ===
+            let lastVariablesHash = '';
             function renderStatusBar(externalVars) {
                 let variables = {};
-
                 if (externalVars && Object.keys(externalVars).length > 0) {
-                    // 直接使用外部传入的变量（本地计算好的结果）
                     variables = externalVars;
                     console.log('[状态栏] ✅ 使用本地传入的变量渲染');
                 } else {
-                    // 没有外部数据，走原来的酒馆读取逻辑（兜底）
                     try {
                         let rawData = null;
-                        // 优先使用 getVariables，传入真实楼层数字索引
                         if (typeof getVariables === 'function') {
                             const ctx = typeof SillyTavern !== 'undefined' ? SillyTavern.getContext() : null;
                             const latestIndex = ctx && ctx.chat ? ctx.chat.length - 1 : null;
@@ -571,12 +574,9 @@ content = content.replace(/<NSFW_IMG>(.*?)<\/NSFW_IMG>/gi, (match, path) => {
                                         rawData = result.stat_data;
                                         console.log('[状态栏] ✅ 从 getVariables(索引' + latestIndex + ') 读取到数据');
                                     }
-                                } catch (e) {
-                                    console.warn('[状态栏] getVariables 读取失败', e);
-                                }
+                                } catch (e) { console.warn('[状态栏] getVariables 读取失败', e); }
                             }
                         }
-                        // 回退到 ctx.stat_data
                         if (!rawData || Object.keys(rawData).length === 0) {
                             if (typeof SillyTavern !== 'undefined') {
                                 const ctx = SillyTavern.getContext();
@@ -586,7 +586,6 @@ content = content.replace(/<NSFW_IMG>(.*?)<\/NSFW_IMG>/gi, (match, path) => {
                                 }
                             }
                         }
-                        // 最后回退到 getAllVariables
                         if (!rawData || Object.keys(rawData).length === 0) {
                             if (typeof getAllVariables === 'function') {
                                 const allVars = getAllVariables();
@@ -595,9 +594,7 @@ content = content.replace(/<NSFW_IMG>(.*?)<\/NSFW_IMG>/gi, (match, path) => {
                             }
                         }
                         variables = unflatten(rawData || {});
-                    } catch (e) {
-                        console.warn('[状态栏] 读取变量失败:', e);
-                    }
+                    } catch (e) { console.warn('[状态栏] 读取变量失败:', e); }
                 }
 
                 if (!variables || Object.keys(variables).length === 0) {
@@ -609,14 +606,12 @@ content = content.replace(/<NSFW_IMG>(.*?)<\/NSFW_IMG>/gi, (match, path) => {
                 if (currentHash === lastVariablesHash) return;
                 lastVariablesHash = currentHash;
 
-                // 环境信息
                 const world = variables.世界 || {};
                 document.getElementById('envSeason').textContent = world.季节 || '春';
                 document.getElementById('envWeather').textContent = world.天气 || '晴';
                 document.getElementById('envTime').textContent = world.时段 || '上午';
                 document.getElementById('envScene').textContent = world.当前场景 || '公寓客厅';
 
-                // 卡片渲染
                 const order = ['林夕', '张晓曼', '赵雅兰', '赵梦琪', '苏小薇', '王阿姨', '林婉如'];
                 let cardsHtml = '';
                 let hasAnyCard = false;
@@ -628,13 +623,7 @@ content = content.replace(/<NSFW_IMG>(.*?)<\/NSFW_IMG>/gi, (match, path) => {
                     if (!staticData) return '';
                     const isMain = staticData.isMain;
                     const color = staticData.color;
-
-                    let progress = 0;
-                    let stage = '初遇期';
-                    let mood = '平静';
-                    let badge = '';
-                    let badgeClass = 'hidden';
-
+                    let progress = 0, stage = '初遇期', mood = '平静', badge = '', badgeClass = 'hidden';
                     if (isMain) {
                         const linxiData = variables.林夕 || {};
                         progress = linxiData.好感度 || 0;
@@ -643,40 +632,10 @@ content = content.replace(/<NSFW_IMG>(.*?)<\/NSFW_IMG>/gi, (match, path) => {
                         else if (intimacy < 80) stage = '暧昧试探';
                         else if (intimacy < 90) stage = '互相承认';
                         else stage = '在一起';
-                        if (linxiData.病娇状态 && linxiData.病娇状态 !== '未触发') {
-                            badge = '病娇';
-                            badgeClass = '';
-                        }
+                        if (linxiData.病娇状态 && linxiData.病娇状态 !== '未触发') { badge = '病娇'; badgeClass = ''; }
                         const avatarUrl = AVATAR_URLS[name] || '';
                         const progressClamped = Math.min(Math.max(progress, 0), 100);
-                        return `
-                            <div class="card-wrapper" data-character="${name}" onclick="window.openDrawer('${name}')">
-                                <div class="card-inner">
-                                    <div class="gradient-overlay" style="background:linear-gradient(to bottom, ${color}, transparent 55%);"></div>
-                                    <span class="card-badge ${badgeClass}">${badge}</span>
-                                    <div class="card-avatar" style="background:${color};">
-                                        <img src="${avatarUrl}" alt="${name}" loading="lazy" decoding="async" onerror="this.style.display='none';this.parentElement.textContent='${name.charAt(0)}'">
-                                        <span class="online-dot"></span>
-                                    </div>
-                                    <div class="card-name">${name}</div>
-                                    <div class="card-mood">
-                                        <span class="mood-dot" style="background:${color};"></span>
-                                        ${mood}
-                                    </div>
-                                    <div class="card-progress">
-                                        <div class="progress-label">
-                                            <span>好感度</span>
-                                            <span>${progressClamped}%</span>
-                                        </div>
-                                        <div class="progress-track">
-                                            <div class="progress-fill" style="width:${progressClamped}%;background:${color};"></div>
-                                        </div>
-                                    </div>
-                                    <div class="card-stage highlight">${stage}</div>
-                                    <div class="card-hint">点击展开 ↻</div>
-                                </div>
-                            </div>
-                        `;
+                        return `<div class="card-wrapper" data-character="${name}" onclick="window.openDrawer('${name}')"><div class="card-inner"><div class="gradient-overlay" style="background:linear-gradient(to bottom, ${color}, transparent 55%);"></div><span class="card-badge ${badgeClass}">${badge}</span><div class="card-avatar" style="background:${color};"><img src="${avatarUrl}" alt="${name}" loading="lazy" decoding="async" onerror="this.style.display='none';this.parentElement.textContent='${name.charAt(0)}'"><span class="online-dot"></span></div><div class="card-name">${name}</div><div class="card-mood"><span class="mood-dot" style="background:${color};"></span>${mood}</div><div class="card-progress"><div class="progress-label"><span>好感度</span><span>${progressClamped}%</span></div><div class="progress-track"><div class="progress-fill" style="width:${progressClamped}%;background:${color};"></div></div></div><div class="card-stage highlight">${stage}</div><div class="card-hint">点击展开 ↻</div></div></div>`;
                     } else {
                         const eventData = variables.事件?.[name] || {};
                         const eventKeys = staticData.events || [];
@@ -690,93 +649,28 @@ content = content.replace(/<NSFW_IMG>(.*?)<\/NSFW_IMG>/gi, (match, path) => {
                         else stage = '初遇期';
                         const moodMap = { '初遇期': '平静', '升温期': '期待', '靠近期': '温柔', '转折期': '犹豫', '交往期': '开心' };
                         mood = moodMap[stage] || '平静';
-
                         const appeared = eventKeys.some(k => eventData[k] === true);
                         const avatarUrl = AVATAR_URLS[name] || '';
                         const progressClamped = Math.min(Math.max(progress, 0), 100);
-
                         if (!appeared) {
-                            return `
-                                <div class="card-wrapper placeholder" data-character="${name}">
-                                    <div class="card-inner">
-                                        <div class="gradient-overlay" style="background:linear-gradient(to bottom, ${color}, transparent 55%);"></div>
-                                        <div class="card-avatar" style="background:var(--text-dim);">
-                                            <span style="font-size:16px;color:rgba(255,255,255,0.2);">?</span>
-                                            <span class="online-dot offline"></span>
-                                        </div>
-                                        <div class="card-name" style="color:var(--text-dim);">${name}</div>
-                                        <div class="card-mood" style="color:var(--text-dim);opacity:0.3;">
-                                            <span class="mood-dot" style="background:var(--text-dim);"></span>
-                                            未出场
-                                        </div>
-                                        <div class="card-progress">
-                                            <div class="progress-label">
-                                                <span>进度</span>
-                                                <span>—</span>
-                                            </div>
-                                            <div class="progress-track">
-                                                <div class="progress-fill" style="width:0%;background:var(--text-dim);"></div>
-                                            </div>
-                                        </div>
-                                        <div class="card-stage" style="color:var(--text-dim);opacity:0.3;">等待出场</div>
-                                        <div class="card-hint"></div>
-                                    </div>
-                                </div>
-                            `;
+                            return `<div class="card-wrapper placeholder" data-character="${name}"><div class="card-inner"><div class="gradient-overlay" style="background:linear-gradient(to bottom, ${color}, transparent 55%);"></div><div class="card-avatar" style="background:var(--text-dim);"><span style="font-size:16px;color:rgba(255,255,255,0.2);">?</span><span class="online-dot offline"></span></div><div class="card-name" style="color:var(--text-dim);">${name}</div><div class="card-mood" style="color:var(--text-dim);opacity:0.3;"><span class="mood-dot" style="background:var(--text-dim);"></span>未出场</div><div class="card-progress"><div class="progress-label"><span>进度</span><span>—</span></div><div class="progress-track"><div class="progress-fill" style="width:0%;background:var(--text-dim);"></div></div></div><div class="card-stage" style="color:var(--text-dim);opacity:0.3;">等待出场</div><div class="card-hint"></div></div></div>`;
                         }
-
-                        return `
-                            <div class="card-wrapper" data-character="${name}" onclick="window.openDrawer('${name}')">
-                                <div class="card-inner">
-                                    <div class="gradient-overlay" style="background:linear-gradient(to bottom, ${color}, transparent 55%);"></div>
-                                    <div class="card-avatar" style="background:${color};">
-                                        <img src="${avatarUrl}" alt="${name}" loading="lazy" decoding="async" onerror="this.style.display='none';this.parentElement.textContent='${name.charAt(0)}'">
-                                        <span class="online-dot"></span>
-                                    </div>
-                                    <div class="card-name">${name}</div>
-                                    <div class="card-mood">
-                                        <span class="mood-dot" style="background:${color};"></span>
-                                        ${mood}
-                                    </div>
-                                    <div class="card-progress">
-                                        <div class="progress-label">
-                                            <span>进度</span>
-                                            <span>${progressClamped}%</span>
-                                        </div>
-                                        <div class="progress-track">
-                                            <div class="progress-fill" style="width:${progressClamped}%;background:${color};"></div>
-                                        </div>
-                                    </div>
-                                    <div class="card-stage">${stage}</div>
-                                    <div class="card-hint">点击展开 ↻</div>
-                                </div>
-                            </div>
-                        `;
+                        return `<div class="card-wrapper" data-character="${name}" onclick="window.openDrawer('${name}')"><div class="card-inner"><div class="gradient-overlay" style="background:linear-gradient(to bottom, ${color}, transparent 55%);"></div><div class="card-avatar" style="background:${color};"><img src="${avatarUrl}" alt="${name}" loading="lazy" decoding="async" onerror="this.style.display='none';this.parentElement.textContent='${name.charAt(0)}'"><span class="online-dot"></span></div><div class="card-name">${name}</div><div class="card-mood"><span class="mood-dot" style="background:${color};"></span>${mood}</div><div class="card-progress"><div class="progress-label"><span>进度</span><span>${progressClamped}%</span></div><div class="progress-track"><div class="progress-fill" style="width:${progressClamped}%;background:${color};"></div></div></div><div class="card-stage">${stage}</div><div class="card-hint">点击展开 ↻</div></div></div>`;
                     }
                 }
 
                 order.forEach(name => {
                     const html = buildCardHTML(name);
-                    if (html) {
-                        cardsHtml += html;
-                        hasAnyCard = true;
-                    }
+                    if (html) { cardsHtml += html; hasAnyCard = true; }
                 });
-
                 statusTrack.innerHTML = hasAnyCard ? cardsHtml : '<div class="status-empty">✦ 等待故事展开 ✦</div>';
 
-                if (isDrawerOpen && activeDrawerChar) {
-                    renderDrawer(activeDrawerChar);
-                }
+                if (isDrawerOpen && activeDrawerChar) renderDrawer(activeDrawerChar);
 
-                // 拖拽滑动
                 let isDragging = false, startX = 0, scrollLeft = 0, rafDrag = null;
                 statusTrack.addEventListener('mousedown', (e) => {
                     if (e.target.closest('.card-wrapper')) return;
-                    isDragging = true;
-                    startX = e.pageX - statusTrack.offsetLeft;
-                    scrollLeft = statusTrack.scrollLeft;
-                    statusTrack.style.cursor = 'grabbing';
+                    isDragging = true; startX = e.pageX - statusTrack.offsetLeft; scrollLeft = statusTrack.scrollLeft; statusTrack.style.cursor = 'grabbing';
                 });
                 document.addEventListener('mouseup', () => { isDragging = false; statusTrack.style.cursor = 'grab'; });
                 statusTrack.addEventListener('mousemove', (e) => {
@@ -791,20 +685,14 @@ content = content.replace(/<NSFW_IMG>(.*?)<\/NSFW_IMG>/gi, (match, path) => {
                 statusTrack.addEventListener('mouseleave', () => { isDragging = false; statusTrack.style.cursor = 'grab'; });
             }
 
-            // ============================================================
-            // renderDrawer - 抽屉内容
-            // ============================================================
+            // === renderDrawer ===
             function renderDrawer(charName) {
                 const staticData = CHARACTER_STATIC[charName];
-                if (!staticData) {
-                    drawerContent.innerHTML = '<div class="status-empty">✦ 角色数据缺失 ✦</div>';
-                    return;
-                }
+                if (!staticData) { drawerContent.innerHTML = '<div class="status-empty">✦ 角色数据缺失 ✦</div>'; return; }
 
                 let variables = {};
                 try {
                     let rawData = null;
-                    // 优先从 getVariables 读取最新楼层
                     if (typeof getVariables === 'function') {
                         const ctx = typeof SillyTavern !== 'undefined' ? SillyTavern.getContext() : null;
                         const latestIndex = ctx && ctx.chat ? ctx.chat.length - 1 : null;
@@ -813,10 +701,7 @@ content = content.replace(/<NSFW_IMG>(.*?)<\/NSFW_IMG>/gi, (match, path) => {
                             if (result && result.stat_data) rawData = result.stat_data;
                         }
                     }
-                    if (!rawData && typeof getAllVariables === 'function') {
-                        const allVars = getAllVariables();
-                        rawData = allVars.stat_data || allVars;
-                    }
+                    if (!rawData && typeof getAllVariables === 'function') { const allVars = getAllVariables(); rawData = allVars.stat_data || allVars; }
                     variables = unflatten(rawData || {});
                 } catch (e) {}
 
@@ -824,30 +709,17 @@ content = content.replace(/<NSFW_IMG>(.*?)<\/NSFW_IMG>/gi, (match, path) => {
                 const r = variables.关系 || {};
                 const linxiData = variables.林夕 || {};
                 const eventData = variables.事件?.[charName] || {};
-
-                let relationType = r.类型 || '初遇期';
-                let confession = r.告白状态 || '未告白';
-                let intimacyBreak = r.亲密突破 || '未突破';
-                let intimacy = r.亲密度 || 0;
-                let dependence = 0, bravery = 0, jealousy = 0;
-                let yandere = '未触发', sexStage = '未发生', nightRaid = 0;
+                let relationType = r.类型 || '初遇期', confession = r.告白状态 || '未告白', intimacyBreak = r.亲密突破 || '未突破', intimacy = r.亲密度 || 0;
+                let dependence = 0, bravery = 0, jealousy = 0, yandere = '未触发', sexStage = '未发生', nightRaid = 0;
 
                 if (isMain) {
-                    dependence = linxiData.依赖度 || 0;
-                    bravery = linxiData.勇敢值 || 0;
-                    jealousy = linxiData.吃醋值 || 0;
-                    yandere = linxiData.病娇状态 || '未触发';
-                    sexStage = linxiData.性爱阶段 || '未发生';
-                    nightRaid = linxiData.夜袭次数 || 0;
+                    dependence = linxiData.依赖度 || 0; bravery = linxiData.勇敢值 || 0; jealousy = linxiData.吃醋值 || 0;
+                    yandere = linxiData.病娇状态 || '未触发'; sexStage = linxiData.性爱阶段 || '未发生'; nightRaid = linxiData.夜袭次数 || 0;
                 } else {
                     const routeData = variables.路线?.[charName] || {};
-                    dependence = routeData.好感度 || 0;
-                    yandere = '未触发';
-                    sexStage = routeData.性爱阶段 || '未发生';
-                    nightRaid = 0;
+                    dependence = routeData.好感度 || 0; yandere = '未触发'; sexStage = routeData.性爱阶段 || '未发生'; nightRaid = 0;
                     const eventKeys = staticData.events || [];
-                    let completed = 0;
-                    eventKeys.forEach(k => { if (eventData[k] === true) completed++; });
+                    let completed = 0; eventKeys.forEach(k => { if (eventData[k] === true) completed++; });
                     const progress = Math.min(Math.round(completed / eventKeys.length * 100), 100);
                     if (progress >= 100) relationType = '交往期';
                     else if (progress >= 71) relationType = '转折期';
@@ -857,322 +729,161 @@ content = content.replace(/<NSFW_IMG>(.*?)<\/NSFW_IMG>/gi, (match, path) => {
                 }
 
                 const images = GALLERY_IMAGES[charName] || [];
-                let galleryHtml = images.map(url =>
-                    `<div class="gallery-item" onclick="window.openImageOverlay('${url}')">
-                        <div class="g-glow"></div>
-                        <img src="${url}" loading="lazy" decoding="async" onerror="this.style.display='none'">
-                    </div>`
-                ).join('');
-                while (galleryHtml.split('gallery-item').length - 1 < 8) {
-                    galleryHtml += `
-                        <div class="gallery-item" style="background:hsl(270,20%,10%);cursor:default;opacity:0.15;">
-                            <div class="g-fallback">—</div>
-                        </div>
-                    `;
-                }
+                let galleryHtml = images.map(url => `<div class="gallery-item" onclick="window.openImageOverlay('${url}')"><div class="g-glow"></div><img src="${url}" loading="lazy" decoding="async" onerror="this.style.display='none'"></div>`).join('');
+                while (galleryHtml.split('gallery-item').length - 1 < 8) galleryHtml += `<div class="gallery-item" style="background:hsl(270,20%,10%);cursor:default;opacity:0.15;"><div class="g-fallback">—</div></div>`;
 
                 let milestoneHtml = '';
                 if (isMain) {
-                    const linxiMilestones = [
-                        { label: '相依为命', threshold: 0 },
-                        { label: '暧昧试探', threshold: 60 },
-                        { label: '互相承认', threshold: 80 },
-                        { label: '在一起', threshold: 90 }
-                    ];
+                    const linxiMilestones = [{ label:'相依为命', threshold:0 },{ label:'暧昧试探', threshold:60 },{ label:'互相承认', threshold:80 },{ label:'在一起', threshold:90 }];
                     const affection = linxiData.好感度 || 0;
                     linxiMilestones.forEach((m, idx) => {
                         let progress = 0;
                         if (idx < linxiMilestones.length - 1) {
                             const nextThreshold = linxiMilestones[idx + 1].threshold;
                             if (affection >= nextThreshold) progress = 100;
-                            else if (affection >= m.threshold) {
-                                progress = Math.min(Math.round((affection - m.threshold) / (nextThreshold - m.threshold) * 100), 100);
-                            }
-                        } else {
-                            progress = affection >= m.threshold ? 100 : Math.min(Math.round(affection / m.threshold * 100), 100);
-                        }
+                            else if (affection >= m.threshold) progress = Math.min(Math.round((affection - m.threshold) / (nextThreshold - m.threshold) * 100), 100);
+                        } else progress = affection >= m.threshold ? 100 : Math.min(Math.round(affection / m.threshold * 100), 100);
                         const done = progress >= 100 ? 'done' : '';
-                        milestoneHtml += `
-                            <div class="milestone-item">
-                                <span class="m-label">${m.label}</span>
-                                <div class="m-track">
-                                    <div class="m-fill" style="width:${progress}%;"></div>
-                                </div>
-                                <span class="m-check ${done}">✓</span>
-                            </div>
-                        `;
+                        milestoneHtml += `<div class="milestone-item"><span class="m-label">${m.label}</span><div class="m-track"><div class="m-fill" style="width:${progress}%;"></div></div><span class="m-check ${done}">✓</span></div>`;
                     });
                 } else {
                     const eventKeys = staticData.events || [];
                     eventKeys.forEach(key => {
-                        const done = eventData[key] === true ? 'done' : '';
-                        const progress = done ? 100 : 0;
-                        milestoneHtml += `
-                            <div class="milestone-item">
-                                <span class="m-label">${key}</span>
-                                <div class="m-track">
-                                    <div class="m-fill" style="width:${progress}%;"></div>
-                                </div>
-                                <span class="m-check ${done}">✓</span>
-                            </div>
-                        `;
+                        const done = eventData[key] === true ? 'done' : '', progress = done ? 100 : 0;
+                        milestoneHtml += `<div class="milestone-item"><span class="m-label">${key}</span><div class="m-track"><div class="m-fill" style="width:${progress}%;"></div></div><span class="m-check ${done}">✓</span></div>`;
                     });
                 }
 
-                const tags = [
-                    staticData.enneagram,
-                    staticData.mbti,
-                    staticData.attachment,
-                    yandere !== '未触发' ? `⚠️ 病娇 ${yandere}` : null,
-                    sexStage !== '未发生' ? `💫 ${sexStage}` : null
-                ].filter(Boolean);
-                let tagsHtml = tags.map(t =>
-                    `<span class="tag ${t.includes('病娇') || t.includes('性爱') ? 'special' : ''}">${t}</span>`
-                ).join('');
-
+                const tags = [staticData.enneagram, staticData.mbti, staticData.attachment, yandere !== '未触发' ? `⚠️ 病娇 ${yandere}` : null, sexStage !== '未发生' ? `💫 ${sexStage}` : null].filter(Boolean);
+                let tagsHtml = tags.map(t => `<span class="tag ${t.includes('病娇')||t.includes('性爱')?'special':''}">${t}</span>`).join('');
                 let specialHtml = '';
                 if (yandere !== '未触发') specialHtml += `<span class="tag status">病娇 · ${yandere}</span> `;
                 if (sexStage !== '未发生') specialHtml += `<span class="tag status">${sexStage}</span> `;
                 if (nightRaid > 0) specialHtml += `<span class="tag status">夜袭 ×${nightRaid}</span> `;
                 if (!specialHtml) specialHtml = `<span class="tag" style="opacity:0.3;">暂无特殊状态</span>`;
 
-                let timelineHtml = (staticData.timeline || []).map(t =>
-                    `<div class="timeline-item">
-                        <span class="t-year">${t.year}</span>
-                        <span class="t-text">${t.text}</span>
-                    </div>`
-                ).join('');
+                let timelineHtml = (staticData.timeline || []).map(t => `<div class="timeline-item"><span class="t-year">${t.year}</span><span class="t-text">${t.text}</span></div>`).join('');
 
                 drawerContent.innerHTML = `
                     <div class="drawer-grid">
+                        <div class="drawer-col"><div class="col-title">✦ 图库</div><div class="gallery-grid">${galleryHtml}</div><div style="margin-top:6px;font-size:0.45rem;color:var(--text-dim);opacity:0.3;letter-spacing:0.5px;">点击图片放大</div></div>
                         <div class="drawer-col">
-                            <div class="col-title">✦ 图库</div>
-                            <div class="gallery-grid">${galleryHtml}</div>
-                            <div style="margin-top:6px;font-size:0.45rem;color:var(--text-dim);opacity:0.3;letter-spacing:0.5px;">点击图片放大</div>
-                        </div>
-                        <div class="drawer-col">
-                            <div class="col-title">✦ 关系状态</div>
-                            <div class="info-block">
+                            <div class="col-title">✦ 关系状态</div><div class="info-block">
                                 <div class="info-row"><span class="label">类型</span><span class="value">${relationType}</span></div>
                                 <div class="info-row"><span class="label">告白</span><span class="value">${confession}</span></div>
                                 <div class="info-row"><span class="label">亲密突破</span><span class="value">${intimacyBreak}</span></div>
                                 <div class="info-row"><span class="label">亲密度</span><span class="value highlight">${intimacy}</span></div>
-                                ${isMain ? `
-                                    <div class="info-row"><span class="label">依赖度</span><span class="value">${dependence}</span></div>
-                                    <div class="info-row"><span class="label">勇敢值</span><span class="value">${bravery}</span></div>
-                                    <div class="info-row"><span class="label">吃醋值</span><span class="value">${jealousy}</span></div>
-                                ` : `
-                                    <div class="info-row"><span class="label">好感度</span><span class="value">${dependence}</span></div>
-                                `}
+                                ${isMain ? `<div class="info-row"><span class="label">依赖度</span><span class="value">${dependence}</span></div><div class="info-row"><span class="label">勇敢值</span><span class="value">${bravery}</span></div><div class="info-row"><span class="label">吃醋值</span><span class="value">${jealousy}</span></div>` : `<div class="info-row"><span class="label">好感度</span><span class="value">${dependence}</span></div>`}
                             </div>
-                            <div class="col-title" style="margin-top:10px;">✦ 关系里程碑</div>
-                            <div class="info-block">${milestoneHtml}</div>
+                            <div class="col-title" style="margin-top:10px;">✦ 关系里程碑</div><div class="info-block">${milestoneHtml}</div>
                         </div>
                         <div class="drawer-col">
-                            <div class="col-title">✦ 角色档案</div>
-                            <div class="info-block">
-                                <div class="info-row"><span class="label">年龄</span><span class="value">${staticData.age}</span></div>
-                                <div class="info-row"><span class="label">身份</span><span class="value">${staticData.identity}</span></div>
-                                <div class="info-row"><span class="label">身高</span><span class="value">${staticData.height}</span></div>
-                            </div>
-                            <div class="col-title" style="margin-top:10px;">✦ 性格标签</div>
-                            <div class="tag-group">${tagsHtml}</div>
-                            <div class="col-title" style="margin-top:10px;">✦ 特殊状态</div>
-                            <div class="tag-group">${specialHtml}</div>
-                            <div class="col-title" style="margin-top:10px;">✦ 经典语录</div>
-                            <div class="quote-text">${staticData.quote}</div>
-                            <div class="col-title" style="margin-top:10px;">✦ 关系演变史</div>
-                            <div style="display:flex;flex-direction:column;gap:2px;">${timelineHtml}</div>
+                            <div class="col-title">✦ 角色档案</div><div class="info-block"><div class="info-row"><span class="label">年龄</span><span class="value">${staticData.age}</span></div><div class="info-row"><span class="label">身份</span><span class="value">${staticData.identity}</span></div><div class="info-row"><span class="label">身高</span><span class="value">${staticData.height}</span></div></div>
+                            <div class="col-title" style="margin-top:10px;">✦ 性格标签</div><div class="tag-group">${tagsHtml}</div>
+                            <div class="col-title" style="margin-top:10px;">✦ 特殊状态</div><div class="tag-group">${specialHtml}</div>
+                            <div class="col-title" style="margin-top:10px;">✦ 经典语录</div><div class="quote-text">${staticData.quote}</div>
+                            <div class="col-title" style="margin-top:10px;">✦ 关系演变史</div><div style="display:flex;flex-direction:column;gap:2px;">${timelineHtml}</div>
                         </div>
-                    </div>
-                `;
+                    </div>`;
             }
 
-            // ============================================================
-            // 暴露全局函数
-            // ============================================================
             window.openDrawer = openDrawer;
             window.closeDrawer = closeDrawer;
             window.openImageOverlay = openImageOverlay;
 
-            // ============================================================
-            // 解析并执行 <UpdateVariable> 中的 _.set 命令
-            // ============================================================
+            // === executeVariableUpdate ===
             function executeVariableUpdate(updateVarText, currentStatData) {
                 if (!updateVarText) return currentStatData;
-
                 const setMatches = updateVarText.match(/_.set\s*\(\s*['"]([^'"]+)['"]\s*,\s*([^,]+)\s*,\s*([^)]+)\s*\)/g);
                 if (!setMatches) return currentStatData;
-
                 const newData = JSON.parse(JSON.stringify(currentStatData || {}));
-
                 for (const match of setMatches) {
                     const parts = match.match(/_.set\s*\(\s*['"]([^'"]+)['"]\s*,\s*([^,]+)\s*,\s*([^)]+)\s*\)/);
                     if (!parts) continue;
-
-                    const path = parts[1];
-                    const newValue = parts[3].trim();
-
+                    const path = parts[1], newValue = parts[3].trim();
                     let parsedValue;
                     if (newValue === 'true') parsedValue = true;
                     else if (newValue === 'false') parsedValue = false;
                     else if (newValue === 'null') parsedValue = null;
                     else if (newValue === 'undefined') parsedValue = undefined;
                     else if (!isNaN(newValue) && newValue !== '') parsedValue = Number(newValue);
-                    else if (newValue.startsWith("'") && newValue.endsWith("'")) {
-                        parsedValue = newValue.slice(1, -1);
-                    } else if (newValue.startsWith('"') && newValue.endsWith('"')) {
-                        parsedValue = newValue.slice(1, -1);
-                    } else {
-                        parsedValue = newValue;
-                    }
-
+                    else if (newValue.startsWith("'") && newValue.endsWith("'")) parsedValue = newValue.slice(1, -1);
+                    else if (newValue.startsWith('"') && newValue.endsWith('"')) parsedValue = newValue.slice(1, -1);
+                    else parsedValue = newValue;
                     const pathParts = path.split('.');
                     let current = newData;
-                    for (let i = 0; i < pathParts.length - 1; i++) {
-                        if (!current[pathParts[i]]) current[pathParts[i]] = {};
-                        current = current[pathParts[i]];
-                    }
+                    for (let i = 0; i < pathParts.length - 1; i++) { if (!current[pathParts[i]]) current[pathParts[i]] = {}; current = current[pathParts[i]]; }
                     current[pathParts[pathParts.length - 1]] = parsedValue;
-
                     console.log(`[变量执行] ✅ ${path} = ${parsedValue}`);
                 }
-
                 return newData;
             }
 
-            // ============================================================
-            // 流式监听优化
-            // ============================================================
-            let streamingHandlerIncremental, streamingHandlerFull, generationEndHandler;
-            let rafId = null, pendingStreamText = '';
-
+            // === 流式监听 ===
+            let streamingHandlerIncremental, streamingHandlerFull, generationEndHandler, rafId = null, pendingStreamText = '';
             function setupStreamingListeners() {
-                if (streamingHandlerIncremental && typeof eventRemoveListener === 'function')
-                    eventRemoveListener(iframe_events.STREAM_TOKEN_RECEIVED_INCREMENTALLY, streamingHandlerIncremental);
-                if (streamingHandlerFull && typeof eventRemoveListener === 'function')
-                    eventRemoveListener(iframe_events.STREAM_TOKEN_RECEIVED_FULLY, streamingHandlerFull);
-                if (generationEndHandler && typeof eventRemoveListener === 'function')
-                    eventRemoveListener(iframe_events.GENERATION_ENDED, generationEndHandler);
-
+                if (streamingHandlerIncremental && typeof eventRemoveListener === 'function') eventRemoveListener(iframe_events.STREAM_TOKEN_RECEIVED_INCREMENTALLY, streamingHandlerIncremental);
+                if (streamingHandlerFull && typeof eventRemoveListener === 'function') eventRemoveListener(iframe_events.STREAM_TOKEN_RECEIVED_FULLY, streamingHandlerFull);
+                if (generationEndHandler && typeof eventRemoveListener === 'function') eventRemoveListener(iframe_events.GENERATION_ENDED, generationEndHandler);
                 streamingHandlerIncremental = function(text) {
-                    if (!isStreaming) return;
-                    streamingFullText += text;
-                    pendingStreamText = streamingFullText;
+                    if (!isStreaming) return; streamingFullText += text; pendingStreamText = streamingFullText;
                     if (rafId) cancelAnimationFrame(rafId);
                     rafId = requestAnimationFrame(() => {
                         const match = pendingStreamText.match(/<content>([\s\S]*?)(?:<\/content>|$)/);
-                        if (match && match[1]) {
-                            storyText.innerHTML = match[1].trim() + '<span class="streaming-cursor"></span>';
-                            mainArea.scrollTop = mainArea.scrollHeight;
-                        }
+                        if (match && match[1]) { storyText.innerHTML = match[1].trim() + '<span class="streaming-cursor"></span>'; mainArea.scrollTop = mainArea.scrollHeight; }
                         rafId = null;
                     });
                 };
-
                 streamingHandlerFull = function(text) {
                     if (!isStreaming) return;
                     const match = text.match(/<content>([\s\S]*?)(?:<\/content>|$)/);
-                    if (match && match[1]) {
-                        storyText.innerHTML = match[1].trim() + '<span class="streaming-cursor"></span>';
-                        mainArea.scrollTop = mainArea.scrollHeight;
-                    }
+                    if (match && match[1]) { storyText.innerHTML = match[1].trim() + '<span class="streaming-cursor"></span>'; mainArea.scrollTop = mainArea.scrollHeight; }
                 };
-
                 generationEndHandler = function() {
                     isStreaming = false;
-                    setTimeout(() => {
-                        if (streamingFullText) {
-                            const match = streamingFullText.match(/<content>([\s\S]*?)<\/content>/);
-                            if (match && match[1]) storyText.innerHTML = match[1].trim();
-                        }
-                        loadLatestMessage();
-                    }, 300);
+                    setTimeout(() => { if (streamingFullText) { const match = streamingFullText.match(/<content>([\s\S]*?)<\/content>/); if (match && match[1]) storyText.innerHTML = match[1].trim(); } loadLatestMessage(); }, 300);
                 };
-
-                try {
-                    if (typeof eventOn !== 'undefined' && typeof iframe_events !== 'undefined') {
-                        eventOn(iframe_events.STREAM_TOKEN_RECEIVED_INCREMENTALLY, streamingHandlerIncremental);
-                        eventOn(iframe_events.STREAM_TOKEN_RECEIVED_FULLY, streamingHandlerFull);
-                        eventOn(iframe_events.GENERATION_ENDED, generationEndHandler);
-                    }
-                } catch (e) {}
+                try { if (typeof eventOn !== 'undefined' && typeof iframe_events !== 'undefined') { eventOn(iframe_events.STREAM_TOKEN_RECEIVED_INCREMENTALLY, streamingHandlerIncremental); eventOn(iframe_events.STREAM_TOKEN_RECEIVED_FULLY, streamingHandlerFull); eventOn(iframe_events.GENERATION_ENDED, generationEndHandler); } } catch (e) {}
             }
 
-            // ============================================================
-            // 模型列表相关
-            // ============================================================
+            // === 模型列表 ===
             function renderModelList(models) {
-                if (!models || !models.length) {
-                    modelListContainer.innerHTML = '<div class="model-empty">暂无可用模型</div>';
-                    modelCount.textContent = '0 个';
-                    return;
-                }
+                if (!models || !models.length) { modelListContainer.innerHTML = '<div class="model-empty">暂无可用模型</div>'; modelCount.textContent = '0 个'; return; }
                 const currentModel = apiModel.value.trim();
-                modelListContainer.innerHTML = models.map(m => `
-                    <div class="model-item" data-model="${m}">
-                        <span>${m}</span>
-                        <span class="check ${m === currentModel ? 'active' : ''}">✓</span>
-                    </div>`).join('');
+                modelListContainer.innerHTML = models.map(m => `<div class="model-item" data-model="${m}"><span>${m}</span><span class="check ${m === currentModel ? 'active' : ''}">✓</span></div>`).join('');
                 modelCount.textContent = models.length + ' 个';
                 modelListContainer.querySelectorAll('.model-item').forEach(el => {
                     el.addEventListener('click', function() {
                         apiModel.value = this.dataset.model;
                         modelListContainer.querySelectorAll('.check').forEach(c => c.classList.remove('active'));
                         this.querySelector('.check').classList.add('active');
-                        const data = JSON.parse(localStorage.getItem('ds_settings_v2') || '{}');
-                        data.apiModel = this.dataset.model;
-                        saveSettingsToStorage(data);
-                        showToast('✅ 已选择模型: ' + this.dataset.model);
+                        const data = JSON.parse(localStorage.getItem('ds_settings_v2') || '{}'); data.apiModel = this.dataset.model;
+                        saveSettingsToStorage(data); showToast('✅ 已选择模型: ' + this.dataset.model);
                     });
                 });
             }
+            function toggleModelList() { modelListContainer.classList.toggle('open'); modelListArrow.classList.toggle('open', modelListContainer.classList.contains('open')); }
+            function clearModelList() { availableModels = []; renderModelList([]); modelListContainer.classList.remove('open'); modelListArrow.classList.remove('open'); modelCount.textContent = '0 个'; }
 
-            function toggleModelList() {
-                modelListContainer.classList.toggle('open');
-                modelListArrow.classList.toggle('open', modelListContainer.classList.contains('open'));
-            }
-
-            function clearModelList() {
-                availableModels = [];
-                renderModelList([]);
-                modelListContainer.classList.remove('open');
-                modelListArrow.classList.remove('open');
-                modelCount.textContent = '0 个';
-            }
-
-            // ============================================================
-            // handleOptionClick - 单/多API分支（本地计算 + 持久化存储）
-            // ============================================================
+            // === handleOptionClick ===
             async function handleOptionClick(text) {
                 if (isGenerating) return;
-                isGenerating = true;
-                isStreaming = false;
-                streamingFullText = '';
+                isGenerating = true; isStreaming = false; streamingFullText = '';
                 document.querySelectorAll('.option-btn').forEach(b => b.disabled = true);
                 freeInputSend && (freeInputSend.disabled = true);
                 showToast('📤 发送: ' + text);
 
-                // 清理旧消息伪同层
                 const chatEl = document.getElementById('chat');
                 if (chatEl) {
                     const mes = chatEl.querySelectorAll('.mes');
                     if (mes.length > 1) {
                         const toRemove = [];
-                        for (let i = 0; i < mes.length - 1; i++) {
-                            mes[i].style.visibility = 'hidden';
-                            mes[i].style.position = 'absolute';
-                            mes[i].style.pointerEvents = 'none';
-                            toRemove.push(mes[i]);
-                        }
-                        requestAnimationFrame(() => {
-                            toRemove.forEach(el => el.remove());
-                        });
+                        for (let i = 0; i < mes.length - 1; i++) { mes[i].style.visibility = 'hidden'; mes[i].style.position = 'absolute'; mes[i].style.pointerEvents = 'none'; toRemove.push(mes[i]); }
+                        requestAnimationFrame(() => toRemove.forEach(el => el.remove()));
                     }
                 }
 
                 let newStatData = null;
-
                 try {
                     const config = getSecondApiConfig();
                     const isMulti = config.enabled;
@@ -1182,178 +893,66 @@ content = content.replace(/<NSFW_IMG>(.*?)<\/NSFW_IMG>/gi, (match, path) => {
                         if (typeof getVariables === 'function') {
                             const ctx = typeof SillyTavern !== 'undefined' ? SillyTavern.getContext() : null;
                             const latestIndex = ctx && ctx.chat ? ctx.chat.length - 1 : null;
-                            if (latestIndex !== null && latestIndex >= 0) {
-                                const result = getVariables({ type: 'message', message_id: latestIndex });
-                                if (result && result.stat_data) rawData = result.stat_data;
-                            }
+                            if (latestIndex !== null && latestIndex >= 0) { const result = getVariables({ type:'message', message_id:latestIndex }); if (result && result.stat_data) rawData = result.stat_data; }
                         }
-                        if (!rawData && typeof getAllVariables === 'function') {
-                            const allVars = getAllVariables();
-                            rawData = allVars.stat_data || allVars;
-                        }
+                        if (!rawData && typeof getAllVariables === 'function') { const allVars = getAllVariables(); rawData = allVars.stat_data || allVars; }
                         variables = unflatten(rawData || {});
                     } catch (e) {}
 
                     if (isMulti) {
-                        // ==================== 多 API 模式 ====================
-                        console.log('[多API] ══════════ 开始多API调用 ══════════');
-
-                        if (typeof generate !== 'function') {
-                            console.error('[多API] ❌ generate 函数不可用');
-                            showToast('❌ generate 不可用');
-                            return;
-                        }
-
-                        // 步骤 1：调用主 API 生成正文
-                        console.log('[多API] 📝 步骤1: 调用主API生成剧情正文...');
-                        isStreaming = true;
-                        setupStreamingListeners();
-                        const result = await generate({ user_input: text, should_stream: true });
+                        if (typeof generate !== 'function') { showToast('❌ generate 不可用'); return; }
+                        isStreaming = true; setupStreamingListeners();
+                        const result = await generate({ user_input:text, should_stream:true });
                         isStreaming = false;
-
                         const maintext = extractMaintext(result || streamingFullText);
                         const options = parseOptions(result || streamingFullText);
-
-                        if (!maintext) {
-                            console.error('[多API] ❌ 主API未输出正文');
-                            showToast('❌ 主AI未输出正文');
-                            return;
-                        }
-                        console.log('[多API] ✅ 主API正文已生成');
-
+                        if (!maintext) { showToast('❌ 主AI未输出正文'); return; }
                         let finalMessage = `<content>${maintext}</content>\n<StatusPlaceHolderImpl/>\n`;
                         if (options.length > 0) finalMessage += `<options>${options.join('|')}</options>`;
-
-                        console.log('[多API] 🔧 第二API配置检查:', {
-                            enabled: config.enabled,
-                            hasUrl: !!config.url,
-                            hasKey: !!config.key,
-                            model: config.model || '(未设置)'
-                        });
-
-                        if (!config.enabled || !config.url || !config.key || !config.model) {
-                            console.warn('[多API] ⚠️ 第二API配置不完整');
+                        if (!config.url || !config.key || !config.model) {
                             showToast('⚠️ 第二API未配置，变量未更新');
                             newStatData = JSON.parse(JSON.stringify(variables || {}));
                         } else {
-                            console.log('[多API] ⏳ 步骤2: 调用第二API...');
                             showToast('⏳ 第二AI 正在处理变量...');
                             const updateVar = await callSecondApiForVariable(maintext, variables);
-
-                            if (updateVar) {
-                                console.log('[多API] ✅ 第二API返回成功');
-                                newStatData = executeVariableUpdate(updateVar, variables || {});
-                                finalMessage += '\n' + updateVar;
-                            } else {
-                                console.warn('[多API] ⚠️ 第二API未返回有效变量');
-                                showToast('⚠️ 第二API未响应，变量暂未更新');
-                                newStatData = JSON.parse(JSON.stringify(variables || {}));
-                            }
+                            if (updateVar) { newStatData = executeVariableUpdate(updateVar, variables || {}); finalMessage += '\n' + updateVar; }
+                            else { showToast('⚠️ 第二API未响应，变量暂未更新'); newStatData = JSON.parse(JSON.stringify(variables || {})); }
                         }
-
-                        // 持久化
-                        console.log('[多API] 💾 持久化写入楼层...');
+                        const flatData = newStatData ? flatten(newStatData) : {};
                         if (typeof createChatMessages === 'function') {
-                            const flatData = newStatData ? flatten(newStatData) : {};
-                            await createChatMessages([{
-                                role: 'assistant',
-                                message: finalMessage,
-                                data: { stat_data: flatData }
-                            }], { refresh: 'none' });
+                            await createChatMessages([{ role:'assistant', message:finalMessage, data:{ stat_data:flatData } }], { refresh:'none' });
                             showToast('✅ 回复完成');
-                            console.log('[多API] ✅ 持久化完成');
-                        } else {
-                            showToast('❌ 无法创建消息');
-                        }
-
-                        setTimeout(() => {
-                            loadLatestMessage();
-                            statusBar.classList.add('visible');
-                            if (newStatData) {
-                                renderStatusBar(unflatten(newStatData));
-                            } else {
-                                renderStatusBar();
-                            }
-                            console.log('[多API] ══════════ 多API调用完成 ══════════');
-                        }, 800);
-
+                        } else showToast('❌ 无法创建消息');
+                        setTimeout(() => { loadLatestMessage(); statusBar.classList.add('visible'); if (newStatData) renderStatusBar(unflatten(newStatData)); else renderStatusBar(); }, 800);
                     } else {
-                        // ==================== 单 API 模式 ====================
                         if (typeof generate !== 'function') { showToast('❌ generate 不可用'); return; }
-                        isStreaming = true;
-                        setupStreamingListeners();
-                        const result = await generate({ user_input: text, should_stream: true });
+                        isStreaming = true; setupStreamingListeners();
+                        const result = await generate({ user_input:text, should_stream:true });
                         isStreaming = false;
-
                         if (!result) { showToast('❌ 生成失败'); return; }
-
                         const maintext = extractMaintext(result) || result;
-                        const options = parseOptions(result);
                         let updateVar = await callSecondApiForVariable(maintext, variables);
-                        if (!updateVar) {
-                            updateVar = extractUpdateVariable(result);
-                        }
-
+                        if (!updateVar) updateVar = extractUpdateVariable(result);
                         let finalMessage = result;
-                        if (updateVar && !extractUpdateVariable(result)) {
-                            finalMessage = result + '\n' + updateVar;
-                        }
-
-                        if (updateVar) {
-                            newStatData = executeVariableUpdate(updateVar, variables || {});
-                            console.log('[变量执行] ✅ 本地计算完成 (单API)');
-                        }
-
+                        if (updateVar && !extractUpdateVariable(result)) finalMessage = result + '\n' + updateVar;
+                        if (updateVar) newStatData = executeVariableUpdate(updateVar, variables || {});
+                        const flatData = newStatData ? flatten(newStatData) : {};
                         if (typeof createChatMessages === 'function') {
-                            const flatData = newStatData ? flatten(newStatData) : {};
-                            await createChatMessages([{
-                                role: 'assistant',
-                                message: finalMessage,
-                                data: { stat_data: flatData }
-                            }], { refresh: 'none' });
+                            await createChatMessages([{ role:'assistant', message:finalMessage, data:{ stat_data:flatData } }], { refresh:'none' });
                             showToast('✅ 回复完成');
-                            console.log('[持久化] ✅ 变量已随消息写入楼层');
-                        } else {
-                            showToast('❌ 无法创建消息');
-                        }
-
-                        setTimeout(() => {
-                            loadLatestMessage();
-                            statusBar.classList.add('visible');
-                            if (newStatData) {
-                                renderStatusBar(unflatten(newStatData));
-                            } else {
-                                renderStatusBar();
-                            }
-                        }, 800);
+                        } else showToast('❌ 无法创建消息');
+                        setTimeout(() => { loadLatestMessage(); statusBar.classList.add('visible'); if (newStatData) renderStatusBar(unflatten(newStatData)); else renderStatusBar(); }, 800);
                     }
-
-                } catch (error) {
-                    console.error('[同层] 发送失败:', error);
-                    showToast('❌ 发送失败: ' + error.message);
-                    isStreaming = false;
-                } finally {
-                    setTimeout(() => {
-                        document.querySelectorAll('.option-btn').forEach(b => b.disabled = false);
-                        freeInputSend && (freeInputSend.disabled = false);
-                        isGenerating = false;
-                    }, 2000);
-                }
+                } catch (error) { console.error('[同层] 发送失败:', error); showToast('❌ 发送失败: ' + error.message); isStreaming = false; }
+                finally { setTimeout(() => { document.querySelectorAll('.option-btn').forEach(b => b.disabled = false); freeInputSend && (freeInputSend.disabled = false); isGenerating = false; }, 2000); }
             }
-            // ============================================================
-            // handleRevar - 单独重roll变量（本地计算 + 持久化存储）
-            // ============================================================
+
+            // === handleRevar (重roll变量，单/多API兼容) ===
             async function handleRevar() {
                 revarOverlay.classList.remove('open');
                 if (isGenerating) { showToast('⏳ 正在生成中，请稍后'); return; }
                 let raw = '';
-                try {
-                    const ctx = typeof SillyTavern !== 'undefined' ? SillyTavern.getContext() : null;
-                    if (ctx && ctx.chat && ctx.chat.length > 0) {
-                        const last = ctx.chat[ctx.chat.length - 1];
-                        if (last && last.mes) raw = last.mes;
-                    }
-                } catch (e) {}
+                try { const ctx = typeof SillyTavern !== 'undefined' ? SillyTavern.getContext() : null; if (ctx && ctx.chat && ctx.chat.length > 0) { const last = ctx.chat[ctx.chat.length - 1]; if (last && last.mes) raw = last.mes; } } catch (e) {}
                 if (!raw) raw = getRawMessage();
                 if (!raw) { showToast('❌ 没有可重roll的楼层'); return; }
                 const maintext = extractMaintext(raw);
@@ -1364,262 +963,226 @@ content = content.replace(/<NSFW_IMG>(.*?)<\/NSFW_IMG>/gi, (match, path) => {
                     let variables = {};
                     try {
                         let rawData = null;
-                        if (typeof getVariables === 'function') {
-                            const ctx = typeof SillyTavern !== 'undefined' ? SillyTavern.getContext() : null;
-                            const latestIndex = ctx && ctx.chat ? ctx.chat.length - 1 : null;
-                            if (latestIndex !== null && latestIndex >= 0) {
-                                const result = getVariables({ type: 'message', message_id: latestIndex });
-                                if (result && result.stat_data) rawData = result.stat_data;
-                            }
-                        }
-                        if (!rawData && typeof getAllVariables === 'function') {
-                            const allVars = getAllVariables();
-                            rawData = allVars.stat_data || allVars;
-                        }
+                        if (typeof getVariables === 'function') { const ctx = typeof SillyTavern !== 'undefined' ? SillyTavern.getContext() : null; const latestIndex = ctx && ctx.chat ? ctx.chat.length - 1 : null; if (latestIndex !== null && latestIndex >= 0) { const result = getVariables({ type:'message', message_id:latestIndex }); if (result && result.stat_data) rawData = result.stat_data; } }
+                        if (!rawData && typeof getAllVariables === 'function') { const allVars = getAllVariables(); rawData = allVars.stat_data || allVars; }
                         variables = unflatten(rawData || {});
                     } catch (e) {}
                     const cleanedRaw = removeUpdateVariable(raw);
-                    const updateVar = await callSecondApiForVariable(maintext, variables);
-
-                    if (updateVar) {
-                        const finalMessage = cleanedRaw + '\n' + updateVar;
-
+                    let updateVar = null;
+                    const config = getSecondApiConfig();
+                    if (config.enabled && config.url && config.key && config.model) {
+                        updateVar = await callSecondApiForVariable(maintext, variables);
+                    }
+                    if (!updateVar && currentMode === 'single') {
                         try {
-                            const ctx = typeof SillyTavern !== 'undefined' ? SillyTavern.getContext() : null;
-                            newStatData = executeVariableUpdate(updateVar, variables || {});
-                            console.log('[变量执行] ✅ 本地计算完成 (revar)');
-                        } catch (e) {
-                            console.error('[变量执行] 计算失败:', e);
-                        }
-
+                            const [rules, list, format] = await Promise.all([getWorldbookEntry(ENTRIES.variableRules), getWorldbookEntry(ENTRIES.variableList), getWorldbookEntry(ENTRIES.variableFormat)]);
+                            const prompt = `当前剧情正文：\n${maintext}\n\n当前变量数据：\n${JSON.stringify(variables, null, 2)}\n\n${rules}\n${list}\n${format}\n\n任务：根据剧情正文和变量规则，只输出 <UpdateVariable> 标签。`;
+                            const result = await generateRaw({ user_input:prompt, ordered_prompts:['user_input'], max_chat_history:0, should_silence:true });
+                            if (result) updateVar = extractUpdateVariable(result);
+                        } catch (e) { console.error('[重roll变量] 主API回退失败', e); }
+                    }
+                    if (updateVar) {
+                        newStatData = executeVariableUpdate(updateVar, variables || {});
+                        const finalMessage = cleanedRaw + '\n' + updateVar;
                         const msgId = getMessageId();
                         if (msgId >= 0 && typeof setChatMessages === 'function') {
                             const flatData = newStatData ? flatten(newStatData) : {};
-                            await setChatMessages([{ 
-                                message_id: msgId, 
-                                message: finalMessage,
-                                data: { stat_data: flatData }
-                            }], { refresh: 'affected' });
-                            showToast('✅ 变量已重roll（已持久化）');
-                            console.log('[持久化] ✅ 重roll变量已写入楼层');
-                            setTimeout(() => {
-                                loadLatestMessage();
-                                statusBar.classList.add('visible');
-                                if (newStatData) {
-                                    renderStatusBar(unflatten(newStatData));
-                                } else {
-                                    renderStatusBar();
-                                }
-                            }, 500);
+                            await setChatMessages([{ message_id:msgId, message:finalMessage, data:{ stat_data:flatData } }], { refresh:'affected' });
+                            showToast('✅ 变量已重roll');
+                            setTimeout(() => { loadLatestMessage(); statusBar.classList.add('visible'); if (newStatData) renderStatusBar(unflatten(newStatData)); else renderStatusBar(); }, 500);
                         } else showToast('❌ 无法替换楼层');
-                    } else showToast('⚠️ 第二API未返回变量更新');
-                } catch (e) { showToast('❌ 重roll失败: ' + e.message); }
+                    } else showToast('⚠️ 未能获取变量更新');
+                } catch (e) { console.error('[重roll变量] 整体失败', e); showToast('❌ 重roll失败: ' + e.message); }
             }
 
-            // ============================================================
-            // loadLatestMessage - 加载最新消息
-            // ============================================================
+            // === handleRevarText (重roll正文，基于用户上一条输入重新生成) ===
+            async function handleRevarText() {
+                revarOverlay.classList.remove('open');
+                if (isGenerating) { showToast('⏳ 正在生成中，请稍后'); return; }
+
+                let raw = '';
+                try { const ctx = typeof SillyTavern !== 'undefined' ? SillyTavern.getContext() : null; if (ctx && ctx.chat && ctx.chat.length > 0) { const last = ctx.chat[ctx.chat.length - 1]; if (last && last.mes) raw = last.mes; } } catch (e) {}
+                if (!raw) raw = getRawMessage();
+                if (!raw) { showToast('❌ 没有可重roll的楼层'); return; }
+
+                let userInput = '';
+                try {
+                    const ctx = typeof SillyTavern !== 'undefined' ? SillyTavern.getContext() : null;
+                    if (ctx && ctx.chat && ctx.chat.length > 1) {
+                        const lastUser = ctx.chat[ctx.chat.length - 2];
+                        if (lastUser && lastUser.mes) userInput = lastUser.mes;
+                    }
+                } catch (e) {}
+                if (!userInput) {
+                    try {
+                        const ctx = typeof SillyTavern !== 'undefined' ? SillyTavern.getContext() : null;
+                        if (ctx && ctx.chat) {
+                            for (let i = ctx.chat.length - 2; i >= 0; i--) {
+                                const msg = ctx.chat[i];
+                                if (msg && (msg.is_user || msg.role === 'user') && msg.mes) { userInput = msg.mes; break; }
+                            }
+                        }
+                    } catch (e) {}
+                }
+                if (!userInput) { showToast('❌ 无法找到上一条用户消息，请使用重roll楼层'); return; }
+
+                const oldUpdateVar = extractUpdateVariable(raw);
+                showToast('🔄 正在重新生成正文...');
+                isGenerating = true;
+                document.querySelectorAll('.option-btn').forEach(b => b.disabled = true);
+                try {
+                    isStreaming = true; streamingFullText = ''; setupStreamingListeners();
+                    const result = await generate({ user_input: userInput, should_stream: true });
+                    isStreaming = false;
+                    const maintext = extractMaintext(result || streamingFullText) || result || '';
+                    const options = parseOptions(result || streamingFullText);
+                    if (!maintext) { showToast('❌ 生成正文失败'); return; }
+                    let finalMessage = `<content>${maintext}</content>\n<StatusPlaceHolderImpl/>\n`;
+                    if (options.length > 0) finalMessage += `<options>${options.join('|')}</options>`;
+                    if (oldUpdateVar) finalMessage += '\n' + oldUpdateVar;
+                    const msgId = getMessageId();
+                    if (msgId >= 0 && typeof setChatMessages === 'function') {
+                        await setChatMessages([{ message_id:msgId, message:finalMessage }], { refresh:'affected' });
+                        showToast('✅ 正文已重roll（变量不变）');
+                        setTimeout(() => { loadLatestMessage(); statusBar.classList.add('visible'); renderStatusBar(); }, 500);
+                    } else showToast('❌ 无法替换楼层');
+                } catch (e) { console.error('[重roll正文] 失败:', e); showToast('❌ 重roll正文失败: ' + e.message); isStreaming = false; }
+                finally { setTimeout(() => { document.querySelectorAll('.option-btn').forEach(b => b.disabled = false); isGenerating = false; }, 2000); }
+            }
+
+            // === handleRevarAll (重roll楼层，基于用户上一条输入完整重新生成) ===
+            async function handleRevarAll() {
+                revarOverlay.classList.remove('open');
+                if (isGenerating) { showToast('⏳ 正在生成中，请稍后'); return; }
+
+                let userInput = '';
+                try {
+                    const ctx = typeof SillyTavern !== 'undefined' ? SillyTavern.getContext() : null;
+                    if (ctx && ctx.chat && ctx.chat.length > 1) {
+                        const lastUser = ctx.chat[ctx.chat.length - 2];
+                        if (lastUser && lastUser.mes) userInput = lastUser.mes;
+                    }
+                } catch (e) {}
+                if (!userInput) {
+                    try {
+                        const ctx = typeof SillyTavern !== 'undefined' ? SillyTavern.getContext() : null;
+                        if (ctx && ctx.chat) {
+                            for (let i = ctx.chat.length - 2; i >= 0; i--) {
+                                const msg = ctx.chat[i];
+                                if (msg && (msg.is_user || msg.role === 'user') && msg.mes) { userInput = msg.mes; break; }
+                            }
+                        }
+                    } catch (e) {}
+                }
+                if (!userInput) { showToast('❌ 无法找到上一条用户消息'); return; }
+
+                showToast('🔄 正在重新生成楼层...');
+                const msgId = getMessageId();
+                if (msgId >= 0 && typeof deleteChatMessages === 'function') { try { await deleteChatMessages([msgId], { refresh:'none' }); } catch (e) {} }
+                handleOptionClick(userInput);
+            }
+
+            // === loadLatestMessage ===
             function loadLatestMessage() {
                 try {
                     if (isStreaming) return;
                     let raw = '';
-                    try {
-                        const ctx = typeof SillyTavern !== 'undefined' ? SillyTavern.getContext() : null;
-                        if (ctx && ctx.chat && ctx.chat.length > 0) {
-                            const last = ctx.chat[ctx.chat.length - 1];
-                            if (last && last.mes) raw = last.mes;
-                        }
-                    } catch (e) {}
-                    if (!raw) {
-                        raw = getRawMessage();
-                    }
+                    try { const ctx = typeof SillyTavern !== 'undefined' ? SillyTavern.getContext() : null; if (ctx && ctx.chat && ctx.chat.length > 0) { const last = ctx.chat[ctx.chat.length - 1]; if (last && last.mes) raw = last.mes; } } catch (e) {}
+                    if (!raw) raw = getRawMessage();
                     renderMain(raw, false);
-                } catch (e) {
-                    storyText.innerHTML = '<div class="loading-text">❌ 加载失败</div>';
-                }
+                } catch (e) { storyText.innerHTML = '<div class="loading-text">❌ 加载失败</div>'; }
             }
 
-            // ============================================================
-            // onMessageUpdate - 防抖刷新
-            // ============================================================
             function onMessageUpdate() {
                 if (isStreaming) return;
-                if (refreshTimer) {
-                    clearTimeout(refreshTimer);
-                    refreshTimer = null;
-                }
-                refreshTimer = setTimeout(() => {
-                    loadLatestMessage();
-                    renderStatusBar();
-                    refreshTimer = null;
-                }, 400);
+                if (refreshTimer) { clearTimeout(refreshTimer); refreshTimer = null; }
+                refreshTimer = setTimeout(() => { loadLatestMessage(); renderStatusBar(); refreshTimer = null; }, 400);
             }
 
-            // ============================================================
-            // toggleFullscreen - 全屏切换
-            // ============================================================
+            // === 全屏 ===
             function toggleFullscreen() {
                 const doc = document.documentElement;
                 if (!document.fullscreenElement && !document.webkitFullscreenElement) {
-                    (doc.requestFullscreen || doc.webkitRequestFullscreen).call(doc).catch(() => {});
-                    isFullscreen = true;
-                    freeInputRow.style.display = 'flex';
-                    showToast('🔲 全屏模式 (自由输入已开启)');
+                    (doc.requestFullscreen || doc.webkitRequestFullscreen).call(doc).catch(()=>{});
+                    isFullscreen = true; freeInputRow.style.display = 'flex'; showToast('🔲 全屏模式 (自由输入已开启)');
                 } else {
-                    (document.exitFullscreen || document.webkitExitFullscreen).call(document).catch(() => {});
-                    isFullscreen = false;
-                    freeInputRow.style.display = 'none';
-                    showToast('🔳 退出全屏');
+                    (document.exitFullscreen || document.webkitExitFullscreen).call(document).catch(()=>{});
+                    isFullscreen = false; freeInputRow.style.display = 'none'; showToast('🔳 退出全屏');
                 }
             }
 
-            // ============================================================
-            // setMode - 模式切换
-            // ============================================================
+            // === 模式切换 ===
             async function setMode(mode) {
                 currentMode = mode;
                 modeBtns.forEach(b => b.classList.toggle('active', b.dataset.mode === mode));
                 modeBadge.textContent = mode === 'single' ? '1' : '2';
                 modeBadge.style.background = mode === 'single' ? 'hsl(270,25%,60%)' : 'hsl(150,45%,50%)';
-                const data = JSON.parse(localStorage.getItem('ds_settings_v2') || '{}');
-                data.mode = mode;
-                saveSettingsToStorage(data);
+                const data = JSON.parse(localStorage.getItem('ds_settings_v2') || '{}'); data.mode = mode; saveSettingsToStorage(data);
                 const group = $('#secondApiGroup');
-                if (group) {
-                    group.style.opacity = mode === 'multi' ? '1' : '0.4';
-                    group.style.pointerEvents = mode === 'multi' ? 'auto' : 'none';
-                }
+                if (group) { group.style.opacity = mode === 'multi' ? '1' : '0.4'; group.style.pointerEvents = mode === 'multi' ? 'auto' : 'none'; }
                 await syncWorldbookForMode(mode);
             }
 
-            // ============================================================
-            // 设置面板
-            // ============================================================
+            // === 设置面板 ===
             function openSettings() { settingsOverlay.classList.add('open'); }
             function closeSettings() { settingsOverlay.classList.remove('open'); }
-
             function loadSettings() {
                 try {
-                    const raw = localStorage.getItem('ds_settings_v2');
-                    if (!raw) return;
-                    const data = JSON.parse(raw);
-                    if (data.apiUrl) apiUrl.value = data.apiUrl;
-                    if (data.apiKey) apiKey.value = data.apiKey;
-                    if (data.apiModel) apiModel.value = data.apiModel;
-                    if (data.apiTimeout) apiTimeout.value = data.apiTimeout;
-                    if (data.apiRetries) apiRetries.value = data.apiRetries;
-                    if (data.mode) {
-                        setMode(data.mode);
-                        const group = $('#secondApiGroup');
-                        if (group) {
-                            group.style.opacity = data.mode === 'multi' ? '1' : '0.4';
-                            group.style.pointerEvents = data.mode === 'multi' ? 'auto' : 'none';
-                        }
-                    }
-                    if (data.models && Array.isArray(data.models)) {
-                        availableModels = data.models;
-                        renderModelList(availableModels);
-                    }
+                    const raw = localStorage.getItem('ds_settings_v2'); if (!raw) return; const data = JSON.parse(raw);
+                    if (data.apiUrl) apiUrl.value = data.apiUrl; if (data.apiKey) apiKey.value = data.apiKey; if (data.apiModel) apiModel.value = data.apiModel;
+                    if (data.apiTimeout) apiTimeout.value = data.apiTimeout; if (data.apiRetries) apiRetries.value = data.apiRetries;
+                    if (data.mode) { setMode(data.mode); const group = $('#secondApiGroup'); if (group) { group.style.opacity = data.mode === 'multi' ? '1' : '0.4'; group.style.pointerEvents = data.mode === 'multi' ? 'auto' : 'none'; } }
+                    if (data.models && Array.isArray(data.models)) { availableModels = data.models; renderModelList(availableModels); }
                 } catch (e) {}
             }
-
             async function testApiConnection() {
-                const url = apiUrl.value.trim(), key = apiKey.value.trim();
-                if (!url || !key) { showToast('⚠️ 请填写 URL 和 API Key'); return; }
+                const url = apiUrl.value.trim(), key = apiKey.value.trim(); if (!url || !key) { showToast('⚠️ 请填写 URL 和 API Key'); return; }
                 apiStatus.textContent = '⏳ 测试中...';
                 try {
-                    const resp = await fetch(url.replace(/\/$/, '') + '/models', {
-                        headers: { 'Authorization': 'Bearer ' + key },
-                        signal: AbortSignal.timeout(10000)
-                    });
-                    if (resp.ok) {
-                        const data = await resp.json();
-                        const models = data.data ? data.data.map(m => m.id) : [];
-                        apiStatus.textContent = '✅ 成功 (' + models.length + ' 模型)';
-                    } else apiStatus.textContent = '❌ ' + resp.status;
+                    const resp = await fetch(url.replace(/\/$/, '') + '/models', { headers:{ 'Authorization':'Bearer ' + key }, signal:AbortSignal.timeout(10000) });
+                    if (resp.ok) { const data = await resp.json(); const models = data.data ? data.data.map(m => m.id) : []; apiStatus.textContent = '✅ 成功 (' + models.length + ' 模型)'; }
+                    else apiStatus.textContent = '❌ ' + resp.status;
                 } catch (e) { apiStatus.textContent = '❌ ' + (e.name === 'TimeoutError' ? '超时' : e.message); }
             }
-
             async function fetchModels() {
-                const url = apiUrl.value.trim(), key = apiKey.value.trim();
-                if (!url || !key) { showToast('⚠️ 请填写 URL 和 API Key'); return; }
+                const url = apiUrl.value.trim(), key = apiKey.value.trim(); if (!url || !key) { showToast('⚠️ 请填写 URL 和 API Key'); return; }
                 apiStatus.textContent = '⏳ 获取中...';
                 try {
-                    const resp = await fetch(url.replace(/\/$/, '') + '/models', {
-                        headers: { 'Authorization': 'Bearer ' + key },
-                        signal: AbortSignal.timeout(10000)
-                    });
+                    const resp = await fetch(url.replace(/\/$/, '') + '/models', { headers:{ 'Authorization':'Bearer ' + key }, signal:AbortSignal.timeout(10000) });
                     if (resp.ok) {
-                        const data = await resp.json();
-                        const models = data.data ? data.data.map(m => m.id) : [];
-                        if (models.length) {
-                            availableModels = models;
-                            renderModelList(models);
-                            if (!apiModel.value.trim()) apiModel.value = models[0];
-                            const cfg = JSON.parse(localStorage.getItem('ds_settings_v2') || '{}');
-                            cfg.models = models;
-                            saveSettingsToStorage(cfg);
-                            showToast('📋 已获取 ' + models.length + ' 个模型');
-                            apiStatus.textContent = '✅ 已获取 ' + models.length + ' 个模型';
-                        } else showToast('⚠️ 未找到可用模型');
+                        const data = await resp.json(); const models = data.data ? data.data.map(m => m.id) : [];
+                        if (models.length) { availableModels = models; renderModelList(models); if (!apiModel.value.trim()) apiModel.value = models[0]; const cfg = JSON.parse(localStorage.getItem('ds_settings_v2') || '{}'); cfg.models = models; saveSettingsToStorage(cfg); showToast('📋 已获取 ' + models.length + ' 个模型'); apiStatus.textContent = '✅ 已获取 ' + models.length + ' 个模型'; }
+                        else showToast('⚠️ 未找到可用模型');
                     } else showToast('❌ 获取失败: ' + resp.status);
                 } catch (e) { showToast('❌ ' + (e.name === 'TimeoutError' ? '超时' : e.message)); }
             }
-
             function clearAllConfig() {
                 if (!confirm('确定清除所有第二API配置吗？')) return;
-                apiUrl.value = ''; apiKey.value = ''; apiModel.value = ''; apiTimeout.value = '30000'; apiRetries.value = '3';
-                apiStatus.textContent = '⏸ 已清除';
-                availableModels = []; clearModelList();
-                localStorage.removeItem('ds_settings_v2');
-                showToast('🗑️ 已清除所有第二API配置');
+                apiUrl.value = ''; apiKey.value = ''; apiModel.value = ''; apiTimeout.value = '30000'; apiRetries.value = '3'; apiStatus.textContent = '⏸ 已清除';
+                availableModels = []; clearModelList(); localStorage.removeItem('ds_settings_v2'); showToast('🗑️ 已清除所有第二API配置');
             }
-
             function forceIframeHeight() {
-                try {
-                    if (window.parent && window.parent.postMessage) window.parent.postMessage({ type: 'tavern-height', height: document.documentElement.scrollHeight + 80 }, '*');
-                    const iframe = window.frameElement;
-                    if (iframe && iframe.parentNode) { iframe.style.height = '100vh'; iframe.style.minHeight = '100vh'; }
-                } catch (e) {}
+                try { if (window.parent && window.parent.postMessage) window.parent.postMessage({ type:'tavern-height', height:document.documentElement.scrollHeight + 80 }, '*'); const iframe = window.frameElement; if (iframe && iframe.parentNode) { iframe.style.height = '100vh'; iframe.style.minHeight = '100vh'; } } catch (e) {}
             }
 
-            // ============================================================
-            // 伪同层优化：MutationObserver + 事件双重保障
-            // ============================================================
+            // === 伪同层清理 ===
             function setupPseudoSingleLayer() {
-                const chat = document.getElementById('chat');
-                if (!chat) return setTimeout(setupPseudoSingleLayer, 500);
-
+                const chat = document.getElementById('chat'); if (!chat) return setTimeout(setupPseudoSingleLayer, 500);
                 const cleanOld = () => {
                     const mes = chat.querySelectorAll('.mes');
                     if (mes.length > 1) {
                         const toRemove = [];
-                        for (let i = 0; i < mes.length - 1; i++) {
-                            mes[i].style.visibility = 'hidden';
-                            mes[i].style.position = 'absolute';
-                            mes[i].style.pointerEvents = 'none';
-                            toRemove.push(mes[i]);
-                        }
-                        requestAnimationFrame(() => {
-                            toRemove.forEach(el => el.remove());
-                        });
+                        for (let i = 0; i < mes.length - 1; i++) { mes[i].style.visibility = 'hidden'; mes[i].style.position = 'absolute'; mes[i].style.pointerEvents = 'none'; toRemove.push(mes[i]); }
+                        requestAnimationFrame(() => toRemove.forEach(el => el.remove()));
                     }
                 };
-
-                const observer = new MutationObserver(() => requestAnimationFrame(cleanOld));
-                observer.observe(chat, { childList: true, subtree: false });
-
-                if (typeof eventOn === 'function') {
-                    eventOn(tavern_events.MESSAGE_RECEIVED, () => requestAnimationFrame(cleanOld));
-                    eventOn(tavern_events.MESSAGE_SENT, () => requestAnimationFrame(cleanOld));
-                }
+                const observer = new MutationObserver(() => requestAnimationFrame(cleanOld)); observer.observe(chat, { childList:true, subtree:false });
+                if (typeof eventOn === 'function') { eventOn(tavern_events.MESSAGE_RECEIVED, () => requestAnimationFrame(cleanOld)); eventOn(tavern_events.MESSAGE_SENT, () => requestAnimationFrame(cleanOld)); }
             }
 
-            // 长按重roll
             let longPressTimer;
             function setupLongPress() {
-                const el = storyText;
-                if (!el) return;
+                const el = storyText; if (!el) return;
                 el.addEventListener('mousedown', () => { longPressTimer = setTimeout(() => revarOverlay.classList.add('open'), 800); });
                 el.addEventListener('mouseup', () => clearTimeout(longPressTimer));
                 el.addEventListener('mouseleave', () => clearTimeout(longPressTimer));
@@ -1628,9 +1191,7 @@ content = content.replace(/<NSFW_IMG>(.*?)<\/NSFW_IMG>/gi, (match, path) => {
                 el.addEventListener('touchmove', () => clearTimeout(longPressTimer));
             }
 
-            // ============================================================
-            // 事件绑定
-            // ============================================================
+            // === 事件绑定 ===
             fullscreenBtn.addEventListener('click', toggleFullscreen);
             document.addEventListener('keydown', (e) => {
                 if (e.key === 'f' || e.key === 'F') { if (!e.ctrlKey && !e.metaKey) toggleFullscreen(); }
@@ -1645,134 +1206,50 @@ content = content.replace(/<NSFW_IMG>(.*?)<\/NSFW_IMG>/gi, (match, path) => {
             testApiBtn.addEventListener('click', testApiConnection);
             fetchModelsBtn.addEventListener('click', fetchModels);
             clearAllBtn.addEventListener('click', clearAllConfig);
-const saveApiBtn = $('#saveApiBtn');
-if (saveApiBtn) {
-    saveApiBtn.addEventListener('click', () => {
-        const data = JSON.parse(localStorage.getItem('ds_settings_v2') || '{}');
-        data.apiUrl = apiUrl.value.trim();
-        data.apiKey = apiKey.value.trim();
-        data.apiModel = apiModel.value.trim();
-        data.apiTimeout = parseInt(apiTimeout.value) || 30000;
-        data.apiRetries = parseInt(apiRetries.value) || 3;
-        data.mode = currentMode;
-        saveSettingsToStorage(data);
-        showToast('✅ 配置已保存');
-    });
-}
+            const saveApiBtn = $('#saveApiBtn');
+            if (saveApiBtn) {
+                saveApiBtn.addEventListener('click', () => {
+                    const data = JSON.parse(localStorage.getItem('ds_settings_v2') || '{}');
+                    data.apiUrl = apiUrl.value.trim(); data.apiKey = apiKey.value.trim(); data.apiModel = apiModel.value.trim();
+                    data.apiTimeout = parseInt(apiTimeout.value) || 30000; data.apiRetries = parseInt(apiRetries.value) || 3; data.mode = currentMode;
+                    saveSettingsToStorage(data); showToast('✅ 配置已保存');
+                });
+            }
             modelListToggle.addEventListener('click', toggleModelList);
-            optionsGrid.addEventListener('click', e => {
-                const btn = e.target.closest('.option-btn');
-                if (btn && !btn.disabled) handleOptionClick(btn.dataset.text);
-            });
+            optionsGrid.addEventListener('click', e => { const btn = e.target.closest('.option-btn'); if (btn && !btn.disabled) handleOptionClick(btn.dataset.text); });
 
             freeInputSend.addEventListener('click', () => {
                 const text = freeInputText.value.trim();
-                if (text) {
-                    const chatEl = document.getElementById('chat');
-                    if (chatEl) {
-                        const mes = chatEl.querySelectorAll('.mes');
-                        if (mes.length > 1) {
-                            const toRemove = [];
-                            for (let i = 0; i < mes.length - 1; i++) {
-                                mes[i].style.visibility = 'hidden';
-                                mes[i].style.position = 'absolute';
-                                mes[i].style.pointerEvents = 'none';
-                                toRemove.push(mes[i]);
-                            }
-                            requestAnimationFrame(() => {
-                                toRemove.forEach(el => el.remove());
-                            });
-                        }
-                    }
-                    handleOptionClick(text);
-                    freeInputText.value = '';
-                }
+                if (text) { handleOptionClick(text); freeInputText.value = ''; }
             });
-            freeInputText.addEventListener('keydown', (e) => {
-                if (e.key === 'Enter') {
-                    const text = freeInputText.value.trim();
-                    if (text) {
-                        const chatEl = document.getElementById('chat');
-                        if (chatEl) {
-                            const mes = chatEl.querySelectorAll('.mes');
-                            if (mes.length > 1) {
-                                const toRemove = [];
-                                for (let i = 0; i < mes.length - 1; i++) {
-                                    mes[i].style.visibility = 'hidden';
-                                    mes[i].style.position = 'absolute';
-                                    mes[i].style.pointerEvents = 'none';
-                                    toRemove.push(mes[i]);
-                                }
-                                requestAnimationFrame(() => {
-                                    toRemove.forEach(el => el.remove());
-                                });
-                            }
-                        }
-                        handleOptionClick(text);
-                        freeInputText.value = '';
-                    }
-                }
-            });
+            freeInputText.addEventListener('keydown', (e) => { if (e.key === 'Enter') { const text = freeInputText.value.trim(); if (text) { handleOptionClick(text); freeInputText.value = ''; } } });
 
-            revarConfirm.addEventListener('click', handleRevar);
+            revarVariable.addEventListener('click', handleRevar);
+            revarText.addEventListener('click', handleRevarText);
+            revarAll.addEventListener('click', handleRevarAll);
             revarCancel.addEventListener('click', () => revarOverlay.classList.remove('open'));
             revarOverlay.addEventListener('click', e => { if (e.target === revarOverlay) revarOverlay.classList.remove('open'); });
 
-            // 消息更新监听（兜底逻辑）
             if (typeof eventOn === 'function') {
-                try {
-                    eventOn('message_updated', onMessageUpdate);
-                    eventOn('message_received', onMessageUpdate);
-                    if (typeof tavern_events !== 'undefined') {
-                        eventOn(tavern_events.MESSAGE_UPDATED, onMessageUpdate);
-                        eventOn(tavern_events.MESSAGE_RECEIVED, onMessageUpdate);
-                    }
-                } catch (e) {}
+                try { eventOn('message_updated', onMessageUpdate); eventOn('message_received', onMessageUpdate); if (typeof tavern_events !== 'undefined') { eventOn(tavern_events.MESSAGE_UPDATED, onMessageUpdate); eventOn(tavern_events.MESSAGE_RECEIVED, onMessageUpdate); } } catch (e) {}
             } else setInterval(loadLatestMessage, 3000);
 
-            // ============================================================
-            // 配色切换逻辑（保留原实现）
-            // ============================================================
+            // === 配色 ===
             const themeBtns = document.querySelectorAll('.theme-btn');
-            const THEME_MAP = {
-                'purple': 'theme-purple',
-                'amber': 'theme-amber',
-                'glass': 'theme-glass',
-            };
-
+            const THEME_MAP = { 'purple':'theme-purple', 'amber':'theme-amber', 'glass':'theme-glass' };
             function setTheme(themeKey) {
                 document.body.classList.remove('theme-purple', 'theme-amber', 'theme-glass');
-                if (themeKey !== 'warm') {
-                    document.body.classList.add(THEME_MAP[themeKey]);
-                }
-                themeBtns.forEach(btn => {
-                    btn.classList.toggle('active', btn.dataset.theme === themeKey);
-                });
+                if (themeKey !== 'warm') document.body.classList.add(THEME_MAP[themeKey]);
+                themeBtns.forEach(btn => btn.classList.toggle('active', btn.dataset.theme === themeKey));
                 try { localStorage.setItem('ds_theme', themeKey); } catch(e) {}
             }
-
             function loadTheme() {
-                try {
-                    const saved = localStorage.getItem('ds_theme');
-                    if (saved && saved !== 'warm' && THEME_MAP[saved]) {
-                        setTheme(saved);
-                        return;
-                    }
-                } catch(e) {}
-                document.body.classList.remove('theme-purple', 'theme-amber', 'theme-glass');
-                themeBtns.forEach(btn => btn.classList.remove('active'));
+                try { const saved = localStorage.getItem('ds_theme'); if (saved && saved !== 'warm' && THEME_MAP[saved]) { setTheme(saved); return; } } catch(e) {}
+                document.body.classList.remove('theme-purple', 'theme-amber', 'theme-glass'); themeBtns.forEach(btn => btn.classList.remove('active'));
             }
+            themeBtns.forEach(btn => btn.addEventListener('click', function() { setTheme(this.dataset.theme); showToast('🎨 已切换配色'); }));
 
-            themeBtns.forEach(btn => {
-                btn.addEventListener('click', function() {
-                    setTheme(this.dataset.theme);
-                    showToast('🎨 已切换配色');
-                });
-            });
-
-            // ============================================================
-            // 初始化
-            // ============================================================
+            // === 初始化 ===
             loadTheme();
             loadSettings();
             setupStreamingListeners();
@@ -1781,11 +1258,7 @@ if (saveApiBtn) {
             modelListContainer.classList.remove('open');
             modelListArrow.classList.remove('open');
             freeInputRow.style.display = 'none';
-            setTimeout(() => {
-                loadLatestMessage();
-                setTimeout(forceIframeHeight, 300);
-                setTimeout(forceIframeHeight, 800);
-            }, 200);
+            setTimeout(() => { loadLatestMessage(); setTimeout(forceIframeHeight, 300); setTimeout(forceIframeHeight, 800); }, 200);
             console.log('[同层] ✅ 已加载, 模式:', currentMode);
         })();
     </script>
