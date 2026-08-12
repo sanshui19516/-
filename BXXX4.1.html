@@ -1228,6 +1228,7 @@
             revarText.addEventListener('click', handleRevarText);
             revarAll.addEventListener('click', handleRevarAll);
             revarCancel.addEventListener('click', () => revarOverlay.classList.remove('open'));
+overlay.addEventListener('click', closeImageOverlay);
             revarOverlay.addEventListener('click', e => { if (e.target === revarOverlay) revarOverlay.classList.remove('open'); });
 
             if (typeof eventOn === 'function') {
