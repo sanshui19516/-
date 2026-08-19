@@ -13,11 +13,8 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/EasePack.min.js"></script>
 
     <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
+        /* ===== 完整样式（与原始文件一致） ===== */
+        * { margin: 0; padding: 0; box-sizing: border-box; }
 
         body {
             min-height: 100vh;
@@ -67,12 +64,7 @@
             100% { transform: translate(-10%, 8%) scale(1.3); opacity: 0.8; }
         }
 
-        .header {
-            position: relative;
-            z-index: 2;
-            margin-bottom: 20px;
-            text-align: center;
-        }
+        .header { position: relative; z-index: 2; margin-bottom: 20px; text-align: center; }
 
         .title-glitch {
             position: relative;
@@ -86,10 +78,8 @@
         }
         .title-glitch .glitch-layer {
             position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
             pointer-events: none;
             opacity: 0.6;
             mix-blend-mode: screen;
@@ -137,10 +127,7 @@
             margin-top: 8px;
             font-weight: 300;
         }
-        .title-author strong {
-            color: #d4b0b8;
-            font-weight: 600;
-        }
+        .title-author strong { color: #d4b0b8; font-weight: 600; }
 
         .hero-image {
             position: relative;
@@ -155,20 +142,16 @@
         }
         .hero-image .bg-layer {
             position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
             background-size: cover;
             background-position: center 30%;
             background-repeat: no-repeat;
         }
         .hero-image .overlay-dark {
             position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
             background: linear-gradient(135deg, rgba(26, 10, 16, 0.5), rgba(50, 20, 30, 0.25), rgba(80, 30, 50, 0.1));
         }
         .hero-image .caption {
@@ -235,8 +218,7 @@
             gap: 8px;
         }
         .card-label svg {
-            width: 16px;
-            height: 16px;
+            width: 16px; height: 16px;
             fill: none;
             stroke: #c8909a;
             stroke-width: 1.5;
@@ -302,8 +284,7 @@
         }
         .btn-enter:active { transform: scale(0.96); }
         .btn-enter svg {
-            width: 20px;
-            height: 20px;
+            width: 20px; height: 20px;
             fill: none;
             stroke: #d4b0b8;
             stroke-width: 1.8;
@@ -425,14 +406,17 @@
     </div>
 
     <script>
-        document.addEventListener('DOMContentLoaded', () => {
-            const tl = gsap.timeline({ defaults: { ease: 'power2.out', duration: 0.8 } });
+        // ============================================================
+        // ★★★ 兼容外链加载的初始化方式 ★★★
+        // ============================================================
+        function initHomePage() {
+            var tl = gsap.timeline({ defaults: { ease: 'power2.out', duration: 0.8 } });
 
-            const header = document.querySelector('.header');
-            const hero = document.querySelector('.hero-image');
-            const cards = document.querySelectorAll('.card');
-            const action = document.querySelector('.action');
-            const footer = document.querySelector('.footer');
+            var header = document.querySelector('.header');
+            var hero = document.querySelector('.hero-image');
+            var cards = document.querySelectorAll('.card');
+            var action = document.querySelector('.action');
+            var footer = document.querySelector('.footer');
 
             gsap.set([header, hero, cards, action, footer], { opacity: 0 });
 
@@ -442,45 +426,58 @@
               .to(action, { opacity: 1, y: 0, duration: 0.6, ease: 'power2.out' }, '-=0.2')
               .to(footer, { opacity: 1, duration: 0.5, ease: 'power2.out' }, '-=0.2');
 
-            cards.forEach(c => {
-                c.addEventListener('mouseenter', () => {
+            cards.forEach(function(c) {
+                c.addEventListener('mouseenter', function() {
                     gsap.to(c, { scale: 1.01, duration: 0.25, ease: 'power1.out' });
                 });
-                c.addEventListener('mouseleave', () => {
+                c.addEventListener('mouseleave', function() {
                     gsap.to(c, { scale: 1, duration: 0.3, ease: 'power1.out' });
                 });
             });
 
-            document.getElementById('enterBtn').addEventListener('click', async function(e) {
-                const btn = this;
-                btn.style.opacity = '0.6';
-                btn.style.pointerEvents = 'none';
+            // 重新绑定开始按钮
+            var enterBtn = document.getElementById('enterBtn');
+            if (enterBtn) {
+                var newBtn = enterBtn.cloneNode(true);
+                enterBtn.parentNode.replaceChild(newBtn, enterBtn);
+                newBtn.addEventListener('click', function() {
+                    window.switchOpening(1);
+                });
+            }
+        }
+
+        // ===== 切换开场白函数（暴露到全局） =====
+        window.switchOpening = async function(swipeId) {
+            try {
+                var messages;
                 try {
-                    let messages;
-                    try {
-                        messages = await getChatMessages?.('0', { include_swipe: true });
-                    } catch (_) {
-                        const context = window.SillyTavern?.getContext?.();
-                        messages = context?.chat?.messages;
-                    }
-                    if (!messages || messages.length === 0) throw new Error('未找到聊天消息');
-                    const firstMsg = messages[0];
-                    if (!firstMsg.swipes) throw new Error('没有滑动条');
-                    const targetSwipe = firstMsg.swipes[1];
-                    const setChatMessage = window.setChatMessage || window.SillyTavern?.getContext?.()?.setChatMessage;
-                    if (typeof setChatMessage === 'function') {
-                        await setChatMessage(targetSwipe, 0, { swipe_id: 0, refresh: 'display_and_render_current' });
-                    } else if (typeof firstMsg.setSwipe === 'function') {
-                        firstMsg.setSwipe(0);
-                    }
-                } catch (err) {
-                    console.warn('切换开场白失败:', err);
-                } finally {
-                    btn.style.opacity = '1';
-                    btn.style.pointerEvents = 'auto';
+                    messages = await getChatMessages?.('0', { include_swipe: true });
+                } catch (_) {
+                    var context = window.SillyTavern?.getContext?.();
+                    messages = context?.chat?.messages;
                 }
-            });
-        });
+                if (!messages || messages.length === 0) throw new Error('未找到聊天消息');
+                var userMessage = messages[0];
+                if (!userMessage.swipes) throw new Error('没有滑动条');
+                if (userMessage.swipes.length <= swipeId) throw new Error('滑动条不存在');
+                var targetSwipe = userMessage.swipes[swipeId];
+                var setChatMessage = window.setChatMessage || window.SillyTavern?.getContext?.()?.setChatMessage;
+                if (typeof setChatMessage === 'function') {
+                    await setChatMessage(targetSwipe, 0, { swipe_id: swipeId, refresh: 'display_and_render_current' });
+                } else if (typeof userMessage.setSwipe === 'function') {
+                    userMessage.setSwipe(swipeId);
+                }
+            } catch (error) {
+                console.error('切换失败:', error);
+            }
+        };
+
+        // ===== 兼容两种加载方式 =====
+        if (document.readyState === 'loading') {
+            document.addEventListener('DOMContentLoaded', initHomePage);
+        } else {
+            initHomePage();
+        }
     </script>
 
 </body>
