@@ -1,0 +1,954 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>合住之后 · 作者主页</title>
+    <style>
+        /* ============================================================
+           合住之后 · 作者主页
+           主色调：紫粉 (hsl 320-340) + 香槟金 (hsl 40-45)
+           深色玻璃拟态 · 呼吸光晕
+           ============================================================ */
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
+            font-family: 'Georgia', 'Times New Roman', 'Songti SC', serif;
+            padding: 16px;
+            padding-top: 30px;
+            background: hsl(300, 12%, 6%);
+            background-image:
+                radial-gradient(ellipse at 20% 20%, hsla(320, 60%, 20%, 0.6) 0%, transparent 60%),
+                radial-gradient(ellipse at 80% 80%, hsla(340, 50%, 15%, 0.5) 0%, transparent 60%),
+                radial-gradient(ellipse at 50% 50%, hsla(280, 30%, 8%, 0.8) 0%, transparent 80%);
+        }
+
+        .container {
+            max-width: 540px;
+            width: 100%;
+            background: hsla(320, 20%, 14%, 0.75);
+            backdrop-filter: blur(24px) saturate(1.2);
+            -webkit-backdrop-filter: blur(24px) saturate(1.2);
+            border-radius: 40px;
+            padding: 32px 24px 28px;
+            border: 1px solid hsla(340, 30%, 60%, 0.15);
+            box-shadow:
+                0 30px 80px hsla(320, 40%, 10%, 0.6),
+                0 0 0 1px hsla(340, 30%, 70%, 0.06) inset,
+                0 0 80px hsla(320, 50%, 30%, 0.08);
+            text-align: center;
+            transition: all 0.4s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .container::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: conic-gradient(from 0deg at 50% 50%,
+                    transparent 0deg,
+                    hsla(330, 50%, 40%, 0.03) 60deg,
+                    transparent 120deg,
+                    hsla(40, 50%, 50%, 0.02) 180deg,
+                    transparent 240deg,
+                    hsla(320, 50%, 40%, 0.03) 300deg,
+                    transparent 360deg);
+            animation: auroraRotate 30s linear infinite;
+            pointer-events: none;
+            z-index: 0;
+        }
+        @keyframes auroraRotate {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .container > * {
+            position: relative;
+            z-index: 1;
+        }
+
+        .title-wrapper {
+            position: relative;
+            margin-bottom: 20px;
+            border-radius: 32px;
+            overflow: hidden;
+            border: 1px solid hsla(340, 30%, 60%, 0.20);
+            box-shadow: 0 8px 32px hsla(320, 40%, 10%, 0.4);
+        }
+        .title-bg {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-size: cover;
+            background-position: center 30%;
+            background-repeat: no-repeat;
+        }
+        .title-overlay-dark {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg,
+                hsla(320, 30%, 10%, 0.6),
+                hsla(340, 25%, 20%, 0.3),
+                hsla(40, 20%, 40%, 0.15));
+        }
+        .title-content {
+            position: relative;
+            z-index: 2;
+            padding: 32px 16px 28px;
+            text-align: center;
+        }
+
+        .title {
+            font-size: 1.7rem;
+            font-weight: 400;
+            letter-spacing: 12px;
+            color: hsl(340, 30%, 92%);
+            text-shadow: 0 0 30px hsla(340, 40%, 60%, 0.15), 0 2px 20px hsla(320, 40%, 10%, 0.6);
+            animation: titleGlow 4s ease-in-out infinite;
+        }
+        @keyframes titleGlow {
+            0%, 100% { text-shadow: 0 0 20px hsla(340, 40%, 60%, 0.10), 0 0 40px hsla(320, 30%, 40%, 0.05); }
+            50% { text-shadow: 0 0 30px hsla(340, 50%, 65%, 0.25), 0 0 60px hsla(320, 40%, 50%, 0.10), 0 0 90px hsla(340, 30%, 60%, 0.05); }
+        }
+
+        .title-sub {
+            font-size: 0.8rem;
+            letter-spacing: 6px;
+            color: hsl(340, 20%, 75%);
+            opacity: 0.8;
+            font-style: italic;
+            margin-top: 4px;
+        }
+
+        .title-author {
+            font-size: 0.7rem;
+            letter-spacing: 3px;
+            color: hsl(340, 15%, 60%);
+            margin-top: 10px;
+            opacity: 0.7;
+        }
+        .title-author span {
+            color: hsl(40, 30%, 70%);
+            font-weight: bold;
+        }
+
+        .divider {
+            border: none;
+            border-top: 1px solid hsla(340, 20%, 50%, 0.12);
+            margin: 0 0 18px 0;
+        }
+
+        .info-block {
+            background: hsla(320, 15%, 18%, 0.45);
+            border: 1px solid hsla(340, 20%, 50%, 0.08);
+            border-radius: 20px;
+            padding: 14px 16px;
+            margin-bottom: 10px;
+            text-align: left;
+            backdrop-filter: blur(4px);
+            -webkit-backdrop-filter: blur(4px);
+            transition: border-color 0.3s ease;
+        }
+        .info-block:hover {
+            border-color: hsla(340, 30%, 60%, 0.20);
+        }
+
+        .info-label {
+            font-size: 0.75rem;
+            font-weight: bold;
+            letter-spacing: 3px;
+            color: hsl(340, 25%, 85%);
+            margin-bottom: 6px;
+            padding-bottom: 4px;
+            border-bottom: 1px solid hsla(340, 20%, 50%, 0.08);
+        }
+
+        .info-list {
+            list-style: none;
+            padding: 0;
+        }
+        .info-list li {
+            font-size: 0.72rem;
+            line-height: 1.8;
+            color: hsl(340, 15%, 78%);
+            padding-left: 14px;
+            position: relative;
+        }
+        .info-list li::before {
+            content: "◆";
+            position: absolute;
+            left: 0;
+            font-size: 0.45rem;
+            color: hsl(40, 30%, 55%);
+            top: 2px;
+        }
+
+        .tag-allow { color: hsl(140, 30%, 65%); }
+        .tag-warn { color: hsl(350, 40%, 60%); }
+        .tag-note { color: hsl(340, 15%, 68%); }
+        .tag-feature { color: hsl(40, 30%, 72%); }
+
+        /* ===== 作者信息卡片 ===== */
+        .author-card {
+            background: hsla(320, 15%, 16%, 0.55);
+            border: 1px solid hsla(340, 25%, 50%, 0.12);
+            border-radius: 20px;
+            padding: 18px 16px 16px;
+            margin-bottom: 10px;
+            backdrop-filter: blur(4px);
+            -webkit-backdrop-filter: blur(4px);
+            transition: border-color 0.3s ease;
+            text-align: center;
+        }
+        .author-card:hover {
+            border-color: hsla(340, 30%, 60%, 0.25);
+        }
+
+        .author-avatar {
+            width: 72px;
+            height: 72px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 2px solid hsla(340, 30%, 60%, 0.4);
+            box-shadow: 0 0 30px hsla(320, 40%, 20%, 0.3), 0 0 0 1px hsla(340, 20%, 50%, 0.08);
+            margin-bottom: 10px;
+            transition: transform 0.4s ease, box-shadow 0.4s ease;
+        }
+        .author-avatar:hover {
+            transform: scale(1.05);
+            box-shadow: 0 0 40px hsla(340, 40%, 50%, 0.2), 0 0 80px hsla(40, 30%, 50%, 0.1);
+        }
+
+        .author-name {
+            color: hsl(340, 25%, 90%);
+            font-size: 1.0rem;
+            font-weight: bold;
+            letter-spacing: 3px;
+            margin-bottom: 2px;
+        }
+        .author-badge {
+            color: hsl(40, 25%, 65%);
+            font-size: 0.65rem;
+            letter-spacing: 2px;
+            opacity: 0.8;
+            margin-bottom: 12px;
+        }
+
+        .author-links {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+        .author-link-item {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            background: hsla(320, 10%, 12%, 0.5);
+            border: 1px solid hsla(340, 20%, 50%, 0.08);
+            border-radius: 16px;
+            padding: 10px 14px;
+            color: hsl(340, 15%, 72%);
+            text-decoration: none;
+            font-size: 0.75rem;
+            letter-spacing: 1px;
+            transition: all 0.3s ease;
+            backdrop-filter: blur(4px);
+            -webkit-backdrop-filter: blur(4px);
+        }
+        .author-link-item:hover {
+            background: hsla(320, 15%, 22%, 0.6);
+            border-color: hsla(340, 30%, 60%, 0.25);
+            box-shadow: 0 0 30px hsla(320, 40%, 15%, 0.2);
+            transform: translateY(-2px);
+            color: hsl(340, 25%, 90%);
+        }
+        .author-link-item .link-icon {
+            width: 20px;
+            height: 20px;
+            fill: none;
+            stroke: hsl(40, 30%, 60%);
+            stroke-width: 1.8;
+            stroke-linecap: round;
+            stroke-linejoin: round;
+            flex-shrink: 0;
+            opacity: 0.8;
+        }
+        .author-link-item:hover .link-icon {
+            stroke: hsl(40, 30%, 75%);
+        }
+        .author-link-item .link-label {
+            font-weight: bold;
+            color: hsl(40, 25%, 70%);
+            margin-right: 4px;
+        }
+        .author-link-item .link-url {
+            opacity: 0.6;
+            font-size: 0.65rem;
+            word-break: break-all;
+            max-width: 200px;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+        @media (max-width: 480px) {
+            .author-link-item .link-url {
+                max-width: 120px;
+            }
+        }
+
+        /* ===== 开场故事卡片 ===== */
+        .story-card {
+            background: hsla(320, 15%, 16%, 0.55);
+            border: 1px solid hsla(340, 25%, 50%, 0.15);
+            border-radius: 24px;
+            padding: 20px 18px 18px;
+            margin: 20px 0 16px;
+            backdrop-filter: blur(4px);
+            -webkit-backdrop-filter: blur(4px);
+            cursor: pointer;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+            text-align: left;
+        }
+        .story-card::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(ellipse at 30% 50%, hsla(340, 40%, 50%, 0.04) 0%, transparent 60%);
+            animation: cardShimmer 6s ease-in-out infinite;
+            pointer-events: none;
+        }
+        @keyframes cardShimmer {
+            0%, 100% { transform: translateX(-20%) scale(1); opacity: 0.5; }
+            50% { transform: translateX(20%) scale(1.2); opacity: 1; }
+        }
+        .story-card:hover {
+            border-color: hsla(340, 30%, 60%, 0.30);
+            background: hsla(320, 15%, 20%, 0.55);
+            transform: translateY(-2px);
+            box-shadow: 0 8px 30px hsla(320, 40%, 10%, 0.3);
+        }
+        .story-card:active {
+            transform: translateY(1px);
+        }
+
+        .story-card-icon {
+            display: flex;
+            justify-content: center;
+            margin-bottom: 8px;
+        }
+        .story-card-icon svg {
+            width: 40px;
+            height: 40px;
+            fill: none;
+            stroke: hsl(40, 30%, 60%);
+            stroke-width: 1.2;
+            opacity: 0.7;
+        }
+
+        .story-card-title {
+            font-size: 1.05rem;
+            font-weight: bold;
+            color: hsl(340, 25%, 90%);
+            letter-spacing: 4px;
+            text-align: center;
+            margin-bottom: 6px;
+        }
+        .story-card-desc {
+            font-size: 0.78rem;
+            line-height: 1.9;
+            color: hsl(340, 15%, 72%);
+            text-align: center;
+            letter-spacing: 0.5px;
+        }
+        .story-card-desc em {
+            color: hsl(40, 30%, 70%);
+            font-style: normal;
+            font-weight: bold;
+        }
+
+        /* ===== 瀑布流画廊 ===== */
+        .masonry-section {
+            margin-top: 10px;
+        }
+
+        .masonry-title {
+            color: hsl(340, 25%, 85%);
+            font-size: 1rem;
+            letter-spacing: 6px;
+            text-align: center;
+            margin-bottom: 4px;
+            font-weight: 400;
+        }
+        .masonry-sub {
+            color: hsl(340, 15%, 55%);
+            font-size: 0.65rem;
+            letter-spacing: 3px;
+            text-align: center;
+            margin-bottom: 18px;
+            font-style: italic;
+        }
+
+        .masonry {
+            column-count: 3;
+            column-gap: 10px;
+            padding-bottom: 6px;
+        }
+        .masonry-item {
+            break-inside: avoid;
+            margin-bottom: 10px;
+            border-radius: 14px;
+            overflow: hidden;
+            cursor: pointer;
+            border: 1px solid hsla(340, 20%, 50%, 0.10);
+            transition: all 0.3s ease;
+            position: relative;
+            background: hsla(320, 10%, 10%, 0.4);
+        }
+        .masonry-item:hover {
+            border-color: hsla(340, 30%, 60%, 0.30);
+            transform: scale(1.02);
+            box-shadow: 0 8px 30px hsla(320, 40%, 10%, 0.4);
+        }
+        .masonry-item:active {
+            transform: scale(0.98);
+        }
+        .masonry-item img {
+            width: 100%;
+            height: auto;
+            display: block;
+            background: hsla(320, 10%, 8%, 0.5);
+        }
+
+        .masonry-item.portrait img { aspect-ratio: 3 / 4; }
+        .masonry-item.landscape img { aspect-ratio: 16 / 9; }
+
+        /* ===== 灯箱 ===== */
+        .lightbox {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            background: hsla(300, 20%, 6%, 0.92);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            display: none;
+            justify-content: center;
+            align-items: center;
+            z-index: 9999;
+            padding: 20px;
+            cursor: pointer;
+            opacity: 0;
+            transition: opacity 0.35s ease;
+            overflow: hidden;
+        }
+        .lightbox.open {
+            display: flex;
+            opacity: 1;
+        }
+        .lightbox-content {
+            position: relative;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            max-width: 90vw;
+            max-height: 85vh;
+        }
+        .lightbox-content img {
+            max-width: 90vw;
+            max-height: 85vh;
+            width: auto;
+            height: auto;
+            border-radius: 20px;
+            box-shadow: 0 30px 80px hsla(320, 40%, 10%, 0.8), 0 0 0 1px hsla(340, 30%, 60%, 0.15);
+            object-fit: contain;
+            cursor: default;
+            display: block;
+        }
+        .lightbox-close {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            width: 40px;
+            height: 40px;
+            border: none;
+            background: hsla(320, 15%, 20%, 0.7);
+            backdrop-filter: blur(8px);
+            border-radius: 50%;
+            color: hsl(340, 20%, 85%);
+            font-size: 1.3rem;
+            cursor: pointer;
+            transition: all 0.25s ease;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            border: 1px solid hsla(340, 20%, 50%, 0.2);
+            z-index: 10;
+            line-height: 1;
+        }
+        .lightbox-close:hover {
+            background: hsla(320, 20%, 30%, 0.8);
+            color: hsl(340, 30%, 95%);
+            transform: rotate(90deg);
+        }
+        .lightbox-counter {
+            position: absolute;
+            bottom: -40px;
+            left: 50%;
+            transform: translateX(-50%);
+            color: hsl(340, 15%, 50%);
+            font-size: 0.8rem;
+            letter-spacing: 3px;
+            background: hsla(320, 15%, 10%, 0.5);
+            padding: 6px 18px;
+            border-radius: 20px;
+            backdrop-filter: blur(8px);
+            border: 1px solid hsla(340, 20%, 50%, 0.08);
+            white-space: nowrap;
+        }
+
+        .footer-note {
+            color: hsl(340, 15%, 50%);
+            font-size: 0.7rem;
+            margin-top: 16px;
+            padding-top: 14px;
+            border-top: 1px solid hsla(340, 20%, 50%, 0.08);
+            letter-spacing: 2px;
+            line-height: 1.8;
+        }
+        .footer-deco {
+            font-size: 0.75rem;
+            opacity: 0.6;
+            margin-bottom: 4px;
+            letter-spacing: 4px;
+            color: hsl(40, 25%, 55%);
+            animation: decoGlow 3s ease-in-out infinite;
+        }
+        @keyframes decoGlow {
+            0%, 100% { opacity: 0.4; }
+            50% { opacity: 0.8; }
+        }
+        .footer-line {
+            display: block;
+            color: hsl(340, 15%, 55%);
+        }
+
+        @media (max-width: 640px) {
+            body {
+                padding: 8px;
+                padding-top: 12px;
+            }
+            .container {
+                max-width: 100%;
+                border-radius: 28px;
+                padding: 20px 14px 18px;
+            }
+            .title-wrapper {
+                border-radius: 24px;
+                margin-bottom: 14px;
+            }
+            .title-content {
+                padding: 22px 12px 20px;
+            }
+            .title {
+                font-size: 1.3rem;
+                letter-spacing: 6px;
+            }
+            .title-sub {
+                font-size: 0.7rem;
+                letter-spacing: 3px;
+            }
+            .info-block {
+                padding: 10px 12px;
+            }
+            .info-label {
+                font-size: 0.7rem;
+            }
+            .info-list li {
+                font-size: 0.66rem;
+                line-height: 1.7;
+            }
+            .story-card {
+                padding: 16px 14px 14px;
+                margin: 16px 0 12px;
+            }
+            .story-card-title {
+                font-size: 0.95rem;
+            }
+            .story-card-desc {
+                font-size: 0.72rem;
+                line-height: 1.8;
+            }
+            .masonry {
+                column-count: 2;
+                column-gap: 8px;
+            }
+            .masonry-item {
+                margin-bottom: 8px;
+                border-radius: 10px;
+            }
+            .masonry-title {
+                font-size: 0.85rem;
+                letter-spacing: 4px;
+            }
+            .lightbox {
+                padding: 12px;
+            }
+            .lightbox-content {
+                max-width: 96vw;
+                max-height: 82vh;
+            }
+            .lightbox-content img {
+                max-width: 96vw;
+                max-height: 82vh;
+            }
+            .lightbox-close {
+                top: 6px;
+                right: 6px;
+                width: 34px;
+                height: 34px;
+                font-size: 1.1rem;
+            }
+            .lightbox-counter {
+                font-size: 0.7rem;
+                padding: 4px 14px;
+                bottom: -36px;
+            }
+            .footer-note {
+                font-size: 0.62rem;
+                margin-top: 12px;
+                padding-top: 10px;
+            }
+            .author-avatar {
+                width: 60px;
+                height: 60px;
+            }
+            .author-link-item .link-url {
+                max-width: 120px;
+            }
+        }
+
+        @media (max-width: 400px) {
+            .container {
+                padding: 16px 10px 14px;
+            }
+            .title {
+                font-size: 1.1rem;
+                letter-spacing: 4px;
+            }
+            .title-sub {
+                font-size: 0.6rem;
+                letter-spacing: 2px;
+            }
+            .info-list li {
+                font-size: 0.6rem;
+                padding-left: 10px;
+            }
+            .story-card-desc {
+                font-size: 0.66rem;
+            }
+            .lightbox-content {
+                max-width: 98vw;
+                max-height: 78vh;
+            }
+            .lightbox-content img {
+                max-width: 98vw;
+                max-height: 78vh;
+            }
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+
+    <div class="title-wrapper">
+        <div class="title-bg" style="background-image: url('https://testingcf.jsdelivr.net/gh/sanshui19516/-@main/IMG_20260529_062318.jpg');"></div>
+        <div class="title-overlay-dark"></div>
+        <div class="title-content">
+            <div class="title">合 住 之 后</div>
+            <div class="title-sub">— 两个不完整的人，慢慢变成彼此的一部分 —</div>
+            <div class="title-author">作者：<span>三年的水</span></div>
+        </div>
+    </div>
+
+    <hr class="divider">
+
+    <!-- ===== 发布信息 ===== -->
+    <div class="info-block">
+        <div class="info-label">发布信息</div>
+        <ul class="info-list">
+            <li>仅发布于 Discord 类脑、旅程</li>
+            <li>作者：三年的水</li>
+            <li>故事基调：日常 · 克制 · 禁忌 · 治愈</li>
+        </ul>
+    </div>
+
+    <!-- ===== 作者信息卡片 ===== -->
+    <div class="author-card">
+        <img class="author-avatar" src="https://cdn.jsdelivr.net/gh/sanshui19516/CG@main/%E5%A4%B4%E5%83%8F.png" alt="作者头像" />
+        <div class="author-name">三年的水</div>
+        <div class="author-badge">✦ 合住之后 ✦</div>
+        <div class="author-links">
+            <a class="author-link-item" href="https://discord.com/channels/1134557553011998840/1516980193195987075/1516980193195987075" target="_blank" rel="noopener noreferrer">
+                <svg class="link-icon" viewBox="0 0 24 24">
+                    <path d="M4 4h16v16H4z" />
+                    <path d="M8 8h8v8H8z" />
+                    <path d="M16 8l-4 4-4-4" />
+                    <path d="M12 12v6" />
+                </svg>
+                <span class="link-label">作品集锦</span>
+                <span class="link-url">Discord 频道</span>
+            </a>
+            <a class="author-link-item" href="https://discord.com/channels/1134557553011998840/1516980193195987075/1516980470871621794" target="_blank" rel="noopener noreferrer">
+                <svg class="link-icon" viewBox="0 0 24 24">
+                    <path d="M21 11.5L12 2 3 11.5" />
+                    <path d="M5 10v10a2 2 0 002 2h10a2 2 0 002-2V10" />
+                    <path d="M12 15v4" />
+                </svg>
+                <span class="link-label">关注作者</span>
+                <span class="link-url">Discord 频道</span>
+            </a>
+        </div>
+    </div>
+
+    <!-- ===== 授权说明 ===== -->
+    <div class="info-block">
+        <div class="info-label">授权说明</div>
+        <ul class="info-list">
+            <li><span class="tag-allow">✅ 允许二改（署名）</span></li>
+            <li><span class="tag-allow">✅ 二改后需标注出处</span></li>
+            <li><span class="tag-warn">❌ 禁止商用</span></li>
+            <li><span class="tag-warn">❌ 禁止墙内二传</span></li>
+        </ul>
+    </div>
+
+    <!-- ===== 本卡包含 ===== -->
+    <div class="info-block">
+        <div class="info-label">本卡包含</div>
+        <ul class="info-list">
+            <li><span class="tag-feature">✦ 合住之后 · 完整故事线</span></li>
+            <li><span class="tag-feature">✦ 三条分支结局（好线 / 中间线 / 坏线）</span></li>
+            <li><span class="tag-feature">✦ 有菜 · 全阶段人设与成长弧光</span></li>
+            <li><span class="tag-feature">✦ {{user}} · 深度心理刻画</span></li>
+            <li><span class="tag-feature">✦ MVU 变量系统 · 17 个核心事件驱动</span></li>
+            <li><span class="tag-feature">✦ 日常文风 / 母猪文风 · 双文风切换</span></li>
+        </ul>
+    </div>
+
+    <!-- ===== 使用说明 ===== -->
+    <div class="info-block">
+        <div class="info-label">使用说明</div>
+        <ul class="info-list">
+            <li>导入角色卡到 SillyTavern</li>
+            <li>开启提示词模板</li>
+            <li>加载 MVU 变量框架</li>
+            <li>开始对话体验</li>
+        </ul>
+    </div>
+
+    <!-- ===== 额外说明 ===== -->
+    <div class="info-block">
+        <div class="info-label">关于这个故事</div>
+        <ul class="info-list">
+            <li><span class="tag-note">「两个有伤口的人，在同一个屋檐下慢慢靠近。」</span></li>
+            <li><span class="tag-note">不追求治愈，只追求「不完美却值得」的日常。</span></li>
+            <li><span class="tag-note">用克制而准确的笔触，写一段有温度的禁忌关系。</span></li>
+        </ul>
+    </div>
+
+    <!-- ===== 公益声明 ===== -->
+    <div class="info-block">
+        <div class="info-label">⚠️ 禁止商用 · 公益声明</div>
+        <ul class="info-list" style="list-style: none; padding-left: 0;">
+            <li><span class="tag-note">本角色卡为作者"三年的水"免费分享的公益作品，仅供个人娱乐与创作交流使用。</span></li>
+            <li><span class="tag-note">严禁任何形式的商业用途，包括转卖、收费下载、打包售卖或用于盈利性直播/视频。</span></li>
+            <li><span class="tag-note">如通过付费渠道获得，请立即退款并举报贩卖者，维护创作者与您自身的权益。</span></li>
+            <li><span class="tag-note">感谢您的支持与理解。—— 作者：三年的水</span></li>
+        </ul>
+    </div>
+
+    <!-- ====== 画廊 ====== -->
+    <div class="masonry-section" id="gallery">
+        <div class="masonry-title">✦ 有菜 · 日常切片 ✦</div>
+        <div class="masonry-sub">点击图片预览大图</div>
+        <div class="masonry" id="masonry"></div>
+    </div>
+
+    <!-- ====== 开场故事卡片 ====== -->
+    <div class="story-card" onclick="switchOpening(2)">
+        <div class="story-card-icon">
+            <svg viewBox="0 0 48 48" xmlns="http://www.w3.org/2000/svg">
+                <path d="M24 6 L24 12 M24 36 L24 42 M6 24 L12 24 M36 24 L42 24 M8 8 L12 12 M36 36 L40 40 M8 40 L12 36 M36 8 L40 12" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"/>
+                <circle cx="24" cy="24" r="6" stroke="currentColor" stroke-width="1.2" fill="none"/>
+                <path d="M24 6 A18 18 0 0 1 42 24 A18 18 0 0 1 24 42 A18 18 0 0 1 6 24 A18 18 0 0 1 24 6Z" stroke="currentColor" stroke-width="0.8" fill="none" opacity="0.3"/>
+                <path d="M15 22 L20 27 L33 14" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round" opacity="0.5"/>
+            </svg>
+        </div>
+        <div class="story-card-title">从合住开始</div>
+        <div class="story-card-desc">
+            她搬进来那天，行李箱的轮子碾过地板。<br>
+            他把水放在床头柜上，<em>没有多问一句。</em><br>
+            后来他们慢慢成为了彼此生活里<br>
+            最安静、也最难以替代的那部分。<br>
+            <span style="color:hsl(340, 20%, 55%); font-size:0.7rem; display:block; margin-top:6px;">点击卡片，进入合住之后的第一个早晨</span>
+        </div>
+    </div>
+
+    <div class="footer-note">
+        <div class="footer-deco">✦ 请多多评论 ✦</div>
+        <span class="footer-line">by 三年的水 · 2026</span>
+    </div>
+
+</div>
+
+<!-- ===== 灯箱 ===== -->
+<div class="lightbox" id="lightbox">
+    <div class="lightbox-content" id="lightboxContent">
+        <button class="lightbox-close" id="lightboxCloseBtn">✕</button>
+        <img id="lightbox-img" src="" alt="预览">
+        <div class="lightbox-counter" id="lightbox-counter">1 / 8</div>
+    </div>
+</div>
+
+<script>
+    // ===== 跳转开场白 =====
+    function switchOpening(swipeId) {
+        const clickedCard = event.currentTarget;
+        clickedCard.style.opacity = '0.6';
+        clickedCard.style.pointerEvents = 'none';
+        try {
+            let messages;
+            try {
+                messages = getChatMessages?.('0', { include_swipe: true });
+            } catch (e) {
+                const context = window.SillyTavern?.getContext?.();
+                messages = context?.chat?.messages;
+            }
+            if (!messages || messages.length === 0) throw new Error('没有找到聊天消息。');
+            const userMessage = messages[0];
+            if (!userMessage.swipes) throw new Error('第一条消息没有滑动条。');
+            if (userMessage.swipes.length <= swipeId) throw new Error(`滑动条 ${swipeId} 不存在。`);
+            const targetSwipe = userMessage.swipes[swipeId];
+            const setChatMessage = window.setChatMessage || window.SillyTavern?.getContext?.()?.setChatMessage;
+            if (typeof setChatMessage === 'function') {
+                setChatMessage(targetSwipe, 0, { swipe_id: swipeId, refresh: 'display_and_render_current' });
+            } else if (typeof userMessage.setSwipe === 'function') {
+                userMessage.setSwipe(swipeId);
+            }
+        } catch (error) {
+            console.error('切换失败:', error);
+        } finally {
+            clickedCard.style.opacity = '1';
+            clickedCard.style.pointerEvents = 'auto';
+        }
+    }
+
+    // ===== 8张有菜照片 =====
+    const IMAGES = [
+        { src: 'https://testingcf.jsdelivr.net/gh/sanshui19516/CG@main/%E6%9C%89%E8%8F%9C%20(1).jpg', ratio: 'portrait' },
+        { src: 'https://testingcf.jsdelivr.net/gh/sanshui19516/CG@main/%E6%9C%89%E8%8F%9C%20(2).jpg', ratio: 'portrait' },
+        { src: 'https://testingcf.jsdelivr.net/gh/sanshui19516/CG@main/%E6%9C%89%E8%8F%9C%20(3).jpg', ratio: 'portrait' },
+        { src: 'https://testingcf.jsdelivr.net/gh/sanshui19516/CG@main/%E6%9C%89%E8%8F%9C%20(4).jpg', ratio: 'portrait' },
+        { src: 'https://testingcf.jsdelivr.net/gh/sanshui19516/CG@main/%E6%9C%89%E8%8F%9C%20(5).jpg', ratio: 'portrait' },
+        { src: 'https://testingcf.jsdelivr.net/gh/sanshui19516/CG@main/%E6%9C%89%E8%8F%9C%20(6).jpg', ratio: 'portrait' },
+        { src: 'https://testingcf.jsdelivr.net/gh/sanshui19516/CG@main/%E6%9C%89%E8%8F%9C%20(7).jpg', ratio: 'portrait' },
+        { src: 'https://testingcf.jsdelivr.net/gh/sanshui19516/CG@main/%E6%9C%89%E8%8F%9C%20(8).jpg', ratio: 'portrait' },
+    ];
+
+    const masonry = document.getElementById('masonry');
+    const lightbox = document.getElementById('lightbox');
+    const lightboxImg = document.getElementById('lightbox-img');
+    const lightboxCounter = document.getElementById('lightbox-counter');
+    const closeBtn = document.getElementById('lightboxCloseBtn');
+
+    let currentIndex = 0;
+
+    IMAGES.forEach((img, index) => {
+        const item = document.createElement('div');
+        item.className = `masonry-item ${img.ratio}`;
+        const placeholderSvg = `data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" width="400" height="400"><rect width="400" height="400" fill="%232a1a2a"/><text x="50%" y="50%" dominant-baseline="middle" text-anchor="middle" fill="%23a080a0" font-size="20" font-family="Georgia">有菜 ${index+1}</text></svg>`;
+
+        const imgElement = document.createElement('img');
+        imgElement.src = img.src;
+        imgElement.alt = `有菜 ${index + 1}`;
+        imgElement.loading = 'lazy';
+        imgElement.decoding = 'async';
+        imgElement.onerror = function() {
+            this.onerror = null;
+            this.src = placeholderSvg;
+        };
+
+        item.appendChild(imgElement);
+        item.addEventListener('click', function(e) {
+            e.stopPropagation();
+            currentIndex = index;
+            openLightbox(index);
+        });
+        masonry.appendChild(item);
+    });
+
+    function openLightbox(index) {
+        lightboxImg.src = IMAGES[index].src;
+        lightboxCounter.textContent = (index + 1) + ' / ' + IMAGES.length;
+        lightbox.classList.add('open');
+        document.body.style.overflow = 'hidden';
+    }
+
+    function closeLightbox() {
+        lightbox.classList.remove('open');
+        document.body.style.overflow = '';
+    }
+
+    closeBtn.addEventListener('click', function(e) {
+        e.stopPropagation();
+        closeLightbox();
+    });
+
+    lightbox.addEventListener('click', function(e) {
+        if (e.target === lightbox) {
+            closeLightbox();
+        }
+    });
+
+    document.addEventListener('keydown', function(e) {
+        if (e.key === 'Escape') {
+            closeLightbox();
+        }
+        if (e.key === 'ArrowRight' && lightbox.classList.contains('open')) {
+            currentIndex = (currentIndex + 1) % IMAGES.length;
+            openLightbox(currentIndex);
+        }
+        if (e.key === 'ArrowLeft' && lightbox.classList.contains('open')) {
+            currentIndex = (currentIndex - 1 + IMAGES.length) % IMAGES.length;
+            openLightbox(currentIndex);
+        }
+    });
+</script>
+
+</body>
+</html>
