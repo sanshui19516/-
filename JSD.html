@@ -1,0 +1,794 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.5, user-scalable=yes" />
+    <title>严厉教师母亲的调教日记 · 欢迎</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;14..32,400;14..32,600;14..32,700&family=Playfair+Display:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet" />
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            min-height: 100vh;
+            background: transparent;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-family: 'Inter', 'PingFang SC', system-ui, -apple-system, sans-serif;
+            padding: 20px;
+            overflow-x: hidden;
+        }
+
+        .container {
+            max-width: 720px;
+            width: 100%;
+            background: hsla(30, 12%, 8%, 0.78);
+            backdrop-filter: blur(32px) saturate(1.6);
+            -webkit-backdrop-filter: blur(32px) saturate(1.6);
+            border-radius: 48px;
+            border: 1px solid hsla(25, 60%, 45%, 0.12);
+            box-shadow: 0 40px 100px rgba(0, 0, 0, 0.7), inset 0 0 0 1px hsla(25, 60%, 45%, 0.04), 0 0 160px -60px hsla(25, 60%, 45%, 0.06);
+            padding: 36px 32px 28px;
+            position: relative;
+            overflow: hidden;
+            opacity: 0;
+            transform: translateY(30px) scale(0.98);
+            animation: containerIn 0.9s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+        }
+        @keyframes containerIn {
+            to {
+                opacity: 1;
+                transform: translateY(0) scale(1);
+            }
+        }
+
+        .container::before {
+            content: '';
+            position: absolute;
+            top: -30%;
+            right: -20%;
+            width: 70%;
+            height: 80%;
+            background: radial-gradient(ellipse, hsla(25, 60%, 45%, 0.08), transparent 65%);
+            pointer-events: none;
+            animation: driftGold 14s infinite alternate ease-in-out;
+        }
+        .container::after {
+            content: '';
+            position: absolute;
+            bottom: -30%;
+            left: -20%;
+            width: 60%;
+            height: 70%;
+            background: radial-gradient(ellipse, hsla(350, 55%, 40%, 0.05), transparent 65%);
+            pointer-events: none;
+            animation: driftWine 18s infinite alternate-reverse ease-in-out;
+        }
+        @keyframes driftGold {
+            0% {
+                transform: translate(0, 0) scale(1);
+                opacity: 0.3;
+            }
+            100% {
+                transform: translate(-10%, 8%) scale(1.4);
+                opacity: 0.8;
+            }
+        }
+        @keyframes driftWine {
+            0% {
+                transform: translate(0, 0) scale(1);
+                opacity: 0.2;
+            }
+            100% {
+                transform: translate(8%, -6%) scale(1.3);
+                opacity: 0.7;
+            }
+        }
+
+        .container>* {
+            position: relative;
+            z-index: 2;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 16px;
+        }
+
+        .title-glitch {
+            position: relative;
+            display: inline-block;
+            font-family: 'Playfair Display', serif;
+            font-weight: 700;
+            font-size: clamp(1.4rem, 5vw, 2.8rem);
+            letter-spacing: 0.04em;
+            color: hsl(30, 15%, 92%);
+            text-shadow: 0 0 30px hsla(25, 60%, 45%, 0.10);
+        }
+        .title-glitch .glitch-layer {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            opacity: 0.5;
+            mix-blend-mode: screen;
+        }
+        .title-glitch .glitch-layer:nth-child(2) {
+            color: hsl(350, 55%, 50%);
+            transform: translate(2px, -2px);
+            animation: glitchShift1 3.2s infinite alternate;
+        }
+        .title-glitch .glitch-layer:nth-child(3) {
+            color: hsl(25, 60%, 50%);
+            transform: translate(-2px, 2px);
+            animation: glitchShift2 2.8s infinite alternate;
+        }
+        @keyframes glitchShift1 {
+            0%, 90% { transform: translate(2px, -2px); opacity: 0.4; }
+            92% { transform: translate(-4px, 4px); opacity: 0.9; }
+            94% { transform: translate(6px, -3px); opacity: 0.2; }
+            96% { transform: translate(-2px, 2px); opacity: 0.6; }
+            100% { transform: translate(2px, -2px); opacity: 0.4; }
+        }
+        @keyframes glitchShift2 {
+            0%, 88% { transform: translate(-2px, 2px); opacity: 0.4; }
+            90% { transform: translate(3px, -3px); opacity: 0.8; }
+            93% { transform: translate(-5px, 5px); opacity: 0.15; }
+            95% { transform: translate(4px, -2px); opacity: 0.5; }
+            100% { transform: translate(-2px, 2px); opacity: 0.4; }
+        }
+
+        .title-sub {
+            font-size: clamp(0.55rem, 1.4vw, 0.8rem);
+            font-weight: 300;
+            color: hsla(30, 10%, 70%, 0.5);
+            letter-spacing: 8px;
+            margin-top: 4px;
+            font-style: italic;
+        }
+        .title-author {
+            font-size: clamp(0.45rem, 1vw, 0.6rem);
+            color: hsla(30, 10%, 55%, 0.4);
+            letter-spacing: 4px;
+            margin-top: 6px;
+            font-weight: 300;
+        }
+        .title-author strong {
+            color: hsl(25, 60%, 50%);
+            font-weight: 600;
+        }
+
+        .hero-image {
+            position: relative;
+            margin: 0 0 18px 0;
+            border-radius: 28px;
+            overflow: hidden;
+            border: 1px solid hsla(25, 60%, 45%, 0.12);
+            box-shadow: 0 4px 30px rgba(0, 0, 0, 0.35);
+            aspect-ratio: 16 / 5.5;
+        }
+        .hero-image .bg-layer {
+            position: absolute;
+            inset: 0;
+            background-image: url('https://testingcf.jsdelivr.net/gh/sanshui19516/-@main/IMG_20260529_062318.jpg');
+            background-size: cover;
+            background-position: center 30%;
+            background-repeat: no-repeat;
+        }
+        .hero-image .overlay-dark {
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(135deg, hsla(30, 15%, 5%, 0.50), hsla(350, 55%, 40%, 0.12), hsla(25, 60%, 45%, 0.08));
+        }
+        .hero-image .caption {
+            position: relative;
+            z-index: 2;
+            padding: 20px 16px 18px;
+            text-align: center;
+            color: hsl(30, 15%, 92%);
+            font-size: clamp(0.7rem, 2vw, 1.0rem);
+            letter-spacing: 4px;
+            font-style: italic;
+            text-shadow: 0 2px 20px rgba(0, 0, 0, 0.6);
+            display: flex;
+            align-items: flex-end;
+            justify-content: center;
+            height: 100%;
+            font-weight: 300;
+        }
+        .hero-image .caption .caption-bold {
+            font-weight: 700;
+            color: hsl(30, 15%, 95%);
+            letter-spacing: 5px;
+            text-shadow: 0 0 30px hsla(25, 60%, 45%, 0.3), 0 2px 20px rgba(0, 0, 0, 0.7);
+        }
+
+        .story-area {
+            background: hsla(30, 12%, 6%, 0.40);
+            border: 1px solid hsla(25, 60%, 45%, 0.06);
+            border-radius: 24px;
+            padding: 22px 26px 18px;
+            margin-bottom: 18px;
+            max-height: 300px;
+            overflow-y: auto;
+            position: relative;
+            transition: border-color 0.4s ease;
+            scrollbar-width: thin;
+            scrollbar-color: hsla(25, 60%, 45%, 0.15) transparent;
+        }
+        .story-area::-webkit-scrollbar {
+            width: 3px;
+        }
+        .story-area::-webkit-scrollbar-track {
+            background: transparent;
+        }
+        .story-area::-webkit-scrollbar-thumb {
+            background: hsla(25, 60%, 45%, 0.20);
+            border-radius: 10px;
+        }
+
+        .story-area:hover {
+            border-color: hsla(25, 60%, 45%, 0.12);
+        }
+
+        .story-area .story-label {
+            font-size: 0.5rem;
+            font-weight: 600;
+            letter-spacing: 3px;
+            color: hsla(30, 10%, 55%, 0.25);
+            text-transform: uppercase;
+            margin-bottom: 12px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            flex-shrink: 0;
+        }
+        .story-area .story-label svg {
+            width: 14px;
+            height: 14px;
+            fill: none;
+            stroke: hsla(25, 60%, 45%, 0.2);
+            stroke-width: 1.8;
+            stroke-linecap: round;
+            stroke-linejoin: round;
+        }
+
+        .typewriter-content {
+            font-family: 'Inter', 'PingFang SC', system-ui, sans-serif;
+            font-size: clamp(0.7rem, 1.4vw, 0.85rem);
+            font-weight: 300;
+            line-height: 2.0;
+            color: hsla(30, 10%, 85%, 0.78);
+            letter-spacing: 0.3px;
+            position: relative;
+        }
+
+        .typewriter-content .paragraph {
+            display: block;
+            text-indent: 2em;
+            margin-bottom: 0.6em;
+        }
+        .typewriter-content .paragraph:last-child {
+            margin-bottom: 0;
+        }
+
+        .typewriter-content .divider-line {
+            display: block;
+            text-align: center;
+            font-size: 0.5rem;
+            letter-spacing: 8px;
+            color: hsla(25, 60%, 45%, 0.12);
+            margin: 0.1em 0 0.4em 0;
+            opacity: 0;
+            transition: opacity 0.6s ease;
+        }
+        .typewriter-content .divider-line.show {
+            opacity: 1;
+        }
+
+        .typewriter-content .cursor {
+            display: inline-block;
+            width: 2px;
+            height: 1em;
+            background: hsl(25, 60%, 50%);
+            margin-left: 2px;
+            vertical-align: text-bottom;
+            animation: blink 0.9s step-end infinite;
+        }
+        @keyframes blink {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0; }
+        }
+
+        .typewriter-content .cursor.done {
+            animation: blink 1.2s step-end infinite;
+            opacity: 0.6;
+        }
+
+        .skip-hint {
+            position: absolute;
+            bottom: 8px;
+            right: 14px;
+            font-size: 0.5rem;
+            color: hsla(30, 10%, 50%, 0.15);
+            letter-spacing: 2px;
+            pointer-events: none;
+            opacity: 0;
+            transition: opacity 0.8s ease;
+        }
+        .skip-hint.show {
+            opacity: 1;
+        }
+
+        .story-area.done {
+            border-color: hsla(25, 60%, 45%, 0.08);
+        }
+        .story-area.done .skip-hint {
+            opacity: 0;
+        }
+
+        .action {
+            text-align: center;
+            margin: 0 0 14px;
+        }
+
+        .btn-enter {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 16px;
+            width: 100%;
+            padding: 16px 28px;
+            border-radius: 60px;
+            background: hsla(25, 60%, 45%, 0.04);
+            border: 1px solid hsla(25, 60%, 45%, 0.12);
+            color: hsl(30, 15%, 92%);
+            font-size: clamp(0.8rem, 1.8vw, 1.0rem);
+            font-weight: 500;
+            letter-spacing: 4px;
+            cursor: pointer;
+            transition: all 0.4s cubic-bezier(0.25, 0.8, 0.25, 1);
+            backdrop-filter: blur(6px);
+            -webkit-backdrop-filter: blur(6px);
+            font-family: 'Inter', sans-serif;
+            position: relative;
+            overflow: hidden;
+        }
+        .btn-enter::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(135deg, hsla(25, 60%, 45%, 0.03), hsla(350, 55%, 40%, 0.03));
+            pointer-events: none;
+            opacity: 0;
+            transition: opacity 0.5s ease;
+        }
+        .btn-enter:hover::before {
+            opacity: 1;
+        }
+        .btn-enter:hover {
+            background: hsla(25, 60%, 45%, 0.08);
+            border-color: hsla(25, 60%, 45%, 0.25);
+            box-shadow: 0 0 50px hsla(25, 60%, 45%, 0.05), inset 0 0 0 1px hsla(25, 60%, 45%, 0.04);
+            transform: translateY(-3px);
+        }
+        .btn-enter:active {
+            transform: scale(0.96) translateY(0);
+            transition-duration: 0.05s;
+        }
+
+        .btn-enter .btn-icon-svg {
+            width: 22px;
+            height: 22px;
+            fill: none;
+            stroke: hsla(25, 60%, 55%, 0.5);
+            stroke-width: 1.8;
+            stroke-linecap: round;
+            stroke-linejoin: round;
+            transition: all 0.4s ease;
+            flex-shrink: 0;
+        }
+        .btn-enter:hover .btn-icon-svg {
+            stroke: hsla(25, 60%, 55%, 0.9);
+            transform: translateX(4px);
+        }
+
+        .btn-enter .btn-glow-ring {
+            position: absolute;
+            inset: -1px;
+            border-radius: 60px;
+            padding: 1px;
+            background: linear-gradient(135deg, hsla(25, 60%, 45%, 0.12), transparent 60%, hsla(350, 55%, 40%, 0.08));
+            -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+            -webkit-mask-composite: xor;
+            mask-composite: exclude;
+            pointer-events: none;
+            opacity: 0;
+            transition: opacity 0.5s ease;
+        }
+        .btn-enter:hover .btn-glow-ring {
+            opacity: 1;
+        }
+
+        .footer {
+            text-align: center;
+            padding-top: 14px;
+            border-top: 1px solid hsla(25, 60%, 45%, 0.03);
+            font-size: 0.5rem;
+            color: hsla(30, 10%, 45%, 0.25);
+            letter-spacing: 3px;
+            font-weight: 300;
+        }
+        .footer .footer-deco {
+            font-size: 0.65rem;
+            opacity: 0.25;
+            margin-bottom: 4px;
+            letter-spacing: 4px;
+            animation: pulseDeco 3s ease-in-out infinite;
+        }
+        @keyframes pulseDeco {
+            0%, 100% { opacity: 0.12; }
+            50% { opacity: 0.4; }
+        }
+        .footer span {
+            color: hsla(30, 10%, 50%, 0.25);
+        }
+
+        @media (max-width: 640px) {
+            body {
+                padding: 10px;
+            }
+            .container {
+                border-radius: 32px;
+                padding: 24px 16px 20px;
+            }
+            .hero-image {
+                border-radius: 20px;
+                margin-bottom: 14px;
+                aspect-ratio: 16 / 4.5;
+            }
+            .hero-image .caption {
+                font-size: 0.6rem;
+                padding: 14px 12px;
+                letter-spacing: 3px;
+            }
+            .story-area {
+                padding: 16px 16px 14px;
+                border-radius: 18px;
+                max-height: 220px;
+            }
+            .typewriter-content {
+                font-size: 0.68rem;
+                line-height: 1.9;
+            }
+            .btn-enter {
+                padding: 14px 20px;
+                font-size: 0.7rem;
+                letter-spacing: 3px;
+                gap: 12px;
+            }
+            .btn-enter .btn-icon-svg {
+                width: 18px;
+                height: 18px;
+            }
+            .footer {
+                font-size: 0.45rem;
+            }
+            .skip-hint {
+                font-size: 0.4rem;
+                bottom: 6px;
+                right: 10px;
+            }
+            .typewriter-content .paragraph {
+                text-indent: 1.6em;
+            }
+        }
+
+        @media (max-width: 400px) {
+            .container {
+                padding: 16px 10px 14px;
+                border-radius: 24px;
+            }
+            .title-glitch {
+                font-size: 1.1rem;
+            }
+            .title-sub {
+                font-size: 0.45rem;
+                letter-spacing: 4px;
+            }
+            .hero-image {
+                aspect-ratio: 16 / 4;
+                border-radius: 16px;
+            }
+            .hero-image .caption {
+                font-size: 0.5rem;
+                letter-spacing: 2px;
+                padding: 10px 8px;
+            }
+            .story-area {
+                padding: 12px 12px 10px;
+                max-height: 180px;
+            }
+            .typewriter-content {
+                font-size: 0.6rem;
+                line-height: 1.8;
+            }
+            .btn-enter {
+                padding: 12px 16px;
+                font-size: 0.6rem;
+                letter-spacing: 2px;
+                gap: 10px;
+            }
+            .typewriter-content .paragraph {
+                text-indent: 1.4em;
+            }
+        }
+
+        @media (min-width: 641px) and (max-width: 900px) {
+            .container {
+                padding: 30px 24px 24px;
+            }
+            .story-area {
+                padding: 20px 22px 16px;
+                max-height: 260px;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container" id="app">
+
+        <header class="header">
+            <div class="title-glitch">
+                严厉教师母亲的调教日记
+                <span class="glitch-layer" aria-hidden="true">严厉教师母亲的调教日记</span>
+                <span class="glitch-layer" aria-hidden="true">严厉教师母亲的调教日记</span>
+            </div>
+            <div class="title-sub">—— 母亲 · 教师 · 堕落的开端 ——</div>
+            <div class="title-author">作者 · <strong>三年的水</strong></div>
+        </header>
+
+        <div class="hero-image" id="heroImage">
+            <div class="bg-layer"></div>
+            <div class="overlay-dark"></div>
+            <div class="caption">
+                <span class="caption-bold">「{{user}}……你干什么……出去！」</span>
+            </div>
+        </div>
+
+        <div class="story-area" id="storyArea">
+            <div class="story-label">
+                <svg viewBox="0 0 24 24"><polyline points="4 7 4 4 20 4 20 7"/><line x1="4" y1="10" x2="20" y2="10"/><line x1="4" y1="14" x2="20" y2="14"/><line x1="4" y1="18" x2="16" y2="18"/></svg>
+                故事简介
+            </div>
+            <div class="typewriter-content" id="typewriter"></div>
+            <div class="skip-hint" id="skipHint">✦ 点击任意位置跳过 ✦</div>
+        </div>
+
+        <div class="action">
+            <button class="btn-enter" id="enterBtn">
+                <span>进入故事 · 门缝之后</span>
+                <svg class="btn-icon-svg" viewBox="0 0 24 24"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+                <span class="btn-glow-ring"></span>
+            </button>
+        </div>
+
+        <div class="footer">
+            <div class="footer-deco">✦ 请多多评论 ✦</div>
+            <span>by 三年的水</span>
+        </div>
+
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+
+            const storyParagraphs = [
+                '母亲森田玲子，40岁，高校教师，以严厉著称。丈夫常年在外，夫妻已四年没有性生活。表面端庄的她，只能在深夜关上门后独自纾解压抑的欲望。',
+                '18岁的儿子在一次起夜时，无意中撞见了这一幕。平日里威严不可侵犯的母亲，竟然在自慰。冲击之下，他开始偷看母子乱伦题材，并刻意制造第二次撞见——这一次，他脱下裤子，用20cm的肉棒回应母亲的呵斥。',
+                '从「我是你妈妈，滚出去」，到第一次高潮时翻白眼潮喷，再到被内射时大喊「不要」——她的身体一步步沉沦，嘴上却仍咬着严厉母亲的语气。儿子时常用冷战与强制交替调教，直到她主动穿上情趣内衣，甚至当着昏睡父亲的面被他操到失神。',
+                '禁忌的外壳一旦裂开，就再也合不上了。'
+            ];
+
+            const CHAR_INTERVAL = 20;
+            const PARAGRAPH_PAUSE = 350;
+
+            const typewriterEl = document.getElementById('typewriter');
+            const skipHint = document.getElementById('skipHint');
+            const storyArea = document.getElementById('storyArea');
+
+            let isTyping = false;
+            let isDone = false;
+            let timer = null;
+
+            function buildFullHTML() {
+                let html = '';
+                storyParagraphs.forEach((p, index) => {
+                    html += `<span class="paragraph">${p}</span>`;
+                    if (index < storyParagraphs.length - 1) {
+                        html += `<span class="divider-line show">✦ ✦ ✦</span>`;
+                    }
+                });
+                return html;
+            }
+
+            function startTypewriter() {
+                if (isTyping || isDone) return;
+
+                isTyping = true;
+                typewriterEl.innerHTML = '';
+                skipHint.classList.remove('show');
+
+                const charQueue = [];
+                storyParagraphs.forEach((p, index) => {
+                    charQueue.push({ type: 'paragraph-start', index: index });
+                    for (let i = 0; i < p.length; i++) {
+                        charQueue.push({ type: 'char', char: p[i], paragraph: index });
+                    }
+                    charQueue.push({ type: 'paragraph-end', index: index });
+                });
+
+                let queueIndex = 0;
+                let currentParagraph = null;
+
+                function typeNext() {
+                    if (queueIndex >= charQueue.length) {
+                        isTyping = false;
+                        isDone = true;
+                        storyArea.classList.add('done');
+
+                        const cursor = document.createElement('span');
+                        cursor.className = 'cursor done';
+                        cursor.textContent = ' ';
+                        typewriterEl.appendChild(cursor);
+                        skipHint.classList.add('show');
+
+                        storyArea.scrollTop = storyArea.scrollHeight;
+                        return;
+                    }
+
+                    const item = charQueue[queueIndex];
+
+                    if (item.type === 'paragraph-start') {
+                        currentParagraph = document.createElement('span');
+                        currentParagraph.className = 'paragraph';
+                        typewriterEl.appendChild(currentParagraph);
+                        queueIndex++;
+                        timer = setTimeout(typeNext, 40);
+                        return;
+                    }
+
+                    if (item.type === 'paragraph-end') {
+                        if (item.index < storyParagraphs.length - 1) {
+                            const divider = document.createElement('span');
+                            divider.className = 'divider-line';
+                            divider.textContent = '✦ ✦ ✦';
+                            typewriterEl.appendChild(divider);
+                            setTimeout(() => {
+                                divider.classList.add('show');
+                            }, 50);
+                            queueIndex++;
+                            timer = setTimeout(typeNext, PARAGRAPH_PAUSE);
+                            return;
+                        } else {
+                            queueIndex++;
+                            timer = setTimeout(typeNext, 30);
+                            return;
+                        }
+                    }
+
+                    if (item.type === 'char') {
+                        if (currentParagraph) {
+                            const textNode = document.createTextNode(item.char);
+                            currentParagraph.appendChild(textNode);
+                        }
+                        queueIndex++;
+                        timer = setTimeout(typeNext, CHAR_INTERVAL);
+                        return;
+                    }
+
+                    queueIndex++;
+                    timer = setTimeout(typeNext, CHAR_INTERVAL);
+                }
+
+                timer = setTimeout(typeNext, 300);
+            }
+
+            function skipTypewriter() {
+                if (!isTyping && isDone) return;
+                if (timer) {
+                    clearTimeout(timer);
+                    timer = null;
+                }
+                isTyping = false;
+                isDone = true;
+                storyArea.classList.add('done');
+
+                typewriterEl.innerHTML = buildFullHTML();
+
+                const cursor = document.createElement('span');
+                cursor.className = 'cursor done';
+                cursor.textContent = ' ';
+                typewriterEl.appendChild(cursor);
+                skipHint.classList.add('show');
+
+                storyArea.scrollTop = storyArea.scrollHeight;
+            }
+
+            storyArea.addEventListener('click', function(e) {
+                if (isTyping) skipTypewriter();
+            });
+            storyArea.addEventListener('touchstart', function(e) {
+                if (isTyping) skipTypewriter();
+            }, { passive: true });
+
+            setTimeout(startTypewriter, 400);
+
+            const btn = document.getElementById('enterBtn');
+            if (!btn) return;
+
+            btn.addEventListener('click', async function(e) {
+                const el = this;
+                el.style.opacity = '0.5';
+                el.style.pointerEvents = 'none';
+
+                try {
+                    let messages;
+                    try {
+                        messages = await getChatMessages?.('0', { include_swipe: true });
+                    } catch (_) {
+                        const context = window.SillyTavern?.getContext?.();
+                        messages = context?.chat?.messages;
+                    }
+
+                    if (!messages || messages.length === 0) {
+                        console.warn('未找到聊天消息，请先开始对话');
+                        return;
+                    }
+
+                    const firstMsg = messages[0];
+                    if (!firstMsg.swipes) {
+                        console.warn('第一条消息没有滑动条');
+                        return;
+                    }
+
+                    const targetIndex = 1;
+                    if (firstMsg.swipes.length <= targetIndex) {
+                        console.warn('swipe ' + targetIndex + ' 不存在');
+                        return;
+                    }
+
+                    const targetSwipe = firstMsg.swipes[targetIndex];
+                    const setChatMessage = window.setChatMessage || window.SillyTavern?.getContext?.()?.setChatMessage;
+
+                    if (typeof setChatMessage === 'function') {
+                        await setChatMessage(targetSwipe, 0, { swipe_id: targetIndex, refresh: 'display_and_render_current' });
+                    } else if (typeof firstMsg.setSwipe === 'function') {
+                        firstMsg.setSwipe(targetIndex);
+                    } else {
+                        console.warn('无法切换开场白');
+                    }
+                } catch (err) {
+                    console.warn('切换失败:', err);
+                } finally {
+                    el.style.opacity = '1';
+                    el.style.pointerEvents = 'auto';
+                }
+            });
+
+        });
+    </script>
+
+</body>
+</html>
