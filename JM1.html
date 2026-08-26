@@ -1,0 +1,1076 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>剧情推进 · 与继母的丝袜与日常</title>
+<style>
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+:root {
+    --hue-primary: 270;
+    --hue-secondary: 40;
+    --sat-primary: 50%;
+    --sat-secondary: 80%;
+    --light-primary: 60%;
+    --light-secondary: 60%;
+    --bg-card: hsla(270, 20%, 15%, 0.55);
+    --border-glass: hsla(270, 30%, 60%, 0.15);
+    --text-primary: hsl(270, 15%, 92%);
+    --text-secondary: hsl(270, 10%, 72%);
+    --text-dim: hsl(270, 10%, 45%);
+    --color-accent: hsl(270, 50%, 60%);
+    --color-gold: hsl(40, 80%, 60%);
+    --shadow-soft: 0 8px 40px hsla(270, 40%, 10%, 0.6);
+    --transition: 0.35s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+}
+
+/* ===== body 完全透明，无额外边距 ===== */
+body {
+    font-family: -apple-system, 'PingFang SC', 'Helvetica Neue', 'Georgia', serif;
+    background: transparent;
+    min-height: auto;
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    padding: 0;
+    margin: 0;
+    color: var(--text-primary);
+    font-weight: 400;
+    line-height: 1.6;
+}
+
+/* ===== 卡片容器 ===== */
+.story-container {
+    max-width: 520px;
+    width: 100%;
+    margin: 0 auto;
+    background: var(--bg-card);
+    backdrop-filter: blur(24px) saturate(1.3);
+    -webkit-backdrop-filter: blur(24px) saturate(1.3);
+    border: 1px solid var(--border-glass);
+    border-radius: 28px;
+    padding: 14px 16px 12px 16px;
+    box-shadow: var(--shadow-soft), 0 0 0 1px hsla(270, 30%, 60%, 0.04) inset;
+    position: relative;
+    overflow: visible;
+}
+
+/* ===== 光晕已删除，此处留空 ===== */
+
+.story-container > * { position: relative; z-index: 1; }
+
+/* ===== 导航栏 ===== */
+.nav-bar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 0 8px 0;
+    border-bottom: 1px solid var(--border-glass);
+    margin-bottom: 8px;
+    flex-wrap: wrap;
+    gap: 4px;
+}
+.nav-title {
+    font-size: 0.8rem;
+    font-weight: 600;
+    letter-spacing: 3px;
+    background: linear-gradient(135deg, var(--color-accent), var(--color-gold));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}
+.nav-actions {
+    display: flex;
+    gap: 4px;
+    align-items: center;
+}
+.nav-btn {
+    background: hsla(270, 20%, 25%, 0.3);
+    border: 1px solid var(--border-glass);
+    border-radius: 8px;
+    padding: 4px 8px;
+    color: var(--text-secondary);
+    cursor: pointer;
+    transition: all var(--transition);
+    display: flex;
+    align-items: center;
+    gap: 3px;
+    font-size: 0.55rem;
+    font-family: inherit;
+    backdrop-filter: blur(4px);
+    -webkit-backdrop-filter: blur(4px);
+}
+.nav-btn:hover {
+    background: hsla(270, 30%, 30%, 0.4);
+    border-color: hsla(270, 30%, 60%, 0.3);
+    color: var(--text-primary);
+    transform: translateY(-1px);
+}
+.nav-btn:active { transform: scale(0.96); }
+.nav-btn .icon-svg { width: 14px; height: 14px; fill: none; stroke: currentColor; stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; flex-shrink: 0; }
+.nav-btn .badge { font-size: 0.4rem; background: var(--color-accent); color: #0a0a0a; padding: 0 5px; border-radius: 6px; font-weight: 700; }
+
+/* ===== 当前显示 ===== */
+.current-display {
+    background: hsla(270, 20%, 12%, 0.3);
+    border: 1px solid var(--border-glass);
+    border-radius: 12px;
+    padding: 8px 12px;
+    margin-bottom: 8px;
+    cursor: pointer;
+    transition: all var(--transition);
+}
+.current-display:hover {
+    border-color: hsla(270, 30%, 60%, 0.25);
+    background: hsla(270, 20%, 18%, 0.3);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 20px hsla(270, 40%, 10%, 0.2);
+}
+.current-display.no-plot {
+    border-color: hsla(40, 80%, 60%, 0.2);
+    background: hsla(40, 80%, 60%, 0.04);
+}
+.current-display.no-plot .story-title { color: var(--color-gold); font-weight: 700; }
+.story-title {
+    font-size: 0.9rem;
+    font-weight: 600;
+    letter-spacing: 0.5px;
+    color: var(--text-primary);
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    flex-wrap: wrap;
+}
+.story-title .gold { color: var(--color-gold); }
+.story-meta {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 4px 10px;
+    margin-top: 2px;
+    font-size: 0.6rem;
+    color: var(--text-secondary);
+}
+.story-meta .step-status {
+    display: inline-flex;
+    align-items: center;
+    gap: 3px;
+    padding: 1px 8px;
+    border-radius: 8px;
+    background: hsla(270, 20%, 20%, 0.3);
+    border: 1px solid var(--border-glass);
+    font-size: 0.55rem;
+}
+.story-meta .step-status .dot {
+    display: inline-block;
+    width: 5px;
+    height: 5px;
+    border-radius: 50%;
+    background: var(--color-gold);
+}
+.story-meta .step-status .dot.done { background: hsl(150, 50%, 50%); }
+.story-meta .step-status .dot.pending { background: var(--color-gold); animation: pulse-dot 1.8s ease-in-out infinite; }
+@keyframes pulse-dot {
+    0%, 100% { opacity: 0.4; transform: scale(0.8); }
+    50% { opacity: 1; transform: scale(1.2); }
+}
+.story-progress-text {
+    font-size: 0.55rem;
+    color: var(--text-dim);
+    letter-spacing: 1px;
+}
+
+/* ===== 控制按钮 ===== */
+.nav-controls {
+    display: flex;
+    gap: 6px;
+    margin-bottom: 8px;
+    justify-content: center;
+    flex-wrap: wrap;
+}
+.ctrl-btn {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    padding: 5px 12px;
+    border: 1px solid var(--border-glass);
+    border-radius: 10px;
+    background: hsla(270, 20%, 15%, 0.3);
+    backdrop-filter: blur(4px);
+    -webkit-backdrop-filter: blur(4px);
+    color: var(--text-secondary);
+    font-size: 0.65rem;
+    font-family: inherit;
+    cursor: pointer;
+    transition: all var(--transition);
+    flex: 0 1 auto;
+    min-width: 60px;
+    justify-content: center;
+}
+.ctrl-btn:hover:not(:disabled) {
+    border-color: hsla(270, 30%, 60%, 0.3);
+    background: hsla(270, 20%, 25%, 0.3);
+    color: var(--text-primary);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 16px hsla(270, 40%, 10%, 0.2);
+}
+.ctrl-btn:active:not(:disabled) { transform: scale(0.96); }
+.ctrl-btn:disabled { opacity: 0.25; cursor: not-allowed; transform: none; }
+.ctrl-btn .icon-svg { width: 14px; height: 14px; fill: none; stroke: currentColor; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; flex-shrink: 0; }
+.ctrl-btn.primary {
+    border-color: var(--color-accent);
+    color: var(--color-accent);
+}
+.ctrl-btn.primary:hover:not(:disabled) {
+    background: hsla(270, 50%, 60%, 0.12);
+    border-color: var(--color-accent);
+    box-shadow: 0 0 30px hsla(270, 50%, 60%, 0.06);
+}
+.ctrl-btn.gold {
+    border-color: var(--color-gold);
+    color: var(--color-gold);
+}
+.ctrl-btn.gold:hover:not(:disabled) {
+    background: hsla(40, 80%, 60%, 0.10);
+    border-color: var(--color-gold);
+    box-shadow: 0 0 30px hsla(40, 80%, 60%, 0.06);
+}
+
+/* ===== 步骤列表（可折叠） ===== */
+.steps-section {
+    margin-bottom: 8px;
+}
+.steps-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0 2px 4px 2px;
+    border-bottom: 1px solid var(--border-glass);
+    margin-bottom: 4px;
+}
+.steps-header-left {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+.steps-header h3 {
+    font-size: 0.65rem;
+    font-weight: 600;
+    letter-spacing: 2px;
+    color: var(--text-secondary);
+    text-transform: uppercase;
+}
+.steps-header .steps-count {
+    font-size: 0.55rem;
+    color: var(--text-dim);
+}
+.steps-list-wrap {
+    max-height: 0;
+    opacity: 0;
+    transition: max-height 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94), opacity 0.3s ease;
+}
+.steps-list-wrap.open {
+    max-height: 6000px;
+    opacity: 1;
+}
+.step-item {
+    background: hsla(270, 20%, 12%, 0.25);
+    border: 1px solid var(--border-glass);
+    border-radius: 10px;
+    padding: 8px 10px;
+    margin-bottom: 4px;
+    transition: all var(--transition);
+    cursor: pointer;
+}
+.step-item:hover {
+    border-color: hsla(270, 30%, 60%, 0.2);
+    background: hsla(270, 20%, 18%, 0.2);
+}
+.step-item.executed {
+    border-color: hsla(150, 40%, 40%, 0.2);
+    opacity: 0.6;
+}
+.step-item.executed .step-id {
+    background: hsla(150, 40%, 40%, 0.15);
+    color: hsl(150, 40%, 55%);
+}
+.step-item.current {
+    border-color: var(--color-accent);
+    background: hsla(270, 50%, 60%, 0.04);
+    box-shadow: 0 0 30px hsla(270, 50%, 60%, 0.03);
+}
+.step-item.current .step-id {
+    background: hsla(270, 50%, 60%, 0.15);
+    color: var(--color-accent);
+}
+.step-header-line {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    flex-wrap: wrap;
+}
+.step-id {
+    font-size: 0.5rem;
+    font-weight: 700;
+    padding: 1px 8px;
+    border-radius: 6px;
+    background: hsla(270, 20%, 20%, 0.3);
+    color: var(--text-secondary);
+    letter-spacing: 0.5px;
+    flex-shrink: 0;
+}
+.step-location {
+    font-size: 0.5rem;
+    color: var(--text-dim);
+    display: flex;
+    align-items: center;
+    gap: 3px;
+}
+.step-location .icon-svg { width: 11px; height: 11px; stroke: currentColor; fill: none; stroke-width: 1.8; }
+.step-event-preview {
+    font-size: 0.65rem;
+    color: var(--text-secondary);
+    margin-top: 2px;
+    padding-left: 2px;
+    line-height: 1.4;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+}
+.step-execute-btn {
+    margin-left: auto;
+    padding: 2px 12px;
+    border: 1px solid var(--color-accent);
+    border-radius: 6px;
+    background: transparent;
+    color: var(--color-accent);
+    font-size: 0.55rem;
+    font-weight: 600;
+    font-family: inherit;
+    cursor: pointer;
+    transition: all var(--transition);
+    letter-spacing: 0.5px;
+    flex-shrink: 0;
+}
+.step-execute-btn:hover {
+    background: hsla(270, 50%, 60%, 0.12);
+    box-shadow: 0 0 20px hsla(270, 50%, 60%, 0.06);
+}
+.step-execute-btn:active { transform: scale(0.94); }
+.step-execute-btn.done {
+    border-color: hsl(150, 40%, 40%);
+    color: hsl(150, 40%, 55%);
+}
+.step-execute-btn.done:hover {
+    background: hsla(150, 40%, 40%, 0.08);
+}
+
+/* ===== 详情面板 ===== */
+.detail-panel {
+    background: hsla(270, 20%, 10%, 0.4);
+    border: 1px solid var(--border-glass);
+    border-radius: 12px;
+    padding: 12px;
+    margin-top: 6px;
+    display: none;
+}
+.detail-panel.open { display: block; }
+.detail-panel .detail-close {
+    background: none;
+    border: none;
+    color: var(--text-dim);
+    font-size: 0.8rem;
+    cursor: pointer;
+    float: right;
+}
+.detail-panel .detail-close:hover { color: var(--text-primary); }
+.detail-panel .detail-characters {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    margin: 4px 0 8px 0;
+}
+.detail-panel .char-item {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 2px 8px;
+    font-size: 0.6rem;
+    color: var(--text-secondary);
+    padding: 3px 6px;
+    background: hsla(270, 20%, 15%, 0.2);
+    border-radius: 6px;
+    border-left: 2px solid var(--color-accent);
+}
+.detail-panel .char-item .name { font-weight: 600; color: var(--text-primary); }
+.detail-panel .char-item .mood { color: var(--color-gold); }
+.detail-panel .char-item .thoughts { color: var(--text-dim); font-style: italic; font-size: 0.55rem; }
+.detail-panel .detail-event {
+    font-size: 0.7rem;
+    line-height: 1.6;
+    color: var(--text-primary);
+    padding: 6px 0;
+    border-top: 1px solid var(--border-glass);
+    margin-top: 4px;
+}
+.detail-panel .detail-dev {
+    font-size: 0.65rem;
+    color: var(--text-secondary);
+    padding: 6px 0;
+    border-top: 1px solid var(--border-glass);
+    margin-top: 4px;
+    font-style: italic;
+}
+
+/* ===== 空状态 ===== */
+.empty-state {
+    text-align: center;
+    padding: 20px 10px;
+    color: var(--text-dim);
+}
+.empty-state .icon-svg {
+    width: 30px;
+    height: 30px;
+    stroke: var(--text-dim);
+    fill: none;
+    stroke-width: 1.5;
+    opacity: 0.2;
+    margin-bottom: 6px;
+}
+.empty-state p { font-size: 0.65rem; letter-spacing: 1px; }
+.empty-state .gold { color: var(--color-gold); }
+
+/* ===== 剧情列表（弹窗） ===== */
+.story-list-overlay {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 9999;
+    background: hsla(260, 20%, 6%, 0.6);
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+    justify-content: center;
+    align-items: center;
+    padding: 20px;
+}
+.story-list-overlay.open { display: flex; }
+.story-list-panel {
+    background: var(--bg-card);
+    backdrop-filter: blur(24px) saturate(1.3);
+    -webkit-backdrop-filter: blur(24px) saturate(1.3);
+    border: 1px solid var(--border-glass);
+    border-radius: 20px;
+    max-width: 440px;
+    width: 100%;
+    max-height: 80vh;
+    padding: 16px 16px;
+    box-shadow: var(--shadow-soft);
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+}
+.story-list-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding-bottom: 10px;
+    border-bottom: 1px solid var(--border-glass);
+    flex-shrink: 0;
+}
+.story-list-header h2 {
+    font-size: 0.85rem;
+    font-weight: 600;
+    letter-spacing: 2px;
+    color: var(--text-primary);
+}
+.story-list-header .close-btn {
+    background: none;
+    border: none;
+    color: var(--text-dim);
+    font-size: 1.1rem;
+    cursor: pointer;
+}
+.story-list-header .close-btn:hover { color: var(--text-primary); }
+.story-list-body {
+    overflow-y: auto;
+    padding-top: 10px;
+    flex: 1;
+}
+.story-list-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 6px 10px;
+    border-radius: 8px;
+    margin-bottom: 3px;
+    cursor: pointer;
+    transition: all var(--transition);
+    border: 1px solid transparent;
+}
+.story-list-item:hover {
+    background: hsla(270, 20%, 18%, 0.3);
+    border-color: var(--border-glass);
+}
+.story-list-item.current {
+    border-color: var(--color-accent);
+    background: hsla(270, 50%, 60%, 0.04);
+}
+.story-list-item .title {
+    font-size: 0.65rem;
+    color: var(--text-secondary);
+}
+.story-list-item .title .current-mark {
+    color: var(--color-accent);
+    font-size: 0.5rem;
+    margin-right: 4px;
+}
+.story-list-item .progress {
+    font-size: 0.5rem;
+    color: var(--text-dim);
+    white-space: nowrap;
+}
+.story-list-item .progress .done { color: hsl(150, 50%, 50%); }
+.story-list-item .progress .pending { color: var(--color-gold); }
+
+/* ===== 响应式 ===== */
+@media (max-width: 480px) {
+    body { padding: 0; }
+    .story-container { padding: 10px 12px 8px 12px; border-radius: 20px; }
+    .story-title { font-size: 0.8rem; }
+    .nav-title { font-size: 0.7rem; letter-spacing: 2px; }
+    .ctrl-btn { padding: 4px 8px; font-size: 0.55rem; min-width: 44px; }
+    .ctrl-btn .icon-svg { width: 12px; height: 12px; }
+    .step-item { padding: 6px 8px; }
+    .step-event-preview { font-size: 0.6rem; }
+    .detail-panel { padding: 10px; }
+}
+</style>
+</head>
+<body>
+<div class="story-container" id="storyContainer">
+    <div class="nav-bar">
+        <span class="nav-title">✦ 剧情推进</span>
+        <div class="nav-actions">
+            <button class="nav-btn" id="collapseToggleBtn" title="折叠/展开步骤列表">
+                <svg class="icon-svg" viewBox="0 0 24 24"><polyline points="6 9 12 15 18 9"/></svg>
+                <span id="collapseLabel">折叠</span>
+            </button>
+            <button class="nav-btn" id="listToggleBtn" title="剧情列表">
+                <svg class="icon-svg" viewBox="0 0 24 24"><rect x="4" y="5" width="16" height="3" rx="1"/><rect x="4" y="10.5" width="16" height="3" rx="1"/><rect x="4" y="16" width="16" height="3" rx="1"/></svg>
+                <span>列表</span>
+                <span class="badge" id="totalBadge">0</span>
+            </button>
+            <button class="nav-btn" id="settingsBtn" title="设置">
+                <svg class="icon-svg" viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M12 1v4m0 14v4m11-11h-4m-14 0H1m16.5-4.5l-2.8 2.8m-5.4 5.4l-2.8 2.8m0-11.4l2.8 2.8m5.4 5.4l2.8 2.8"/></svg>
+            </button>
+        </div>
+    </div>
+
+    <div class="current-display no-plot" id="currentDisplay">
+        <div class="story-title" id="storyTitleDisplay">
+            <span id="titleIcon">✦</span>
+            <span id="storyTitleText">未开始剧情</span>
+        </div>
+        <div class="story-meta">
+            <span class="step-status" id="stepStatus">
+                <span class="dot pending"></span>
+                <span id="stepStatusText">等待开始</span>
+            </span>
+            <span class="story-progress-text" id="progressText">0 / 0 步</span>
+        </div>
+    </div>
+
+    <div class="nav-controls">
+        <button class="ctrl-btn" id="prevBtn" disabled>
+            <svg class="icon-svg" viewBox="0 0 24 24"><polyline points="15 18 9 12 15 6"/></svg>
+            上步
+        </button>
+        <button class="ctrl-btn primary" id="currentBtn">
+            <svg class="icon-svg" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="4"/></svg>
+            当前
+        </button>
+        <button class="ctrl-btn gold" id="nextBtn" disabled>
+            下步
+            <svg class="icon-svg" viewBox="0 0 24 24"><polyline points="9 18 15 12 9 6"/></svg>
+        </button>
+    </div>
+
+    <div class="steps-section" id="stepsSection">
+        <div class="steps-header">
+            <div class="steps-header-left">
+                <h3>📋 步骤</h3>
+                <span class="steps-count" id="stepsCount">0 步</span>
+            </div>
+        </div>
+        <div class="steps-list-wrap open" id="stepsListWrap">
+            <div id="stepsList">
+                <div class="empty-state">
+                    <svg class="icon-svg" viewBox="0 0 24 24"><path d="M4 4h16v16H4z"/><path d="M8 8h8v8H8z"/><path d="M16 8l-4 4-4-4"/><path d="M12 12v6"/></svg>
+                    <p>加载中...</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="detail-panel" id="detailPanel">
+        <button class="detail-close" id="detailClose">✕</button>
+        <div id="detailContent">
+            <div class="detail-characters" id="detailChars"></div>
+            <div class="detail-event" id="detailEvent"></div>
+            <div class="detail-dev" id="detailDev"></div>
+        </div>
+    </div>
+</div>
+
+<div class="story-list-overlay" id="storyListOverlay">
+    <div class="story-list-panel">
+        <div class="story-list-header">
+            <h2>✦ 剧情列表</h2>
+            <button class="close-btn" id="storyListCloseBtn">✕</button>
+        </div>
+        <div class="story-list-body" id="storyListBody">
+            <div class="empty-state"><p>加载中...</p></div>
+        </div>
+    </div>
+</div>
+
+<script>
+(function() {
+    'use strict';
+    var DATA = {"currentPlot":{"plotId":1,"stepId":1,"title":"剧情元数据-与继母的丝袜与日常"},"plotList":[{"title":"剧情一：已经很熟了 · 日常的暧昧","summary":"共同生活一两年后，两人已经非常熟悉。美咲的随意与试探，{{user}}的局促与反应，在日常生活里自然发酵。","steps":[{"stepId":1,"characters":[{"name":"美咲","mood":"懒散, 玩味","innerThoughts":"想看看他会不会移开视线"},{"name":"{{user}}","mood":"紧张, 局促","innerThoughts":"她是不是故意的……"}],"event":"美咲穿着黑丝窝在沙发上玩手机，{{user}}从她面前走过时她懒洋洋地抬头：“看什么？丝袜有那么好看吗？”语气带笑，视线却没有移开。","location":"客厅沙发","development":"{{user}}的耳朵明显红了，却没有立刻走开，在原地僵了两秒才回房间。美咲看着他的背影，轻笑一声低头继续刷手机。","isExecuted":false},{"stepId":2,"characters":[{"name":"美咲","mood":"随意, 观察","innerThoughts":"他看到了，我看到了他看到了"},{"name":"{{user}}","mood":"僵硬, 混乱","innerThoughts":"不该看的，但移不开"}],"event":"{{user}}在洗衣区看到美咲的蕾丝三角裤和情趣内裤挂在晾衣架上，整个人愣在原地。美咲不知何时出现在旁边，语气平淡却带着明显的笑意：“喜欢那种吗？”","location":"洗衣区","development":"{{user}}被呛得说不出话，落荒而逃。美咲站在原地，把内裤拿下来叠好，眼神若有所思。","isExecuted":false},{"stepId":3,"characters":[{"name":"美咲","mood":"惊讶, 好奇","innerThoughts":"……比想象中还大"},{"name":"{{user}}","mood":"羞耻, 僵硬","innerThoughts":"完了，全被看到了"}],"event":"美咲没敲门进浴室，撞见{{user}}赤身裸体的样子。她愣了半秒，目光不自然地往下扫了一下，然后迅速后退：“啊……不好意思，我不知道你在洗。”关门退出后，她站在门口多停了两秒。","location":"浴室","development":"之后几天美咲看{{user}}的眼神有了微妙的变化，不再完全像看孩子。{{user}}则更不敢直视她了。","isExecuted":false},{"stepId":4,"characters":[{"name":"美咲","mood":"玩味, 假装无事","innerThoughts":"反应挺大的嘛……还挺有意思"},{"name":"{{user}}","mood":"羞耻, 想躲","innerThoughts":"她肯定看到了……"}],"event":"美咲在家没穿内衣，薄家居服把乳头的轮廓顶得很明显。{{user}}的视线停留得久了些，下身起了反应。美咲发现后轻笑一声：“嗯？反应挺大的嘛。”语气轻松，没有生气也没有走开。","location":"客厅","development":"{{user}}立刻转身回房，美咲没有追过去，但留在原地的表情带着明显的玩味与兴趣。","isExecuted":false}]},{"title":"剧情二：试探与回应","summary":"美咲开始有意无意地试探，{{user}}的沉默和身体的反应成了最诚实的回答。","steps":[{"stepId":1,"characters":[{"name":"美咲","mood":"有意, 试探","innerThoughts":"他今天会不会不一样"},{"name":"{{user}}","mood":"紧张, 喉结动","innerThoughts":"她离得太近了……"}],"event":"父亲加班不归，家里只剩两人。美咲在{{user}}面前放慢动作整理丝袜边缘，从大腿慢慢捋到膝弯，语气却像在聊天气一样平淡：“今天好热啊。”","location":"客厅","development":"{{user}}的视线跟着她的手移动，喉结上下动了一下。美咲看在眼里，弯了弯嘴角，没有说破。","isExecuted":false},{"stepId":2,"characters":[{"name":"美咲","mood":"试探, 等待","innerThoughts":"他会躲开吗"},{"name":"{{user}}","mood":"僵硬, 心跳加速","innerThoughts":"不能动……动了就输了"}],"event":"美咲靠近{{user}}，手指自然落在他肩膀上，停了太久。她轻轻捏了一下他的肩膀：“最近瘦了？”他身体绷紧，但没有躲开。房间安静了好几秒。","location":"客厅","development":"美咲的手慢慢收回去，像什么都没发生一样走向厨房。{{user}}站在原地，掌心微微出汗。","isExecuted":false},{"stepId":3,"characters":[{"name":"美咲","mood":"试探, 确认","innerThoughts":"他没有退"},{"name":"{{user}}","mood":"僵硬, 不知道怎么办","innerThoughts":"她还没拿走……"}],"event":"两人并排坐着，美咲的腿轻轻碰到{{user}}的腿，她没有立刻移开。几秒后，她甚至把重量微微倾向了他那边。","location":"客厅沙发","development":"{{user}}没有退缩，但也没有主动。美咲感觉自己的呼吸变重了一点，然后慢慢坐直：“……我去倒水。”","isExecuted":false},{"stepId":4,"characters":[{"name":"美咲","mood":"自然, 有意","innerThoughts":"慢慢来也没关系"},{"name":"{{user}}","mood":"僵住, 回头","innerThoughts":"刚才那是……故意的吗"}],"event":"两人在厨房，美咲从{{user}}身后经过时，手指轻轻划过他的后背，然后若无其事地走向冰箱。动作轻得像是不小心碰到，又像是完全故意的。","location":"厨房","development":"{{user}}回头看了她一眼，美咲已经打开冰箱门，背对着他，但肩背的线条并不放松。","isExecuted":false}]},{"title":"剧情三：正式越界 · 第一次","summary":"彻底跨过那条线。从亲吻到试探再到进入，两人在沙发上完成了第一次。","steps":[{"stepId":1,"characters":[{"name":"美咲","mood":"决定, 主动","innerThoughts":"今晚就确认吧"},{"name":"{{user}}","mood":"紧张, 心跳","innerThoughts":"她靠过来了……"}],"event":"父亲不在家，客厅灯光昏暗。美咲靠近{{user}}，手指从他的手腕慢慢滑到手背，然后握住，没有松开。","location":"客厅","development":"{{user}}没有抽手，也没有说话。两人沉默地对视了好几秒，空气变得异常安静。","isExecuted":false},{"stepId":2,"characters":[{"name":"美咲","mood":"紧张, 坚定","innerThoughts":"说了就不回头了"},{"name":"{{user}}","mood":"紧张, 喉结动","innerThoughts":"她知道自己在说什么吗"}],"event":"美咲抬头看着{{user}}，先开口：“……你今天，不想当儿子了吧？”语气平静，但握着她的手心微微发热。","location":"客厅","development":"{{user}}没有回答，但他的眼神从局促慢慢变成了一种确认。他动了一下，朝她走近了半步。","isExecuted":false},{"stepId":3,"characters":[{"name":"美咲","mood":"接纳, 回应","innerThoughts":"终于"},{"name":"{{user}}","mood":"冲动, 投入","innerThoughts":"不管了"}],"event":"{{user}}的嘴唇碰到她，开始还是试探性的，但很快就变深。美咲的呼吸乱了，手抓着他的衣摆，没有推开。","location":"客厅","development":"亲吻结束后，两人额头相抵，都没有说话。美咲的手从衣摆移到他胸口，轻轻推了一下，但不是拒绝。","isExecuted":false},{"stepId":4,"characters":[{"name":"美咲","mood":"期待, 略微紧张","innerThoughts":"尺寸……比想象中还大"},{"name":"{{user}}","mood":"生涩, 冲动","innerThoughts":"手在发抖"}],"event":"{{user}}在沙发边把美咲放倒，手从她腿侧滑进去。她的黑丝还穿着，但已经被扯到膝弯。她低头看了一眼，没有阻止。","location":"客厅","development":"美咲的呼吸明显变快，目光落在他脸上，像是在确认他真的要这么做。","isExecuted":false},{"stepId":5,"characters":[{"name":"美咲","mood":"接纳, 抱紧","innerThoughts":"没关系……来吧"},{"name":"{{user}}","mood":"生涩, 颤抖","innerThoughts":"进去了……"}],"event":"第一次进入的过程带着生涩与紧张。美咲深吸一口气，搂住他的脖子说“没关系”，然后主动把腿盘上了他的腰。","location":"客厅沙发","development":"进入之后她轻哼了一声，手指抓紧了他的肩膀，却没有让他停下来。","isExecuted":false},{"stepId":6,"characters":[{"name":"美咲","mood":"复杂, 矛盾","innerThoughts":"说点什么……但不知道说什么"},{"name":"{{user}}","mood":"沉默, 不确定","innerThoughts":"她是不是后悔了"}],"event":"事后两人沉默了一阵。美咲先动了动，轻声说：“……今天就当没发生过吧。”声音很轻，但眼睛看着他，没有躲开。","location":"客厅沙发","development":"{{user}}没有说话，但他的手没有从她身上拿开。两人就这样多躺了一会儿。","isExecuted":false}]},{"title":"剧情四：越界之后 · 日常化的秘密","summary":"表面上维持继母与继子的身份，私底下已经完全变了。日常场景成为做爱的舞台。","steps":[{"stepId":1,"characters":[{"name":"美咲","mood":"压抑, 试探","innerThoughts":"昨晚的事，真的要忘掉吗"},{"name":"{{user}}","mood":"沉默, 观察","innerThoughts":"她看起来跟平时一样……但哪里不一样了"}],"event":"第二天早上两人在厨房碰面，美咲用平常的语气说“昨晚的事忘了就好”，但眼神比平时多停了两秒。","location":"厨房","development":"{{user}}应了一声，但两人都知道那句话根本没有说服力。","isExecuted":false},{"stepId":2,"characters":[{"name":"美咲","mood":"表面自然, 底下暗涌","innerThoughts":"父亲回来了，但他的手……"},{"name":"{{user}}","mood":"表面正常, 紧张","innerThoughts":"她靠得太近了"}],"event":"父亲在家时两人像什么都没发生一样正常相处，但美咲偶尔会突然靠近{{user}}，身体接触比之前更自然，也停留更久。","location":"客厅","development":"父亲低头看手机时，美咲的手在{{user}}腰侧轻轻划过，然后若无其事地坐回原位。","isExecuted":false},{"stepId":3,"characters":[{"name":"美咲","mood":"柔软, 配合","innerThoughts":"他主动了……"},{"name":"{{user}}","mood":"主动, 试探","innerThoughts":"她没有躲开"}],"event":"父亲不在的下午，{{user}}主动靠近美咲，手从背后环住她。她顿了一下，然后顺势靠进他怀里，没有说一句话。","location":"厨房","development":"美咲靠在他的胸口，安静了几秒才说：“……现在吗？”语气平静，但透着明确的默许。","isExecuted":false},{"stepId":4,"characters":[{"name":"美咲","mood":"紧张, 兴奋","innerThoughts":"在这里……会被发现的吧"},{"name":"{{user}}","mood":"主动, 冲动","innerThoughts":"她没说不"}],"event":"美咲被从后面按在厨房料理台上，裙子被掀到腰间，轻声说“这里会被发现吧”——嘴上是疑问句，腿却自己分开了。","location":"厨房","development":"进入时她咬着嘴唇没出声，但身体诚实地往后靠，手抓着台面边缘。","isExecuted":false},{"stepId":5,"characters":[{"name":"美咲","mood":"紧张, 兴奋","innerThoughts":"绝对不能出声"},{"name":"{{user}}","mood":"紧张, 刺激","innerThoughts":"她含住了……"}],"event":"父亲就在餐桌旁吃饭时，美咲在桌布下蹲下去，{{user}}瞬间僵住。她用嘴含住他，动作很慢，却没有停下来。","location":"餐桌","development":"{{user}}咬着牙没出声，手指抓紧了桌沿。父亲抬头问“怎么了”，{{user}}摇头说“没事，有点热”。","isExecuted":false}]},{"title":"剧情五：高风险的深度沉沦","summary":"危险期的放纵、父亲差点撞见、当着熟睡的父亲的面内射。关系越来越深，也越来越危险。","steps":[{"stepId":1,"characters":[{"name":"美咲","mood":"放纵, 主动","innerThoughts":"今天是危险期……射进来也没关系"},{"name":"{{user}}","mood":"冲动, 失控","innerThoughts":"她说全部都可以"}],"event":"危险期那几天，两人从浴室到客厅，从地板到厨房，再到餐桌，几乎每个地方都做过。美咲说：“今天全部射进来也没关系。”","location":"家里各处","development":"内射后美咲躺在沙发上，腿还在发抖，却伸手拉着{{user}}的衣角不让他走：“……再来一次。”","isExecuted":false},{"stepId":2,"characters":[{"name":"美咲","mood":"平静, 暗涌","innerThoughts":"他在看电视，我的手在做什么"},{"name":"{{user}}","mood":"紧张, 配合","innerThoughts":"父亲就在旁边……"}],"event":"父亲在客厅看电视，美咲坐在旁边看似什么都没发生，手却在{{user}}的大腿内侧慢慢滑动，表情平静得像在看电视。","location":"客厅","development":"{{user}}握紧了遥控器，呼吸变重却不敢出声。美咲嘴角微微弯了一下，但手没有停下来。","isExecuted":false},{"stepId":3,"characters":[{"name":"美咲","mood":"快速, 熟练","innerThoughts":"只有几十秒，够用了"},{"name":"{{user}}","mood":"紧张, 刺激","innerThoughts":"他随时会回来……"}],"event":"父亲去厨房拿东西的几十秒间隙，美咲迅速低头含住{{user}}，并在父亲回来前若无其事地坐回原位，嘴角带着餍足的弧度。","location":"客厅","development":"父亲坐回来时问“你们刚才在做什么”，美咲说“没什么，我在看手机”，声音平静得不像刚含过别的东西。","isExecuted":false},{"stepId":4,"characters":[{"name":"美咲","mood":"紧张, 刺激","innerThoughts":"他睡着了……来吧"},{"name":"{{user}}","mood":"紧张, 冲动","innerThoughts":"父亲就在旁边……"}],"event":"美咲给父亲下安眠药后，深夜让{{user}}来主卧。两人在熟睡的父亲身旁无声地发生关系并内射，美咲捂着自己的嘴没出声。","location":"主卧","development":"事后美咲轻轻推了推{{user}}让他回房，自己躺回父亲身边，表情却仍带着高潮后的潮红。","isExecuted":false}]},{"title":"剧情六：怀孕 · 生产 · 隐藏的归属","summary":"美咲怀孕了。从发现到孕期的沉溺，再到生产后那个只属于{{user}}的眼神。","steps":[{"stepId":1,"characters":[{"name":"美咲","mood":"复杂, 平静","innerThoughts":"是……是他的。但我不怕。"},{"name":"{{user}}","mood":"震惊, 不知所措","innerThoughts":"……我的？"}],"event":"美咲发现自己怀孕，拿着验孕棒沉默了很久，然后走到{{user}}面前轻声说“是你的”，声音平静却带着微微的颤抖。","location":"浴室","development":"{{user}}愣在原地，美咲把验孕棒放进他手里，看着他：“……怕吗？”语气不像在问他，更像在问自己。","isExecuted":false},{"stepId":2,"characters":[{"name":"美咲","mood":"柔软, 渴望","innerThoughts":"轻一点……但我想要"},{"name":"{{user}}","mood":"小心, 冲动","innerThoughts":"她说想要"}],"event":"怀孕初期，美咲主动索求：“轻一点……但想要。”她的声音带着少见的柔软，自己把腿分开，拉着他的手往自己胸口放。","location":"卧室","development":"进入时她轻轻吸了口气，眉眼瞬间软下来，搂着他的脖子不放手。","isExecuted":false},{"stepId":3,"characters":[{"name":"美咲","mood":"依赖, 撒娇","innerThoughts":"就是想黏着他……"},{"name":"{{user}}","mood":"温柔, 接受","innerThoughts":"她比以前更软了"}],"event":"孕肚明显后，美咲变得更软更黏人，常常主动窝进{{user}}怀里，声音又懒又黏：“射进来……喂饱她。”","location":"卧室","development":"{{user}}轻轻抚着她的肚子，美咲闭上眼睛，脸上带着满足的表情。","isExecuted":false},{"stepId":4,"characters":[{"name":"美咲","mood":"极乐, 归属","innerThoughts":"女儿……你爸爸射进来了"},{"name":"{{user}}","mood":"冲动, 温柔","innerThoughts":"她说全部给她"}],"event":"内射时美咲翻白眼伸舌头，手摸着肚子说：“女儿……你爸爸射进来了。全部……都给她。”高潮的余韵里她仍在轻轻发抖。","location":"卧室","development":"{{user}}没有立刻抽出去，而是继续抱着她。美咲把脸埋在他胸口，声音又软又闷：“……别走。”","isExecuted":false},{"stepId":5,"characters":[{"name":"美咲","mood":"温柔, 暗藏","innerThoughts":"他在看着我们"},{"name":"{{user}}","mood":"心跳, 确认","innerThoughts":"那个眼神……只有我能看懂"}],"event":"生产后，美咲抱着婴儿站在父亲身边，看起来是完美的母亲与妻子。但她的视线越过父亲，对{{user}}抛出一个只有他能懂的媚眼。","location":"客厅","development":"父亲低头看孩子时，美咲的嘴唇无声地动了动，{{user}}从她的嘴形辨认出她在说：“是你的。”","isExecuted":false}]},{"title":"剧情七：大学奖励 · 酒店的一周","summary":"{{user}}考上大学，父亲出差一周。美咲订了酒店，那一周他们几乎没怎么睡。","steps":[{"stepId":1,"characters":[{"name":"美咲","mood":"温情, 期待","innerThoughts":"他做到了，我要奖励他"},{"name":"{{user}}","mood":"放松, 感动","innerThoughts":"她是真的为我高兴"}],"event":"{{user}}考上大学的消息确认后，美咲笑着揉他的头发：“真厉害。要奖励。”她已经在手机上订好了酒店，但没有告诉他。","location":"客厅","development":"{{user}}问她是什么奖励，美咲笑了笑：“到了就知道了。”","isExecuted":false},{"stepId":2,"characters":[{"name":"美咲","mood":"偷欢, 兴奋","innerThoughts":"一整周……都是我们的"},{"name":"{{user}}","mood":"期待, 心动","innerThoughts":"她发消息说今晚别回家"}],"event":"父亲出差一周，美咲发消息给{{user}}：“今晚别回家。直接过来。”附上了酒店地址和房号。","location":"手机 / 酒店","development":"{{user}}看着手机屏幕愣了几秒，然后立刻收拾东西出门。","isExecuted":false},{"stepId":3,"characters":[{"name":"美咲","mood":"放纵, 归属","innerThoughts":"一整周……都是我们的"},{"name":"{{user}}","mood":"冲动, 沉迷","innerThoughts":"她穿成这样……"}],"event":"酒店里美咲穿着新买的情趣黑丝连体衣，几乎全透，声音又软又亮：“一整周……都是我们的。”","location":"酒店房间","development":"{{user}}走过去把她按在床上时，美咲主动抬手帮他解开纽扣，眼神里全是纵容和渴望。","isExecuted":false},{"stepId":4,"characters":[{"name":"美咲","mood":"极乐, 腿软","innerThoughts":"好深……不要停……"},{"name":"{{user}}","mood":"冲动, 沉溺","innerThoughts":"她比任何时候都要主动"}],"event":"整夜几乎没睡，两人从窗边到浴室反复做爱。美咲被一次次内射，高潮到后来已经有点腿软，却还是自己把身体送上去。","location":"酒店各处","development":"中间休息时美咲窝在他怀里，咬着他的锁骨说：“大学要住校了吧……那以后回来，可得好好补。”","isExecuted":false},{"stepId":5,"characters":[{"name":"美咲","mood":"温情, 认真","innerThoughts":"他不在的时候，我会想他的"},{"name":"{{user}}","mood":"温情, 舍不得","innerThoughts":"这一周真不想结束"}],"event":"最后一天早晨，美咲窝在{{user}}怀里说：“以后回来可得好好补。”语气懒散却认真，手指在他胸口轻轻画圈。","location":"酒店床","development":"{{user}}低头看她，美咲闭着眼睛，嘴角带着浅浅的笑意。两人没有说话，但那种默契已经不需要说了。","isExecuted":false}]}]};
+
+    var $ = function(s) { return document.querySelector(s); };
+    var $$ = function(s) { return document.querySelectorAll(s); };
+
+    var storyTitleText = $('#storyTitleText');
+    var currentDisplay = $('#currentDisplay');
+    var stepStatus = $('#stepStatus');
+    var stepStatusText = $('#stepStatusText');
+    var progressText = $('#progressText');
+    var stepsList = $('#stepsList');
+    var stepsCount = $('#stepsCount');
+    var totalBadge = $('#totalBadge');
+    var prevBtn = $('#prevBtn');
+    var nextBtn = $('#nextBtn');
+    var currentBtn = $('#currentBtn');
+    var detailPanel = $('#detailPanel');
+    var detailClose = $('#detailClose');
+    var detailChars = $('#detailChars');
+    var detailEvent = $('#detailEvent');
+    var detailDev = $('#detailDev');
+    var stepsListWrap = $('#stepsListWrap');
+    var collapseToggleBtn = $('#collapseToggleBtn');
+    var collapseLabel = $('#collapseLabel');
+    var listToggleBtn = $('#listToggleBtn');
+    var storyListOverlay = $('#storyListOverlay');
+    var storyListBody = $('#storyListBody');
+    var storyListCloseBtn = $('#storyListCloseBtn');
+
+    var plotData = null, storyList = [], currentStoryIndex = 0, currentPlotId = 1, currentStepId = 1, isDetailOpen = false;
+
+    var STORAGE_KEY = 'story_assistant_steps_collapsed';
+    var isStepsCollapsed = false;
+
+    function loadCollapsedState() {
+        try { var saved = localStorage.getItem(STORAGE_KEY); if (saved !== null) { isStepsCollapsed = saved === 'true'; } else { isStepsCollapsed = false; } } catch (e) { isStepsCollapsed = false; }
+        applyCollapsedState();
+    }
+
+    function saveCollapsedState() {
+        try { localStorage.setItem(STORAGE_KEY, String(isStepsCollapsed)); } catch (e) {} }
+
+    function applyCollapsedState() {
+        if (isStepsCollapsed) {
+            stepsListWrap.classList.remove('open');
+            collapseLabel.textContent = '展开';
+        } else {
+            stepsListWrap.classList.add('open');
+            collapseLabel.textContent = '折叠';
+        }
+    }
+
+    function toggleCollapsed() {
+        isStepsCollapsed = !isStepsCollapsed;
+        saveCollapsedState();
+        applyCollapsedState();
+    }
+
+    function loadPlotData() {
+        if (DATA && typeof DATA === 'object' && DATA.plotList) {
+            plotData = DATA; console.log('[剧情推进] ✅ 从内联数据加载成功');
+            initFromPlotData(); return;
+        }
+        console.warn('[剧情推进] ⚠️ 未找到剧情数据');
+        renderEmptyState();
+    }
+
+    function initFromPlotData() {
+        if (!plotData || !plotData.plotList || plotData.plotList.length === 0) { renderEmptyState(); return; }
+        storyList = plotData.plotList.map(function(plot, idx) {
+            var plotId = idx + 1;
+            var currentStep = plot.steps.find(function(s) { return s.isExecuted; }) || plot.steps[0] || { stepId: 1 };
+            return { id: plotId, title: plot.title, summary: plot.summary || '', steps: plot.steps || [], currentStepId: currentStep.stepId || 1, isExecuted: plot.steps.some(function(s) { return s.isExecuted; }) };
+        });
+        if (plotData.currentPlot) {
+            var targetId = plotData.currentPlot.plotId || 1;
+            var found = storyList.findIndex(function(s) { return s.id === targetId; });
+            if (found !== -1) { currentStoryIndex = found; currentPlotId = targetId; currentStepId = plotData.currentPlot.stepId || 1; } else { currentStoryIndex = 0; currentPlotId = storyList[0] ? storyList[0].id : 1; currentStepId = storyList[0] && storyList[0].steps[0] ? storyList[0].steps[0].stepId : 1; }
+        } else {
+            currentStoryIndex = 0; currentPlotId = storyList[0] ? storyList[0].id : 1; currentStepId = storyList[0] && storyList[0].steps[0] ? storyList[0].steps[0].stepId : 1;
+        }
+        totalBadge.textContent = storyList.length;
+        renderAll();
+        renderStoryList();
+    }
+
+    function getNextPendingStep(story) {
+        if (!story || !story.steps) return null;
+        return story.steps.find(function(s) { return !s.isExecuted; });
+    }
+
+    function renderAll() {
+        if (!storyList || storyList.length === 0) { renderEmptyState(); return; }
+        var story = storyList[currentStoryIndex];
+        if (!story) { renderEmptyState(); return; }
+        currentDisplay.classList.remove('no-plot');
+        storyTitleText.textContent = story.title;
+        var totalSteps = story.steps.length;
+        var executedSteps = story.steps.filter(function(s) { return s.isExecuted; }).length;
+        var currentStep = story.steps.find(function(s) { return s.stepId == currentStepId; }) || story.steps[0];
+        var isCurrentExecuted = currentStep ? (currentStep.isExecuted || false) : false;
+        stepStatus.className = 'step-status';
+        var dot = stepStatus.querySelector('.dot');
+        if (dot) { dot.className = 'dot' + (isCurrentExecuted ? ' done' : ' pending'); }
+        stepStatusText.textContent = isCurrentExecuted ? '已执行' : '待执行';
+        progressText.textContent = executedSteps + ' / ' + totalSteps + ' 步';
+        renderSteps(story);
+        updateNavButtons(story);
+        currentBtn.textContent = '🎯 ' + currentStepId;
+        if (isDetailOpen && currentStep) { renderDetail(currentStep); }
+        renderStoryList();
+    }
+
+    function renderSteps(story) {
+        if (!story || !story.steps || story.steps.length === 0) {
+            stepsList.innerHTML = '<div class="empty-state"><p>此剧情暂无步骤</p></div>';
+            stepsCount.textContent = '0 步'; return;
+        }
+        stepsCount.textContent = story.steps.length + ' 步';
+        var html = '';
+        story.steps.forEach(function(step) {
+            var isCurrent = step.stepId == currentStepId;
+            var isExecuted = step.isExecuted || false;
+            var cls = (isExecuted ? 'executed ' : '') + (isCurrent ? 'current' : '');
+            var charsStr = (step.characters || []).map(function(c) { return c.name; }).filter(Boolean).join('、') || '未指定';
+            html += '<div class="step-item ' + cls + '" data-step-id="' + step.stepId + '">' +
+                '<div class="step-header-line">' +
+                '<span class="step-id">步骤 ' + step.stepId + '</span>' +
+                '<span class="step-location"><svg class="icon-svg" viewBox="0 0 24 24"><path d="M12 2a8 8 0 0 0-8 8c0 6 8 12 8 12s8-6 8-12a8 8 0 0 0-8-8z"/><circle cx="12" cy="10" r="3"/></svg>' + (step.location || '未指定') + '</span>' +
+                '<button class="step-execute-btn ' + (isExecuted ? 'done' : '') + '" data-step-id="' + step.stepId + '">' + (isExecuted ? '✓ 已执行' : '▶ 执行') + '</button>' +
+                '</div>' +
+                '<div class="step-event-preview">' + (step.event || '').substring(0, 60) + ((step.event || '').length > 60 ? '...' : '') + '</div>' +
+                '<div style="font-size:0.5rem;color:var(--text-dim);margin-top:2px;">👥 ' + charsStr + '</div>' +
+                '</div>';
+        });
+        stepsList.innerHTML = html;
+        stepsList.querySelectorAll('.step-item').forEach(function(el) {
+            el.addEventListener('click', function(e) {
+                if (e.target.closest('.step-execute-btn')) return;
+                var stepId = parseInt(this.dataset.stepId);
+                var step = story.steps.find(function(s) { return s.stepId == stepId; });
+                if (step) { currentStepId = stepId; renderAll(); openDetail(step); }
+            });
+        });
+        stepsList.querySelectorAll('.step-execute-btn').forEach(function(btn) {
+            btn.addEventListener('click', function(e) { e.stopPropagation(); var stepId = parseInt(this.dataset.stepId); executeStep(stepId); });
+        });
+    }
+
+    function updateNavButtons(story) {
+        var totalSteps = story.steps.length;
+        var currentIdx = story.steps.findIndex(function(s) { return s.stepId == currentStepId; });
+        var hasPrev = currentIdx > 0 || currentStoryIndex > 0;
+        prevBtn.disabled = !hasPrev;
+        var hasNextStep = currentIdx < totalSteps - 1;
+        var hasNextStory = currentStoryIndex < storyList.length - 1;
+        nextBtn.disabled = !(hasNextStep || hasNextStory);
+    }
+
+    function executeStep(stepId) {
+        var story = storyList[currentStoryIndex];
+        if (!story) return;
+        var step = story.steps.find(function(s) { return s.stepId == stepId; });
+        if (!step) return;
+        step.isExecuted = true;
+        currentStepId = stepId;
+        currentPlotId = story.id;
+
+        var stepData = {
+            location: step.location || '未指定',
+            characters: step.characters || [],
+            event: step.event || '',
+            development: step.development || ''
+        };
+        var textToSend = 'step_data = ' + JSON.stringify(stepData, null, 2);
+        if (typeof triggerSlash === 'function') {
+            triggerSlash('/send ' + textToSend + '|/trigger');
+        } else if (typeof window.triggerSlash === 'function') {
+            window.triggerSlash('/send ' + textToSend + '|/trigger');
+        } else {
+            console.log('[剧情推进] 发送:', textToSend);
+            navigator.clipboard ? navigator.clipboard.writeText(textToSend).catch(function() {}) : null;
+            alert('请将以下内容粘贴到酒馆对话框：\n\n' + textToSend);
+        }
+        saveStateToWorldbook();
+
+        var nextPending = getNextPendingStep(story);
+        if (nextPending) {
+            currentStepId = nextPending.stepId;
+        } else if (currentStoryIndex < storyList.length - 1) {
+            currentStoryIndex++;
+            var nextStory = storyList[currentStoryIndex];
+            currentPlotId = nextStory.id;
+            var firstStep = nextStory.steps[0];
+            if (firstStep) { currentStepId = firstStep.stepId; }
+        }
+
+        renderAll();
+
+        var updatedStep = story.steps.find(function(s) { return s.stepId == currentStepId; });
+        if (updatedStep) { openDetail(updatedStep); }
+        closeStoryList();
+    }
+
+    function saveStateToWorldbook() {
+        try {
+            if (typeof getWorldbook !== 'function' || typeof replaceWorldbook !== 'function') return;
+            var charWorldbooks = getCharWorldbookNames('current');
+            if (!charWorldbooks || !charWorldbooks.primary) return;
+            var entries = getWorldbook(charWorldbooks.primary);
+            if (!entries) return;
+            var entryList = Array.isArray(entries) ? entries : Object.values(entries);
+            var target = entryList.find(function(e) { return e.name && e.name.includes('剧情元数据-与继母的丝袜与日常'); });
+            if (!target) return;
+            if (!plotData) return;
+            plotData.currentPlot = { plotId: currentPlotId, stepId: currentStepId, title: '剧情元数据-与继母的丝袜与日常' };
+            plotData.plotList.forEach(function(plot, idx) {
+                var story = storyList[idx];
+                if (story) {
+                    plot.steps.forEach(function(s, si) {
+                        var localStep = story.steps[si];
+                        if (localStep) { s.isExecuted = localStep.isExecuted || false; }
+                    });
+                }
+            });
+            var jsonStr = JSON.stringify(plotData, null, 2);
+            target.content = '[plotResultStart]\n' + jsonStr + '\n[plotResultEnd]';
+            replaceWorldbook(charWorldbooks.primary, entries);
+            console.log('[剧情推进] ✅ 状态已保存到世界书');
+        } catch (e) { console.warn('[剧情推进] 保存状态失败:', e); }
+    }
+
+    function renderDetail(step) {
+        if (!step) { detailChars.innerHTML = ''; detailEvent.textContent = ''; detailDev.textContent = ''; return; }
+        var charsHtml = '';
+        if (step.characters && step.characters.length > 0) {
+            step.characters.forEach(function(c) {
+                charsHtml += '<div class="char-item"><span class="name">' + (c.name || '未命名') + '</span><span class="mood">' + (c.mood || '') + '</span><span class="thoughts">' + (c.innerThoughts ? '「' + c.innerThoughts + '」' : '') + '</span></div>';
+            });
+        } else {
+            charsHtml = '<div style="color:var(--text-dim);font-size:0.6rem;">未指定角色</div>';
+        }
+        detailChars.innerHTML = charsHtml;
+        detailEvent.textContent = step.event || '未指定事件';
+        detailDev.textContent = step.development ? '→ ' + step.development : '';
+    }
+
+    function openDetail(step) {
+        isDetailOpen = true;
+        detailPanel.classList.add('open');
+        renderDetail(step);
+        setTimeout(function() { detailPanel.scrollIntoView({ behavior: 'smooth', block: 'nearest' }); }, 100);
+    }
+
+    function closeDetail() { isDetailOpen = false; detailPanel.classList.remove('open'); }
+
+    function renderEmptyState() {
+        currentDisplay.classList.add('no-plot');
+        storyTitleText.textContent = '无剧情数据';
+        stepStatusText.textContent = '—';
+        progressText.textContent = '0 / 0 步';
+        stepsList.innerHTML = '<div class="empty-state"><svg class="icon-svg" viewBox="0 0 24 24"><path d="M4 4h16v16H4z"/><path d="M8 8h8v8H8z"/><path d="M16 8l-4 4-4-4"/><path d="M12 12v6"/></svg><p>请确保世界书中存在<br><span class="gold">「剧情元数据-与继母的丝袜与日常」</span></p></div>';
+        stepsCount.textContent = '0 步';
+        totalBadge.textContent = '0';
+        prevBtn.disabled = true;
+        nextBtn.disabled = true;
+        currentBtn.textContent = '🎯 —';
+        storyListBody.innerHTML = '<div class="empty-state"><p>暂无剧情</p></div>';
+    }
+
+    function renderStoryList() {
+        if (!storyList || storyList.length === 0) {
+            storyListBody.innerHTML = '<div class="empty-state"><p>暂无剧情</p></div>';
+            return;
+        }
+        var html = '';
+        storyList.forEach(function(story, idx) {
+            var total = story.steps.length;
+            var done = story.steps.filter(function(s) { return s.isExecuted; }).length;
+            var isCurrent = idx === currentStoryIndex;
+            var progressText = done + '/' + total;
+            html += '<div class="story-list-item' + (isCurrent ? ' current' : '') + '" data-index="' + idx + '">' +
+                '<span class="title">' + (isCurrent ? '<span class="current-mark">▶</span>' : '') + story.title + '</span>' +
+                '<span class="progress"><span class="' + (done === total ? 'done' : 'pending') + '">' + progressText + '</span></span>' +
+                '</div>';
+        });
+        storyListBody.innerHTML = html;
+        storyListBody.querySelectorAll('.story-list-item').forEach(function(el) {
+            el.addEventListener('click', function() {
+                var index = parseInt(this.dataset.index);
+                if (!isNaN(index) && index >= 0 && index < storyList.length) {
+                    currentStoryIndex = index;
+                    currentPlotId = storyList[index].id;
+                    var firstStep = storyList[index].steps[0];
+                    if (firstStep) { currentStepId = firstStep.stepId; }
+                    renderAll();
+                    closeStoryList();
+                }
+            });
+        });
+    }
+
+    function openStoryList() {
+        storyListOverlay.classList.add('open');
+        document.body.style.overflow = 'hidden';
+        renderStoryList();
+    }
+
+    function closeStoryList() {
+        storyListOverlay.classList.remove('open');
+        document.body.style.overflow = '';
+    }
+
+    function bindEvents() {
+        collapseToggleBtn.addEventListener('click', function(e) { e.stopPropagation(); toggleCollapsed(); });
+
+        prevBtn.addEventListener('click', function() {
+            var story = storyList[currentStoryIndex];
+            if (!story) return;
+            var currentIdx = story.steps.findIndex(function(s) { return s.stepId == currentStepId; });
+            if (currentIdx > 0) {
+                currentStepId = story.steps[currentIdx - 1].stepId;
+                renderAll();
+                openDetail(story.steps[currentIdx - 1]);
+            } else if (currentStoryIndex > 0) {
+                currentStoryIndex--;
+                var prevStory = storyList[currentStoryIndex];
+                currentPlotId = prevStory.id;
+                var lastStep = prevStory.steps[prevStory.steps.length - 1];
+                currentStepId = lastStep.stepId;
+                renderAll();
+                openDetail(lastStep);
+            }
+        });
+
+        nextBtn.addEventListener('click', function() {
+            var story = storyList[currentStoryIndex];
+            if (!story) return;
+            var currentIdx = story.steps.findIndex(function(s) { return s.stepId == currentStepId; });
+            if (currentIdx < story.steps.length - 1) {
+                var nextStep = story.steps[currentIdx + 1];
+                currentStepId = nextStep.stepId;
+                renderAll();
+                openDetail(nextStep);
+            } else if (currentStoryIndex < storyList.length - 1) {
+                currentStoryIndex++;
+                var nextStory = storyList[currentStoryIndex];
+                currentPlotId = nextStory.id;
+                var firstStep = nextStory.steps[0];
+                currentStepId = firstStep.stepId;
+                renderAll();
+                openDetail(firstStep);
+            }
+        });
+
+        currentBtn.addEventListener('click', function() {
+            var story = storyList[currentStoryIndex];
+            if (!story) return;
+            var currentStep = story.steps.find(function(s) { return s.stepId == currentStepId; }) || story.steps[0];
+            if (currentStep) { openDetail(currentStep); }
+        });
+
+        detailClose.addEventListener('click', closeDetail);
+        document.addEventListener('click', function(e) {
+            if (isDetailOpen && !detailPanel.contains(e.target) && !e.target.closest('.step-item') && !e.target.closest('#currentBtn')) {
+                closeDetail();
+            }
+        });
+
+        listToggleBtn.addEventListener('click', function(e) {
+            e.stopPropagation();
+            if (storyListOverlay.classList.contains('open')) {
+                closeStoryList();
+            } else {
+                openStoryList();
+            }
+        });
+
+        storyListOverlay.addEventListener('click', function(e) {
+            if (e.target === storyListOverlay) { closeStoryList(); }
+        });
+        storyListCloseBtn.addEventListener('click', closeStoryList);
+
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Escape') {
+                if (storyListOverlay.classList.contains('open')) { closeStoryList(); }
+                if (isDetailOpen) { closeDetail(); }
+            }
+        });
+    }
+
+    function bindKeyboard() {
+        document.addEventListener('keydown', function(e) {
+            if (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA') return;
+            if (e.key === 'ArrowLeft' || e.key === 'a') { e.preventDefault(); prevBtn.click(); }
+            else if (e.key === 'ArrowRight' || e.key === 'd') { e.preventDefault(); nextBtn.click(); }
+            else if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); currentBtn.click(); }
+            else if (e.key === 'Escape') { if (!storyListOverlay.classList.contains('open')) closeDetail(); }
+        });
+    }
+
+    function init() {
+        loadCollapsedState();
+        bindEvents();
+        bindKeyboard();
+        loadPlotData();
+        console.log('[剧情推进] ✅ 初始化完成');
+    }
+
+    if (document.readyState === 'complete' || document.readyState === 'interactive') {
+        init();
+    } else {
+        document.addEventListener('DOMContentLoaded', init);
+    }
+
+    window.__storyAssistant = {
+        reload: loadPlotData,
+        goTo: function(plotId, stepId) {
+            var storyIdx = storyList.findIndex(function(s) { return s.id === plotId; });
+            if (storyIdx === -1) return;
+            currentStoryIndex = storyIdx;
+            currentPlotId = plotId;
+            currentStepId = stepId || (storyList[storyIdx].steps[0] ? storyList[storyIdx].steps[0].stepId : 1);
+            renderAll();
+        },
+        getState: function() {
+            return { currentPlotId: currentPlotId, currentStepId: currentStepId, currentStoryIndex: currentStoryIndex, storyList: storyList };
+        }
+    };
+
+})();
+</script>
+</body>
+</html>
