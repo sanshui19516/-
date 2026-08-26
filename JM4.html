@@ -1,0 +1,748 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+    <title>与继母的丝袜与日常 · 作者介绍</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;14..32,400;14..32,600;14..32,700&family=Playfair+Display:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet" />
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            min-height: 100vh;
+            background: transparent;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-family: 'Inter', 'PingFang SC', system-ui, -apple-system, sans-serif;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 580px;
+            width: 100%;
+            background: hsla(320, 15%, 6%, 0.82);
+            backdrop-filter: blur(32px) saturate(1.6);
+            -webkit-backdrop-filter: blur(32px) saturate(1.6);
+            border-radius: 40px;
+            border: 1px solid hsla(340, 45%, 45%, 0.15);
+            box-shadow: 0 30px 80px rgba(0, 0, 0, 0.7), inset 0 0 0 1px hsla(340, 45%, 45%, 0.04), 0 0 120px -40px hsla(340, 45%, 45%, 0.06);
+            padding: 36px 30px 28px;
+            position: relative;
+            overflow: hidden;
+            opacity: 0;
+            transform: translateY(24px) scale(0.98);
+            animation: containerIn 0.9s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+        }
+        @keyframes containerIn {
+            to { opacity: 1; transform: translateY(0) scale(1); }
+        }
+
+        .container::before {
+            content: '';
+            position: absolute;
+            top: -30%;
+            right: -20%;
+            width: 70%;
+            height: 80%;
+            background: radial-gradient(ellipse, hsla(340, 45%, 45%, 0.07), transparent 65%);
+            pointer-events: none;
+            animation: driftWine 16s infinite alternate ease-in-out;
+        }
+        .container::after {
+            content: '';
+            position: absolute;
+            bottom: -30%;
+            left: -20%;
+            width: 60%;
+            height: 70%;
+            background: radial-gradient(ellipse, hsla(320, 40%, 35%, 0.05), transparent 65%);
+            pointer-events: none;
+            animation: driftPlum 20s infinite alternate-reverse ease-in-out;
+        }
+        @keyframes driftWine {
+            0% { transform: translate(0, 0) scale(1); opacity: 0.3; }
+            100% { transform: translate(-8%, 6%) scale(1.4); opacity: 0.8; }
+        }
+        @keyframes driftPlum {
+            0% { transform: translate(0, 0) scale(1); opacity: 0.2; }
+            100% { transform: translate(6%, -8%) scale(1.3); opacity: 0.7; }
+        }
+
+        .container>* { position: relative; z-index: 2; }
+
+        /* ===== 标题区块 ===== */
+        .title-wrapper {
+            position: relative;
+            margin-bottom: 20px;
+            border-radius: 28px;
+            overflow: hidden;
+            border: 1px solid hsla(340, 45%, 45%, 0.15);
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.4);
+            aspect-ratio: 16 / 5;
+        }
+        .title-bg {
+            position: absolute;
+            inset: 0;
+            background-image: url('https://testingcf.jsdelivr.net/gh/sanshui19516/-@main/IMG_20260529_062318.jpg');
+            background-size: cover;
+            background-position: center 30%;
+            background-repeat: no-repeat;
+        }
+        .title-overlay {
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(135deg, hsla(320, 15%, 5%, 0.60), hsla(340, 45%, 45%, 0.15), hsla(320, 40%, 35%, 0.10));
+        }
+        .title-content {
+            position: relative;
+            z-index: 2;
+            padding: 22px 16px 20px;
+            text-align: center;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            height: 100%;
+        }
+        .title-main {
+            font-family: 'Playfair Display', serif;
+            font-weight: 700;
+            font-size: clamp(1.2rem, 4.5vw, 2.0rem);
+            letter-spacing: 0.06em;
+            color: hsl(320, 10%, 92%);
+            text-shadow: 0 2px 20px rgba(0, 0, 0, 0.6);
+        }
+        .title-main .accent {
+            color: hsl(340, 50%, 55%);
+        }
+        .title-sub {
+            font-size: clamp(0.5rem, 1.4vw, 0.7rem);
+            font-weight: 300;
+            color: hsla(320, 10%, 70%, 0.6);
+            letter-spacing: 8px;
+            margin-top: 2px;
+            font-style: italic;
+            text-shadow: 0 1px 12px rgba(0, 0, 0, 0.5);
+        }
+        .title-author {
+            font-size: clamp(0.45rem, 1vw, 0.6rem);
+            color: hsla(320, 10%, 60%, 0.5);
+            letter-spacing: 4px;
+            margin-top: 4px;
+            font-weight: 300;
+            text-shadow: 0 1px 10px rgba(0, 0, 0, 0.5);
+        }
+        .title-author strong {
+            color: hsl(340, 50%, 55%);
+            font-weight: 600;
+        }
+
+        /* ===== 分割线 ===== */
+        .divider {
+            border: none;
+            border-top: 1px solid hsla(340, 45%, 45%, 0.08);
+            margin: 0 0 18px 0;
+            position: relative;
+        }
+        .divider::after {
+            content: '';
+            position: absolute;
+            top: -1px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 60px;
+            height: 1px;
+            background: linear-gradient(90deg, transparent, hsla(340, 45%, 45%, 0.2), transparent);
+        }
+
+        /* ===== 信息卡片：两列，但左右独立感更强 ===== */
+        .grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 12px;
+            margin-bottom: 14px;
+        }
+        .card {
+            background: hsla(320, 12%, 12%, 0.45);
+            border: 1px solid hsla(340, 45%, 45%, 0.06);
+            border-radius: 18px;
+            padding: 16px 16px 14px;
+            backdrop-filter: blur(4px);
+            -webkit-backdrop-filter: blur(4px);
+            transition: all 0.35s cubic-bezier(0.25, 0.8, 0.25, 1);
+        }
+        .card:hover {
+            background: hsla(320, 12%, 16%, 0.55);
+            border-color: hsla(340, 45%, 45%, 0.15);
+            transform: translateY(-2px);
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.25);
+        }
+        .card-label {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 0.5rem;
+            font-weight: 600;
+            letter-spacing: 2px;
+            color: hsla(340, 45%, 55%, 0.5);
+            text-transform: uppercase;
+            margin-bottom: 6px;
+            padding-bottom: 4px;
+            border-bottom: 1px solid hsla(340, 45%, 45%, 0.04);
+        }
+        .card-label svg {
+            width: 14px;
+            height: 14px;
+            fill: none;
+            stroke: hsla(340, 45%, 55%, 0.4);
+            stroke-width: 1.8;
+            stroke-linecap: round;
+            stroke-linejoin: round;
+            flex-shrink: 0;
+        }
+        .card-list {
+            list-style: none;
+            padding: 0;
+        }
+        .card-list li {
+            font-size: clamp(0.55rem, 1.1vw, 0.65rem);
+            color: hsla(320, 10%, 80%, 0.7);
+            line-height: 1.8;
+            padding-left: 12px;
+            position: relative;
+        }
+        .card-list li::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 0.6em;
+            width: 4px;
+            height: 4px;
+            border-radius: 50%;
+            background: hsla(340, 45%, 55%, 0.2);
+        }
+        .card-list .tag-allow {
+            color: hsla(140, 40%, 60%, 0.8);
+        }
+        .card-list .tag-warn {
+            color: hsla(350, 50%, 60%, 0.8);
+        }
+        .card-list .tag-note {
+            color: hsla(320, 10%, 65%, 0.7);
+        }
+
+        /* ===== 作者卡片 ===== */
+        .author-card {
+            background: hsla(320, 12%, 12%, 0.45);
+            border: 1px solid hsla(340, 45%, 45%, 0.06);
+            border-radius: 18px;
+            padding: 20px 16px 16px;
+            margin-bottom: 12px;
+            text-align: center;
+            transition: all 0.35s ease;
+        }
+        .author-card:hover {
+            border-color: hsla(340, 45%, 45%, 0.15);
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.2);
+        }
+
+        .author-avatar {
+            width: 68px;
+            height: 68px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 2px solid hsla(340, 45%, 55%, 0.25);
+            box-shadow: 0 0 30px hsla(340, 45%, 55%, 0.08);
+            margin: 0 auto 10px auto;
+            display: block;
+            transition: all 0.4s ease;
+        }
+        .author-avatar:hover {
+            transform: scale(1.04);
+            border-color: hsla(340, 45%, 55%, 0.4);
+            box-shadow: 0 0 40px hsla(340, 45%, 55%, 0.15);
+        }
+
+        .author-name {
+            font-family: 'Playfair Display', serif;
+            font-weight: 700;
+            font-size: 1rem;
+            color: hsl(320, 10%, 92%);
+            letter-spacing: 3px;
+        }
+        .author-badge {
+            font-size: 0.5rem;
+            color: hsla(320, 10%, 65%, 0.5);
+            letter-spacing: 3px;
+            margin-bottom: 12px;
+            font-weight: 300;
+        }
+
+        .author-links {
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+        }
+        .author-link-item {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            background: hsla(320, 12%, 6%, 0.4);
+            border: 1px solid hsla(340, 45%, 45%, 0.05);
+            border-radius: 14px;
+            padding: 10px 14px;
+            color: hsla(320, 10%, 75%, 0.6);
+            text-decoration: none;
+            font-size: 0.65rem;
+            letter-spacing: 1px;
+            transition: all 0.3s ease;
+        }
+        .author-link-item:hover {
+            background: hsla(320, 12%, 10%, 0.6);
+            border-color: hsla(340, 45%, 45%, 0.15);
+            box-shadow: 0 0 30px hsla(340, 45%, 55%, 0.05);
+            transform: translateY(-2px);
+            color: hsl(320, 10%, 92%);
+        }
+        .author-link-item .link-icon {
+            width: 18px;
+            height: 18px;
+            fill: none;
+            stroke: hsla(340, 45%, 55%, 0.35);
+            stroke-width: 1.8;
+            stroke-linecap: round;
+            stroke-linejoin: round;
+            flex-shrink: 0;
+            transition: stroke 0.3s ease;
+        }
+        .author-link-item:hover .link-icon {
+            stroke: hsla(340, 45%, 55%, 0.7);
+        }
+        .author-link-item .link-label {
+            font-weight: 600;
+            color: hsla(340, 45%, 55%, 0.6);
+            margin-right: 2px;
+        }
+        .author-link-item:hover .link-label {
+            color: hsla(340, 45%, 55%, 0.85);
+        }
+        .author-link-item .link-url {
+            opacity: 0.35;
+            font-size: 0.55rem;
+            max-width: 160px;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+        @media (max-width: 480px) {
+            .author-link-item .link-url { max-width: 100px; }
+        }
+
+        /* ===== 故事标签块 ===== */
+        .tag-block {
+            background: hsla(320, 12%, 12%, 0.45);
+            border: 1px solid hsla(340, 45%, 45%, 0.06);
+            border-radius: 18px;
+            padding: 14px 16px 12px;
+            margin-bottom: 12px;
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+            justify-content: center;
+            gap: 8px 16px;
+            transition: all 0.35s ease;
+        }
+        .tag-block:hover {
+            border-color: hsla(340, 45%, 45%, 0.12);
+        }
+        .tag-block .tag-label {
+            font-size: 0.5rem;
+            font-weight: 600;
+            letter-spacing: 2px;
+            color: hsla(340, 45%, 55%, 0.4);
+            text-transform: uppercase;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+        .tag-block .tag-label svg {
+            width: 14px;
+            height: 14px;
+            fill: none;
+            stroke: hsla(340, 45%, 55%, 0.3);
+            stroke-width: 1.8;
+            stroke-linecap: round;
+            stroke-linejoin: round;
+        }
+        .tag-block .tag-item {
+            font-size: 0.6rem;
+            color: hsla(320, 10%, 75%, 0.7);
+            letter-spacing: 1px;
+            padding: 2px 12px;
+            border-radius: 20px;
+            border: 1px solid hsla(340, 45%, 45%, 0.06);
+        }
+        .tag-block .tag-item:hover {
+            border-color: hsla(340, 45%, 45%, 0.15);
+        }
+
+        /* ===== 公益声明 ===== */
+        .notice-block {
+            background: hsla(320, 12%, 6%, 0.30);
+            border: 1px solid hsla(340, 45%, 45%, 0.04);
+            border-radius: 16px;
+            padding: 12px 14px;
+            margin-bottom: 12px;
+            text-align: left;
+        }
+        .notice-block .notice-label {
+            font-size: 0.45rem;
+            font-weight: 600;
+            letter-spacing: 2px;
+            color: hsla(320, 10%, 65%, 0.3);
+            text-transform: uppercase;
+            margin-bottom: 4px;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+        .notice-block .notice-label svg {
+            width: 12px;
+            height: 12px;
+            fill: none;
+            stroke: hsla(340, 45%, 55%, 0.15);
+            stroke-width: 2;
+            stroke-linecap: round;
+            stroke-linejoin: round;
+        }
+        .notice-block .notice-text {
+            font-size: 0.5rem;
+            color: hsla(320, 10%, 65%, 0.45);
+            line-height: 1.7;
+            letter-spacing: 0.3px;
+        }
+        .notice-block .notice-text .hl {
+            color: hsla(340, 45%, 55%, 0.55);
+        }
+
+        /* ===== 按钮 ===== */
+        .action {
+            text-align: center;
+            margin: 0 0 12px;
+        }
+        .btn-enter {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 14px;
+            width: 100%;
+            padding: 16px 24px;
+            border-radius: 60px;
+            background: hsla(340, 45%, 45%, 0.04);
+            border: 1px solid hsla(340, 45%, 45%, 0.10);
+            color: hsl(320, 10%, 92%);
+            font-size: clamp(0.75rem, 1.6vw, 0.9rem);
+            font-weight: 500;
+            letter-spacing: 4px;
+            cursor: pointer;
+            transition: all 0.4s cubic-bezier(0.25, 0.8, 0.25, 1);
+            backdrop-filter: blur(6px);
+            -webkit-backdrop-filter: blur(6px);
+            font-family: 'Inter', sans-serif;
+            position: relative;
+            overflow: hidden;
+        }
+        .btn-enter::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(135deg, hsla(340, 45%, 45%, 0.03), hsla(320, 40%, 35%, 0.03));
+            pointer-events: none;
+            opacity: 0;
+            transition: opacity 0.5s ease;
+        }
+        .btn-enter:hover::before { opacity: 1; }
+        .btn-enter:hover {
+            background: hsla(340, 45%, 45%, 0.08);
+            border-color: hsla(340, 45%, 45%, 0.22);
+            box-shadow: 0 0 50px hsla(340, 45%, 45%, 0.05), inset 0 0 0 1px hsla(340, 45%, 45%, 0.04);
+            transform: translateY(-2px);
+        }
+        .btn-enter:active {
+            transform: scale(0.96) translateY(0);
+            transition-duration: 0.05s;
+        }
+        .btn-enter svg {
+            width: 20px;
+            height: 20px;
+            fill: none;
+            stroke: hsla(340, 45%, 55%, 0.5);
+            stroke-width: 1.8;
+            stroke-linecap: round;
+            stroke-linejoin: round;
+            transition: all 0.4s ease;
+            flex-shrink: 0;
+        }
+        .btn-enter:hover svg {
+            stroke: hsla(340, 45%, 55%, 0.9);
+            transform: translateX(4px);
+        }
+        .btn-enter .btn-glow-ring {
+            position: absolute;
+            inset: -1px;
+            border-radius: 60px;
+            padding: 1px;
+            background: linear-gradient(135deg, hsla(340, 45%, 45%, 0.10), transparent 60%, hsla(320, 40%, 35%, 0.06));
+            -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+            -webkit-mask-composite: xor;
+            mask-composite: exclude;
+            pointer-events: none;
+            opacity: 0;
+            transition: opacity 0.5s ease;
+        }
+        .btn-enter:hover .btn-glow-ring { opacity: 1; }
+
+        /* ===== 底部 ===== */
+        .footer {
+            text-align: center;
+            padding-top: 12px;
+            border-top: 1px solid hsla(340, 45%, 45%, 0.03);
+            font-size: 0.45rem;
+            color: hsla(320, 10%, 45%, 0.25);
+            letter-spacing: 3px;
+            font-weight: 300;
+        }
+        .footer .footer-deco {
+            font-size: 0.6rem;
+            opacity: 0.25;
+            margin-bottom: 2px;
+            letter-spacing: 4px;
+            animation: pulseDeco 3s ease-in-out infinite;
+        }
+        @keyframes pulseDeco {
+            0%, 100% { opacity: 0.12; }
+            50% { opacity: 0.4; }
+        }
+        .footer span { color: hsla(320, 10%, 50%, 0.25); }
+
+        /* ===== 响应式 ===== */
+        @media (max-width: 640px) {
+            body { padding: 10px; align-items: flex-start; padding-top: 12px; }
+            .container { max-width: 100%; border-radius: 28px; padding: 20px 14px 16px; }
+            .title-wrapper { border-radius: 20px; aspect-ratio: 16 / 5; margin-bottom: 14px; }
+            .title-content { padding: 16px 10px 14px; }
+            .grid { grid-template-columns: 1fr; gap: 8px; }
+            .card { padding: 12px 12px 10px; border-radius: 16px; }
+            .card-label { font-size: 0.45rem; }
+            .card-list li { font-size: 0.58rem; line-height: 1.6; }
+            .author-card { padding: 14px 12px 10px; border-radius: 16px; }
+            .author-avatar { width: 56px; height: 56px; margin: 0 auto 8px auto; }
+            .author-name { font-size: 0.85rem; }
+            .btn-enter { padding: 14px 18px; font-size: 0.7rem; letter-spacing: 3px; gap: 10px; }
+            .btn-enter svg { width: 18px; height: 18px; }
+            .tag-block { padding: 10px 12px; gap: 6px 12px; }
+            .tag-block .tag-item { font-size: 0.5rem; }
+            .notice-block { padding: 10px 12px; }
+            .notice-block .notice-text { font-size: 0.45rem; }
+            .footer { font-size: 0.4rem; padding-top: 10px; }
+        }
+
+        @media (max-width: 400px) {
+            .container { padding: 14px 10px 12px; border-radius: 24px; }
+            .title-content { padding: 12px 8px 10px; }
+            .title-main { font-size: 0.95rem; }
+            .title-sub { font-size: 0.4rem; letter-spacing: 3px; }
+            .card-list li { font-size: 0.5rem; }
+            .btn-enter { padding: 12px 14px; font-size: 0.6rem; letter-spacing: 2px; gap: 8px; }
+        }
+
+        @media (min-width: 641px) and (max-width: 900px) {
+            .container { padding: 28px 22px 20px; }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+
+        <div class="title-wrapper">
+            <div class="title-bg"></div>
+            <div class="title-overlay"></div>
+            <div class="title-content">
+                <div class="title-main">
+                    与继母的<span class="accent">丝袜</span>与日常
+                </div>
+                <div class="title-sub">—— 继母与继子 · 日常的暧昧 ——</div>
+                <div class="title-author">作者 · <strong>三年的水</strong></div>
+            </div>
+        </div>
+
+        <hr class="divider" />
+
+        <div class="grid">
+
+            <!-- 发布信息 -->
+            <div class="card">
+                <div class="card-label">
+                    <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M12 8v4l3 3"/></svg>
+                    发布信息
+                </div>
+                <ul class="card-list">
+                    <li>仅发布于 <span style="color:hsla(340,50%,55%,0.6);">Discord 类脑</span></li>
+                    <li>作者：<span style="color:hsla(340,50%,55%,0.6);">三年的水</span></li>
+                </ul>
+            </div>
+
+            <!-- 授权说明 -->
+            <div class="card">
+                <div class="card-label">
+                    <svg viewBox="0 0 24 24"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><polyline points="9 12 11 14 15 10"/></svg>
+                    授权说明
+                </div>
+                <ul class="card-list">
+                    <li><span class="tag-allow">允许二改（署名）</span></li>
+                    <li><span class="tag-allow">二改后需标注出处</span></li>
+                    <li><span class="tag-warn">禁止商用</span></li>
+                    <li><span class="tag-warn">禁止墙内二传</span></li>
+                </ul>
+            </div>
+
+            <!-- 本卡包含 -->
+            <div class="card">
+                <div class="card-label">
+                    <svg viewBox="0 0 24 24"><rect x="2" y="3" width="20" height="18" rx="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg>
+                    本卡包含
+                </div>
+                <ul class="card-list">
+                    <li>继母 · 三条美咲 完整人设</li>
+                    <li>继子 · {{user}} 完整人设</li>
+                    <li>剧情大纲 · 七段式完整故事线</li>
+                    <li>日常暧昧 · 试探与回应</li>
+                    <li>沉沦 · 越界后的秘密关系</li>
+                </ul>
+            </div>
+
+            <!-- 使用说明 -->
+            <div class="card">
+                <div class="card-label">
+                    <svg viewBox="0 0 24 24"><path d="M12 2L2 7l10 5 10-5-10-5z"/><path d="M2 17l10 5 10-5"/><path d="M2 12l10 5 10-5"/></svg>
+                    使用说明
+                </div>
+                <ul class="card-list">
+                    <li>导入角色卡到 SillyTavern</li>
+                    <li>配置状态栏与选项栏正则</li>
+                    <li>开始对话体验</li>
+                </ul>
+            </div>
+
+        </div>
+
+        <!-- 作者卡片 -->
+        <div class="author-card">
+            <img class="author-avatar" src="https://cdn.jsdelivr.net/gh/sanshui19516/CG@main/%E5%A4%B4%E5%83%8F.png" alt="作者头像" />
+            <div class="author-name">三年的水</div>
+            <div class="author-badge">✦ 与继母的丝袜与日常 ✦</div>
+            <div class="author-links">
+                <a class="author-link-item" href="{{原帖链接}}" target="_blank" rel="noopener noreferrer">
+                    <svg class="link-icon" viewBox="0 0 24 24"><path d="M4 4h16v16H4z"/><path d="M8 8h8v8H8z"/><path d="M16 8l-4 4-4-4"/><path d="M12 12v6"/></svg>
+                    <span class="link-label">原帖链接</span>
+                    <span class="link-url">Discord 原帖</span>
+                </a>
+                <a class="author-link-item" href="https://discord.com/channels/1134557553011998840/1516980193195987075/1516980193195987075" target="_blank" rel="noopener noreferrer">
+                    <svg class="link-icon" viewBox="0 0 24 24"><path d="M4 4h16v16H4z"/><path d="M8 8h8v8H8z"/><path d="M16 8l-4 4-4-4"/><path d="M12 12v6"/></svg>
+                    <span class="link-label">作品集锦</span>
+                    <span class="link-url">Discord 频道</span>
+                </a>
+                <a class="author-link-item" href="https://discord.com/channels/1134557553011998840/1516980193195987075/1516980470871621794" target="_blank" rel="noopener noreferrer">
+                    <svg class="link-icon" viewBox="0 0 24 24"><path d="M21 11.5L12 2 3 11.5"/><path d="M5 10v10a2 2 0 002 2h10a2 2 0 002-2V10"/><path d="M12 15v4"/></svg>
+                    <span class="link-label">关注作者</span>
+                    <span class="link-url">Discord 频道</span>
+                </a>
+            </div>
+        </div>
+
+        <!-- 故事标签 -->
+        <div class="tag-block">
+            <span class="tag-label">
+                <svg viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+                故事标签
+            </span>
+            <span class="tag-item">继母 · 暧昧 · 试探 · 沉沦</span>
+            <span class="tag-item">丝袜 · 日常 · 背德的温柔</span>
+        </div>
+
+        <!-- 公益声明 -->
+        <div class="notice-block">
+            <div class="notice-label">
+                <svg viewBox="0 0 24 24"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><circle cx="12" cy="12" r="2"/></svg>
+                禁止商用 · 公益声明
+            </div>
+            <div class="notice-text">
+                本角色卡为作者 <span class="hl">三年的水</span> 免费分享的公益作品，仅供个人娱乐与创作交流使用。<br />
+                严禁任何形式的商业用途，包括转卖、收费下载、打包售卖或用于盈利性直播/视频。<br />
+                如通过付费渠道获得，请立即退款并举报贩卖者。<br />
+                感谢您的支持与理解。
+            </div>
+        </div>
+
+        <!-- 按钮 -->
+        <div class="action">
+            <button class="btn-enter" onclick="switchOpening(2)">
+                <span>进入故事 · 继母与继子</span>
+                <svg viewBox="0 0 24 24"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+                <span class="btn-glow-ring"></span>
+            </button>
+        </div>
+
+        <!-- 底部 -->
+        <div class="footer">
+            <div class="footer-deco">✦ 请多多评论 ✦</div>
+            <span>by 三年的水</span>
+        </div>
+
+    </div>
+
+    <script>
+        async function switchOpening(swipeId) {
+            var clickedCard = event.currentTarget;
+            clickedCard.style.opacity = '0.6';
+            clickedCard.style.pointerEvents = 'none';
+            try {
+                var messages;
+                try {
+                    messages = await getChatMessages?.('0', { include_swipe: true });
+                } catch (e) {
+                    var context = window.SillyTavern?.getContext?.();
+                    messages = context?.chat?.messages;
+                }
+                if (!messages || messages.length === 0) throw new Error('没有找到聊天消息。');
+                var userMessage = messages[0];
+                if (!userMessage.swipes) throw new Error('第一条消息没有滑动条。');
+                if (userMessage.swipes.length <= swipeId) throw new Error('滑动条 ' + swipeId + ' 不存在。');
+                var targetSwipe = userMessage.swipes[swipeId];
+                var setChatMessage = window.setChatMessage || window.SillyTavern?.getContext?.()?.setChatMessage;
+                if (typeof setChatMessage === 'function') {
+                    await setChatMessage(targetSwipe, 0, { swipe_id: swipeId, refresh: 'display_and_render_current' });
+                } else if (typeof userMessage.setSwipe === 'function') {
+                    userMessage.setSwipe(swipeId);
+                }
+            } catch (error) {
+                console.error('切换失败:', error);
+            } finally {
+                clickedCard.style.opacity = '1';
+                clickedCard.style.pointerEvents = 'auto';
+            }
+        }
+    </script>
+
+</body>
+</html>
