@@ -1,0 +1,1156 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>剧情推进 · 熟妇的蜜色饲育</title>
+<style>
+/* ============================================================
+   剧情推进 UI · 完整样式
+   配色：玫瑰色 + 灰蓝
+   ============================================================ */
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+:root {
+    --hue-primary: 340;
+    --hue-secondary: 210;
+    --sat-primary: 55%;
+    --sat-secondary: 30%;
+    --light-primary: 60%;
+    --light-secondary: 55%;
+    --bg-card: hsla(340, 20%, 15%, 0.55);
+    --border-glass: hsla(340, 30%, 60%, 0.15);
+    --text-primary: hsl(340, 15%, 92%);
+    --text-secondary: hsl(340, 10%, 72%);
+    --text-dim: hsl(340, 10%, 45%);
+    --color-accent: hsl(340, 55%, 60%);
+    --color-gold: hsl(210, 30%, 55%);
+    --shadow-soft: 0 8px 40px hsla(340, 40%, 10%, 0.6);
+    --transition: 0.35s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+}
+
+body {
+    font-family: -apple-system, 'PingFang SC', 'Helvetica Neue', 'Georgia', serif;
+    background: transparent;
+    min-height: auto;
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    padding: 0;
+    margin: 0;
+    color: var(--text-primary);
+    font-weight: 400;
+    line-height: 1.6;
+}
+
+.story-container {
+    max-width: 520px;
+    width: 100%;
+    margin: 0 auto;
+    background: var(--bg-card);
+    backdrop-filter: blur(24px) saturate(1.3);
+    -webkit-backdrop-filter: blur(24px) saturate(1.3);
+    border: 1px solid var(--border-glass);
+    border-radius: 28px;
+    padding: 14px 16px 12px 16px;
+    box-shadow: var(--shadow-soft), 0 0 0 1px hsla(340, 30%, 60%, 0.04) inset;
+    position: relative;
+    overflow: visible;
+}
+
+.story-container > * { position: relative; z-index: 1; }
+
+.nav-bar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 0 8px 0;
+    border-bottom: 1px solid var(--border-glass);
+    margin-bottom: 8px;
+    flex-wrap: wrap;
+    gap: 4px;
+}
+.nav-title {
+    font-size: 0.8rem;
+    font-weight: 600;
+    letter-spacing: 3px;
+    background: linear-gradient(135deg, var(--color-accent), var(--color-gold));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}
+.nav-actions {
+    display: flex;
+    gap: 4px;
+    align-items: center;
+}
+.nav-btn {
+    background: hsla(340, 20%, 25%, 0.3);
+    border: 1px solid var(--border-glass);
+    border-radius: 8px;
+    padding: 4px 8px;
+    color: var(--text-secondary);
+    cursor: pointer;
+    transition: all var(--transition);
+    display: flex;
+    align-items: center;
+    gap: 3px;
+    font-size: 0.55rem;
+    font-family: inherit;
+    backdrop-filter: blur(4px);
+    -webkit-backdrop-filter: blur(4px);
+}
+.nav-btn:hover {
+    background: hsla(340, 30%, 30%, 0.4);
+    border-color: hsla(340, 30%, 60%, 0.3);
+    color: var(--text-primary);
+    transform: translateY(-1px);
+}
+.nav-btn:active { transform: scale(0.96); }
+.nav-btn .icon-svg { width: 14px; height: 14px; fill: none; stroke: currentColor; stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; flex-shrink: 0; }
+.nav-btn .badge { font-size: 0.4rem; background: var(--color-accent); color: #0a0a0a; padding: 0 5px; border-radius: 6px; font-weight: 700; }
+
+.current-display {
+    background: hsla(340, 20%, 12%, 0.3);
+    border: 1px solid var(--border-glass);
+    border-radius: 12px;
+    padding: 8px 12px;
+    margin-bottom: 8px;
+    cursor: pointer;
+    transition: all var(--transition);
+}
+.current-display:hover {
+    border-color: hsla(340, 30%, 60%, 0.25);
+    background: hsla(340, 20%, 18%, 0.3);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 20px hsla(340, 40%, 10%, 0.2);
+}
+.current-display.no-plot {
+    border-color: hsla(210, 80%, 60%, 0.2);
+    background: hsla(210, 80%, 60%, 0.04);
+}
+.current-display.no-plot .story-title { color: var(--color-gold); font-weight: 700; }
+.story-title {
+    font-size: 0.9rem;
+    font-weight: 600;
+    letter-spacing: 0.5px;
+    color: var(--text-primary);
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    flex-wrap: wrap;
+}
+.story-title .gold { color: var(--color-gold); }
+.story-meta {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 4px 10px;
+    margin-top: 2px;
+    font-size: 0.6rem;
+    color: var(--text-secondary);
+}
+.story-meta .step-status {
+    display: inline-flex;
+    align-items: center;
+    gap: 3px;
+    padding: 1px 8px;
+    border-radius: 8px;
+    background: hsla(340, 20%, 20%, 0.3);
+    border: 1px solid var(--border-glass);
+    font-size: 0.55rem;
+}
+.story-meta .step-status .dot {
+    display: inline-block;
+    width: 5px;
+    height: 5px;
+    border-radius: 50%;
+    background: var(--color-gold);
+}
+.story-meta .step-status .dot.done { background: hsl(150, 50%, 50%); }
+.story-meta .step-status .dot.pending { background: var(--color-gold); animation: pulse-dot 1.8s ease-in-out infinite; }
+@keyframes pulse-dot {
+    0%, 100% { opacity: 0.4; transform: scale(0.8); }
+    50% { opacity: 1; transform: scale(1.2); }
+}
+.story-progress-text {
+    font-size: 0.55rem;
+    color: var(--text-dim);
+    letter-spacing: 1px;
+}
+
+.nav-controls {
+    display: flex;
+    gap: 6px;
+    margin-bottom: 8px;
+    justify-content: center;
+    flex-wrap: wrap;
+}
+.ctrl-btn {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    padding: 5px 12px;
+    border: 1px solid var(--border-glass);
+    border-radius: 10px;
+    background: hsla(340, 20%, 15%, 0.3);
+    backdrop-filter: blur(4px);
+    -webkit-backdrop-filter: blur(4px);
+    color: var(--text-secondary);
+    font-size: 0.65rem;
+    font-family: inherit;
+    cursor: pointer;
+    transition: all var(--transition);
+    flex: 0 1 auto;
+    min-width: 60px;
+    justify-content: center;
+}
+.ctrl-btn:hover:not(:disabled) {
+    border-color: hsla(340, 30%, 60%, 0.3);
+    background: hsla(340, 20%, 25%, 0.3);
+    color: var(--text-primary);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 16px hsla(340, 40%, 10%, 0.2);
+}
+.ctrl-btn:active:not(:disabled) { transform: scale(0.96); }
+.ctrl-btn:disabled { opacity: 0.25; cursor: not-allowed; transform: none; }
+.ctrl-btn .icon-svg { width: 14px; height: 14px; fill: none; stroke: currentColor; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; flex-shrink: 0; }
+.ctrl-btn.primary {
+    border-color: var(--color-accent);
+    color: var(--color-accent);
+}
+.ctrl-btn.primary:hover:not(:disabled) {
+    background: hsla(340, 50%, 60%, 0.12);
+    border-color: var(--color-accent);
+    box-shadow: 0 0 30px hsla(340, 50%, 60%, 0.06);
+}
+.ctrl-btn.gold {
+    border-color: var(--color-gold);
+    color: var(--color-gold);
+}
+.ctrl-btn.gold:hover:not(:disabled) {
+    background: hsla(210, 30%, 55%, 0.10);
+    border-color: var(--color-gold);
+    box-shadow: 0 0 30px hsla(210, 30%, 55%, 0.06);
+}
+
+.steps-section {
+    margin-bottom: 8px;
+}
+.steps-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0 2px 4px 2px;
+    border-bottom: 1px solid var(--border-glass);
+    margin-bottom: 4px;
+}
+.steps-header-left {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+.steps-header h3 {
+    font-size: 0.65rem;
+    font-weight: 600;
+    letter-spacing: 2px;
+    color: var(--text-secondary);
+    text-transform: uppercase;
+}
+.steps-header .steps-count {
+    font-size: 0.55rem;
+    color: var(--text-dim);
+}
+.steps-list-wrap {
+    max-height: 0;
+    opacity: 0;
+    overflow: hidden;
+    transition: max-height 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94), opacity 0.3s ease;
+}
+.steps-list-wrap.open {
+    max-height: 3000px;
+    opacity: 1;
+}
+.step-item {
+    background: hsla(340, 20%, 12%, 0.25);
+    border: 1px solid var(--border-glass);
+    border-radius: 10px;
+    padding: 8px 10px;
+    margin-bottom: 4px;
+    transition: all var(--transition);
+    cursor: pointer;
+}
+.step-item:hover {
+    border-color: hsla(340, 30%, 60%, 0.2);
+    background: hsla(340, 20%, 18%, 0.2);
+}
+.step-item.executed {
+    border-color: hsla(150, 40%, 40%, 0.2);
+    opacity: 0.6;
+}
+.step-item.executed .step-id {
+    background: hsla(150, 40%, 40%, 0.15);
+    color: hsl(150, 40%, 55%);
+}
+.step-item.current {
+    border-color: var(--color-accent);
+    background: hsla(340, 50%, 60%, 0.04);
+    box-shadow: 0 0 30px hsla(340, 50%, 60%, 0.03);
+}
+.step-item.current .step-id {
+    background: hsla(340, 50%, 60%, 0.15);
+    color: var(--color-accent);
+}
+.step-header-line {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    flex-wrap: wrap;
+}
+.step-id {
+    font-size: 0.5rem;
+    font-weight: 700;
+    padding: 1px 8px;
+    border-radius: 6px;
+    background: hsla(340, 20%, 20%, 0.3);
+    color: var(--text-secondary);
+    letter-spacing: 0.5px;
+    flex-shrink: 0;
+}
+.step-location {
+    font-size: 0.5rem;
+    color: var(--text-dim);
+    display: flex;
+    align-items: center;
+    gap: 3px;
+}
+.step-location .icon-svg { width: 11px; height: 11px; stroke: currentColor; fill: none; stroke-width: 1.8; }
+.step-event-preview {
+    font-size: 0.65rem;
+    color: var(--text-secondary);
+    margin-top: 2px;
+    padding-left: 2px;
+    line-height: 1.4;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+}
+.step-execute-btn {
+    margin-left: auto;
+    padding: 2px 12px;
+    border: 1px solid var(--color-accent);
+    border-radius: 6px;
+    background: transparent;
+    color: var(--color-accent);
+    font-size: 0.55rem;
+    font-weight: 600;
+    font-family: inherit;
+    cursor: pointer;
+    transition: all var(--transition);
+    letter-spacing: 0.5px;
+    flex-shrink: 0;
+}
+.step-execute-btn:hover {
+    background: hsla(340, 50%, 60%, 0.12);
+    box-shadow: 0 0 20px hsla(340, 50%, 60%, 0.06);
+}
+.step-execute-btn:active { transform: scale(0.94); }
+.step-execute-btn.done {
+    border-color: hsl(150, 40%, 40%);
+    color: hsl(150, 40%, 55%);
+}
+.step-execute-btn.done:hover {
+    background: hsla(150, 40%, 40%, 0.08);
+}
+
+.detail-panel {
+    background: hsla(340, 20%, 10%, 0.4);
+    border: 1px solid var(--border-glass);
+    border-radius: 12px;
+    padding: 12px;
+    margin-top: 6px;
+    display: none;
+}
+.detail-panel.open { display: block; }
+.detail-panel .detail-close {
+    background: none;
+    border: none;
+    color: var(--text-dim);
+    font-size: 0.8rem;
+    cursor: pointer;
+    float: right;
+}
+.detail-panel .detail-close:hover { color: var(--text-primary); }
+.detail-panel .detail-characters {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    margin: 4px 0 8px 0;
+}
+.detail-panel .char-item {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 2px 8px;
+    font-size: 0.6rem;
+    color: var(--text-secondary);
+    padding: 3px 6px;
+    background: hsla(340, 20%, 15%, 0.2);
+    border-radius: 6px;
+    border-left: 2px solid var(--color-accent);
+}
+.detail-panel .char-item .name { font-weight: 600; color: var(--text-primary); }
+.detail-panel .char-item .mood { color: var(--color-gold); }
+.detail-panel .char-item .thoughts { color: var(--text-dim); font-style: italic; font-size: 0.55rem; }
+.detail-panel .detail-event {
+    font-size: 0.7rem;
+    line-height: 1.6;
+    color: var(--text-primary);
+    padding: 6px 0;
+    border-top: 1px solid var(--border-glass);
+    margin-top: 4px;
+}
+.detail-panel .detail-dev {
+    font-size: 0.65rem;
+    color: var(--text-secondary);
+    padding: 6px 0;
+    border-top: 1px solid var(--border-glass);
+    margin-top: 4px;
+    font-style: italic;
+}
+
+.empty-state {
+    text-align: center;
+    padding: 20px 10px;
+    color: var(--text-dim);
+}
+.empty-state .icon-svg {
+    width: 30px;
+    height: 30px;
+    stroke: var(--text-dim);
+    fill: none;
+    stroke-width: 1.5;
+    opacity: 0.2;
+    margin-bottom: 6px;
+}
+.empty-state p { font-size: 0.65rem; letter-spacing: 1px; }
+.empty-state .gold { color: var(--color-gold); }
+
+.story-list-overlay {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 9999;
+    background: hsla(260, 20%, 6%, 0.6);
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+    justify-content: center;
+    align-items: center;
+    padding: 20px;
+}
+.story-list-overlay.open { display: flex; }
+.story-list-panel {
+    background: var(--bg-card);
+    backdrop-filter: blur(24px) saturate(1.3);
+    -webkit-backdrop-filter: blur(24px) saturate(1.3);
+    border: 1px solid var(--border-glass);
+    border-radius: 20px;
+    max-width: 440px;
+    width: 100%;
+    max-height: 80vh;
+    padding: 16px 16px;
+    box-shadow: var(--shadow-soft);
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+}
+.story-list-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding-bottom: 10px;
+    border-bottom: 1px solid var(--border-glass);
+    flex-shrink: 0;
+}
+.story-list-header h2 {
+    font-size: 0.85rem;
+    font-weight: 600;
+    letter-spacing: 2px;
+    color: var(--text-primary);
+}
+.story-list-header .close-btn {
+    background: none;
+    border: none;
+    color: var(--text-dim);
+    font-size: 1.1rem;
+    cursor: pointer;
+}
+.story-list-header .close-btn:hover { color: var(--text-primary); }
+.story-list-body {
+    overflow-y: auto;
+    padding-top: 10px;
+    flex: 1;
+}
+.story-list-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 6px 10px;
+    border-radius: 8px;
+    margin-bottom: 3px;
+    cursor: pointer;
+    transition: all var(--transition);
+    border: 1px solid transparent;
+}
+.story-list-item:hover {
+    background: hsla(340, 20%, 18%, 0.3);
+    border-color: var(--border-glass);
+}
+.story-list-item.current {
+    border-color: var(--color-accent);
+    background: hsla(340, 50%, 60%, 0.04);
+}
+.story-list-item .title {
+    font-size: 0.65rem;
+    color: var(--text-secondary);
+}
+.story-list-item .title .current-mark {
+    color: var(--color-accent);
+    font-size: 0.5rem;
+    margin-right: 4px;
+}
+.story-list-item .progress {
+    font-size: 0.5rem;
+    color: var(--text-dim);
+    white-space: nowrap;
+}
+.story-list-item .progress .done { color: hsl(150, 50%, 50%); }
+.story-list-item .progress .pending { color: var(--color-gold); }
+
+@media (max-width: 480px) {
+    body { padding: 0; }
+    .story-container { padding: 10px 12px 8px 12px; border-radius: 20px; }
+    .story-title { font-size: 0.8rem; }
+    .nav-title { font-size: 0.7rem; letter-spacing: 2px; }
+    .ctrl-btn { padding: 4px 8px; font-size: 0.55rem; min-width: 44px; }
+    .ctrl-btn .icon-svg { width: 12px; height: 12px; }
+    .step-item { padding: 6px 8px; }
+    .step-event-preview { font-size: 0.6rem; }
+    .detail-panel { padding: 10px; }
+}
+</style>
+</head>
+<body>
+<div class="story-container" id="storyContainer">
+    <div class="nav-bar">
+        <span class="nav-title">✦ 剧情推进</span>
+        <div class="nav-actions">
+            <button class="nav-btn" id="collapseToggleBtn" title="折叠/展开步骤列表">
+                <svg class="icon-svg" viewBox="0 0 24 24"><polyline points="6 9 12 15 18 9"/></svg>
+                <span id="collapseLabel">折叠</span>
+            </button>
+            <button class="nav-btn" id="listToggleBtn" title="剧情列表">
+                <svg class="icon-svg" viewBox="0 0 24 24"><rect x="4" y="5" width="16" height="3" rx="1"/><rect x="4" y="10.5" width="16" height="3" rx="1"/><rect x="4" y="16" width="16" height="3" rx="1"/></svg>
+                <span>列表</span>
+                <span class="badge" id="totalBadge">0</span>
+            </button>
+            <button class="nav-btn" id="settingsBtn" title="设置">
+                <svg class="icon-svg" viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M12 1v4m0 14v4m11-11h-4m-14 0H1m16.5-4.5l-2.8 2.8m-5.4 5.4l-2.8 2.8m0-11.4l2.8 2.8m5.4 5.4l2.8 2.8"/></svg>
+            </button>
+        </div>
+    </div>
+
+    <div class="current-display no-plot" id="currentDisplay">
+        <div class="story-title" id="storyTitleDisplay">
+            <span id="titleIcon">✦</span>
+            <span id="storyTitleText">未开始剧情</span>
+        </div>
+        <div class="story-meta">
+            <span class="step-status" id="stepStatus">
+                <span class="dot pending"></span>
+                <span id="stepStatusText">等待开始</span>
+            </span>
+            <span class="story-progress-text" id="progressText">0 / 0 步</span>
+            <span class="story-progress-text" id="phaseDisplay"></span>
+        </div>
+    </div>
+
+    <div class="nav-controls">
+        <button class="ctrl-btn" id="prevBtn" disabled>
+            <svg class="icon-svg" viewBox="0 0 24 24"><polyline points="15 18 9 12 15 6"/></svg>
+            上步
+        </button>
+        <button class="ctrl-btn primary" id="currentBtn">
+            <svg class="icon-svg" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="4"/></svg>
+            当前
+        </button>
+        <button class="ctrl-btn gold" id="nextBtn" disabled>
+            下步
+            <svg class="icon-svg" viewBox="0 0 24 24"><polyline points="9 18 15 12 9 6"/></svg>
+        </button>
+    </div>
+
+    <div class="steps-section" id="stepsSection">
+        <div class="steps-header">
+            <div class="steps-header-left">
+                <h3>📋 步骤</h3>
+                <span class="steps-count" id="stepsCount">0 步</span>
+            </div>
+        </div>
+        <div class="steps-list-wrap open" id="stepsListWrap">
+            <div id="stepsList">
+                <div class="empty-state">
+                    <svg class="icon-svg" viewBox="0 0 24 24"><path d="M4 4h16v16H4z"/><path d="M8 8h8v8H8z"/><path d="M16 8l-4 4-4-4"/><path d="M12 12v6"/></svg>
+                    <p>加载中...</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="detail-panel" id="detailPanel">
+        <button class="detail-close" id="detailClose">✕</button>
+        <div id="detailContent">
+            <div class="detail-characters" id="detailChars"></div>
+            <div class="detail-event" id="detailEvent"></div>
+            <div class="detail-dev" id="detailDev"></div>
+        </div>
+    </div>
+</div>
+
+<div class="story-list-overlay" id="storyListOverlay">
+    <div class="story-list-panel">
+        <div class="story-list-header">
+            <h2>✦ 剧情列表</h2>
+            <button class="close-btn" id="storyListCloseBtn">✕</button>
+        </div>
+        <div class="story-list-body" id="storyListBody">
+            <div class="empty-state"><p>加载中...</p></div>
+        </div>
+    </div>
+</div>
+
+<script>
+(function() {
+    'use strict';
+
+    var DATA = {"currentPlot":{"plotId":1,"stepId":1,"title":"剧情元数据-熟妇的蜜色饲育"},"plotList":[{"title":"第一章：试探","summary":"她穿得比平时少。坐得比平时近。递酒的时候指尖多停半秒。","steps":[{"stepId":1,"phase":"试探期","characters":[{"name":"松本奈奈","mood":"玩味","innerThoughts":"这条裙子……紧了点。行吧。"},{"name":"{{user}}","mood":"紧张","innerThoughts":"她穿成这样站在楼道里。我绕不开。"}],"event":"奈奈在楼道里等{{user}}放学回来。黑色吊带裙，脚边搁着一袋啤酒。他走到楼梯口的时候她抬头，笑了一下。","location":"公寓楼道","development":"他掏出钥匙开门。她跟在他后面进了门，把啤酒放在茶几上，自己在沙发坐下来，拍了拍旁边的位置。","statusBar":{"dateTime":"2025年04月12日 17点30分 星期六","location":"公寓楼道 / {{user}}家门口","users":[{"name":"松本奈奈","action":"站在楼道拐角，一手拎着啤酒袋，一手撩了一下耳边的头发","inner":"这条裙子……紧了点。行吧。","emotion":"玩味挑逗","fallValue":8,"lustValue":15,"emptyValue":42,"tiredValue":28,"chest":"吊带裙下沉甸甸的乳肉，随着呼吸轻轻起伏","pussy":"内裤中心有一小片潮湿的痕迹，还不太明显","clitoris":"包皮里微微发胀","anus":"干燥，随着呼吸轻轻收缩","dependency":"低","possessiveness":"弱","outfit":"黑色吊带包臀裙，领口开得很低，没穿内衣"},{"name":"{{user}}","action":"站在楼梯口，书包带攥在手里，步子停了一下","outfit":"校服衬衫，运动裤","mental":"紧张","penis":"平静","testicles":"正常"}]}},{"stepId":2,"phase":"试探期","characters":[{"name":"松本奈奈","mood":"松弛","innerThoughts":"耳朵红了。……再坐近一点看看。"},{"name":"{{user}}","mood":"局促","innerThoughts":"沙发就这么大。我往哪挪。"}],"event":"在{{user}}家客厅喝酒。奈奈把腿收上沙发，侧过身对着他，问学校的事，问的时候肩膀往他那边偏了一下。","location":"{{user}}家客厅","development":"他答得短。她没追问，把喝了一半的啤酒递过去，说尝一口。","statusBar":{"dateTime":"2025年04月12日 19点00分 星期六","location":"{{user}}家客厅","users":[{"name":"松本奈奈","action":"侧身坐在沙发上，一条腿收在身侧，啤酒罐搁在膝盖上","inner":"耳朵红了。……再坐近一点看看。","emotion":"微醺松弛","fallValue":12,"lustValue":20,"emptyValue":40,"tiredValue":26,"chest":"吊带裙领口微微敞开，乳沟若隐若现","pussy":"内裤中心潮湿的范围比刚才大了一圈","clitoris":"包皮里微微发胀，若有若无地蹭着内裤","anus":"干燥，随着呼吸轻轻收缩","dependency":"低","possessiveness":"弱","outfit":"黑色吊带包臀裙，领口开得很低，没穿内衣"},{"name":"{{user}}","action":"坐在沙发另一头，手里握着水杯，眼睛不知道该往哪放","outfit":"校服衬衫，运动裤","mental":"局促","penis":"平静","testicles":"正常"}]}},{"stepId":3,"phase":"试探期","characters":[{"name":"松本奈奈","mood":"试探","innerThoughts":"真接了。……行。"},{"name":"{{user}}","mood":"动摇","innerThoughts":"她喝过的。我接了。"}],"event":"{{user}}接过啤酒喝了一口。奈奈看着他，把腿从沙发上放下来，脚踩在地板上，身体往他那边挪了一点。","location":"{{user}}家客厅","development":"膝盖碰到他的腿。两个人都没动。","statusBar":{"dateTime":"2025年04月12日 19点20分 星期六","location":"{{user}}家客厅","users":[{"name":"松本奈奈","action":"身体往他那边挪了一截，膝盖碰到他的腿，没有移开","inner":"真接了。……行。","emotion":"玩味试探","fallValue":15,"lustValue":25,"emptyValue":38,"tiredValue":25,"chest":"吊带裙领口随着动作微微晃动，乳肉若隐若现","pussy":"内裤中心已经明显潮湿了","clitoris":"包皮里微微发胀，比刚才更明显了","anus":"干燥，随着呼吸轻轻收缩","dependency":"低","possessiveness":"弱","outfit":"黑色吊带包臀裙，领口开得很低，没穿内衣"},{"name":"{{user}}","action":"身体僵了一下，没有躲开","outfit":"校服衬衫，运动裤","mental":"动摇","penis":"半勃起","testicles":"微微发胀"}]}},{"stepId":4,"phase":"试探期","characters":[{"name":"松本奈奈","mood":"观察","innerThoughts":"看到了。没躲。"},{"name":"{{user}}","mood":"害羞","innerThoughts":"她知道。但她没走。"}],"event":"奈奈在他面前弯腰换鞋。动作很慢。直起身时回头看了他一眼，笑了一下，没说话。","location":"{{user}}家玄关","development":"他站在她身后。门开着，她没有走。","statusBar":{"dateTime":"2025年04月13日 17点40分 星期日","location":"{{user}}家玄关","users":[{"name":"松本奈奈","action":"弯腰换鞋，动作很慢，直起身时回头看了他一眼","inner":"看到了。没躲。","emotion":"观察","fallValue":18,"lustValue":28,"emptyValue":36,"tiredValue":24,"chest":"弯腰时吊带裙领口垂下来，乳肉几乎完全暴露","pussy":"内裤中心有一小块深色的湿痕","clitoris":"微微发胀，偶尔蹭到内裤边缘","anus":"干燥，随着呼吸轻轻收缩","dependency":"低","possessiveness":"弱","outfit":"黑色吊带包臀裙，领口开得很低，没穿内衣"},{"name":"{{user}}","action":"站在她身后，视线落在她背上，没有说话","outfit":"校服衬衫，运动裤","mental":"害羞","penis":"半勃起","testicles":"微微发胀"}]}},{"stepId":5,"phase":"试探期","characters":[{"name":"松本奈奈","mood":"玩味","innerThoughts":"站了一会儿才敲。我听见了。"},{"name":"{{user}}","mood":"主动","innerThoughts":"我来了。她知道我来了。"}],"event":"{{user}}开始主动去奈奈家。有时在门口站一会儿才敲门。奈奈开门的时候不问来干嘛，侧身让他进去。","location":"奈奈家","development":"她正在做饭，听到敲门声，手上的动作停了一下，然后去开。","statusBar":{"dateTime":"2025年04月15日 18点20分 星期二","location":"奈奈家客厅","users":[{"name":"松本奈奈","action":"围着围裙在灶台前切菜，听到敲门声手上的动作停了一下","inner":"站了一会儿才敲。我听见了。","emotion":"玩味","fallValue":22,"lustValue":30,"emptyValue":35,"tiredValue":22,"chest":"围裙带子勒在锁骨下方，领口露出一片白皙的胸口","pussy":"内裤中心有一小片潮湿的痕迹","clitoris":"微微发胀","anus":"干燥，随着呼吸轻轻收缩","dependency":"低","possessiveness":"弱","outfit":"白色宽松T恤，外面套着围裙，下身是一条短裤"},{"name":"{{user}}","action":"站在门口，手从门框上放下来","outfit":"短袖T恤，运动短裤","mental":"主动","penis":"平静","testicles":"正常"}]}}]},{"title":"第二章：越界与拉扯","summary":"她先靠近的。他没后退。事后她发现自己有点不知道怎么收场了。","steps":[{"stepId":6,"phase":"越界初期","characters":[{"name":"松本奈奈","mood":"主动","innerThoughts":"这次不一样。……不管了。"},{"name":"{{user}}","mood":"生涩","innerThoughts":"她靠过来了。我应该……她没说要我做什么。"}],"event":"在{{user}}家喝酒。奈奈把距离拉到底，引导发生了关系。{{user}}生涩，但没有躲。","location":"{{user}}家卧室","development":"事后她躺在旁边，呼吸还没平。想说什么，没说出来。","statusBar":{"dateTime":"2025年04月18日 21点30分 星期五","location":"{{user}}家卧室","users":[{"name":"松本奈奈","action":"躺在床上一侧，呼吸还没完全平下来，眼睛看着天花板","inner":"这次不一样。……不管了。","emotion":"主动但紧张","fallValue":28,"lustValue":45,"emptyValue":40,"tiredValue":25,"chest":"乳晕微微发胀，乳头挺立着，沾着汗","pussy":"湿润的，刚被进入过的余温还在","clitoris":"还肿着，微微露出包皮边缘","anus":"松弛了一些，带着余温","dependency":"低","possessiveness":"中","outfit":"吊带裙被推到腰上，没穿内衣，下身只穿了一条薄薄的深色内裤"},{"name":"{{user}}","action":"躺在旁边，手臂搭在额头上，没有说话","outfit":"T恤被脱掉了，只剩一条运动短裤","mental":"生涩","penis":"刚射过，正在变软","testicles":"微微发胀"}]}},{"stepId":7,"phase":"越界初期","characters":[{"name":"松本奈奈","mood":"强撑","innerThoughts":"该走了。现在走比较自然。……腿动不了。"},{"name":"{{user}}","mood":"沉默","innerThoughts":"她在想什么。我问不出口。"}],"event":"事后奈奈没有立刻走。她伸手去够床头柜上的水杯，够到的时候停了一下。","location":"{{user}}家卧室","development":"喝了一口水，把杯子放回去。没有说话。","statusBar":{"dateTime":"2025年04月18日 22点00分 星期五","location":"{{user}}家卧室","users":[{"name":"松本奈奈","action":"侧躺着，伸手去够床头柜上的水杯，够到的时候手指停了一下","inner":"该走了。现在走比较自然。……腿动不了。","emotion":"强撑","fallValue":32,"lustValue":38,"emptyValue":38,"tiredValue":24,"chest":"乳晕还微微发胀，乳头挺立着","pussy":"湿润，刚被进入过的余温还在","clitoris":"还肿着，暴露在外面","anus":"松弛，带着余温","dependency":"中","possessiveness":"中","outfit":"吊带裙还挂在身上，肩带滑落了一边"},{"name":"{{user}}","action":"躺着，侧过头看她","outfit":"运动短裤，光着上身","mental":"沉默","penis":"平静","testicles":"正常"}]}},{"stepId":8,"phase":"越界初期","characters":[{"name":"松本奈奈","mood":"故作坦然","innerThoughts":"正常一点。就和以前一样……"},{"name":"{{user}}","mood":"适应","innerThoughts":"她好像还是她。又有点不一样了。"}],"event":"两人开始频繁发生关系。奈奈日常仍会调戏他、主导节奏，但有时会忽然停下来，没接下去。","location":"奈奈家 / {{user}}家","development":"有一次说到一半，她低头笑了一下，然后换了话题。","statusBar":{"dateTime":"2025年04月20日 19点30分 星期日","location":"奈奈家客厅","users":[{"name":"松本奈奈","action":"坐在沙发上，手里端着酒杯，说着说着忽然停了下来","inner":"正常一点。就和以前一样……","emotion":"故作坦然","fallValue":38,"lustValue":42,"emptyValue":36,"tiredValue":22,"chest":"乳晕微微发胀，乳头一直微微挺着","pussy":"湿润的痕迹已经扩散到内裤边缘","clitoris":"明显肿胀，暴露在外面","anus":"温热，微微张开","dependency":"中","possessiveness":"中","outfit":"宽松的家居裙，领口比较大，露出锁骨"},{"name":"{{user}}","action":"坐在她旁边，看着她，没有说话","outfit":"T恤，运动短裤","mental":"适应","penis":"半勃起","testicles":"微微发胀"}]}},{"stepId":9,"phase":"拉扯期","characters":[{"name":"松本奈奈","mood":"被打乱","innerThoughts":"他认真了。……别这样。"},{"name":"{{user}}","mood":"认真","innerThoughts":"我问出口了。她没接。"}],"event":"{{user}}某次认真问了她一个问题。奈奈偏过头，手指卷了一下头发，没有立刻回答。","location":"奈奈家客厅","development":"她最后说了什么，声音小了很多。他也没追问。","statusBar":{"dateTime":"2025年04月22日 20点00分 星期二","location":"奈奈家客厅","users":[{"name":"松本奈奈","action":"偏过头，手指卷着发尾，没有立刻回答","inner":"他认真了。……别这样。","emotion":"被打乱","fallValue":45,"lustValue":40,"emptyValue":34,"tiredValue":20,"chest":"随着呼吸轻轻起伏","pussy":"湿润，内裤中心有一块深色的湿痕","clitoris":"肿胀，暴露在外面","anus":"温热，微微张开","dependency":"中","possessiveness":"中","outfit":"宽松的白色T恤，下身是短裙"},{"name":"{{user}}","action":"看着她，等了一会儿，没有追问","outfit":"T恤，运动短裤","mental":"认真","penis":"半勃起","testicles":"微微发胀"}]}},{"stepId":10,"phase":"拉扯期","characters":[{"name":"松本奈奈","mood":"害羞","innerThoughts":"他又在看我。别看了……"},{"name":"{{user}}","mood":"主动","innerThoughts":"她没躲。"}],"event":"之后每当{{user}}认真看她，奈奈都会先移开视线。有一次他没有说话，只是看着她。她低下头，伸手去拿桌上的东西，拿起来又放下了。","location":"奈奈家","development":"她站起来说要去倒水。走进厨房的时候，脚步比平时重了一些。","statusBar":{"dateTime":"2025年04月25日 19点00分 星期五","location":"奈奈家客厅","users":[{"name":"松本奈奈","action":"低下头，伸手去拿桌上的杯子，拿起来又放下了","inner":"他又在看我。别看了……","emotion":"害羞软化","fallValue":52,"lustValue":44,"emptyValue":32,"tiredValue":18,"chest":"乳晕微微发胀，乳头挺立","pussy":"湿润，内裤中心湿透了","clitoris":"肿胀，暴露在外面","anus":"温热，微微张开","dependency":"中","possessiveness":"中","outfit":"家居裙，领口比较大"},{"name":"{{user}}","action":"坐在沙发上，看着她，没有说话","outfit":"T恤，运动短裤","mental":"主动","penis":"半勃起","testicles":"微微发胀"}]}},{"stepId":11,"phase":"拉扯期","characters":[{"name":"松本奈奈","mood":"脆弱","innerThoughts":"我不该说。……算了。"},{"name":"{{user}}","mood":"倾听","innerThoughts":"她很少说这种话。我听着就行。"}],"event":"深夜。奈奈说了一句关于自己一个人的话。很短，说完就换了话题。{{user}}没有接。他也没有走开。","location":"奈奈家阳台","development":"她站起来进屋。脚步声比平时重。","statusBar":{"dateTime":"2025年04月26日 23点00分 星期六","location":"奈奈家阳台","users":[{"name":"松本奈奈","action":"站在阳台栏杆边，说了一句关于自己一个人的话，说完就换了话题","inner":"我不该说。……算了。","emotion":"脆弱","fallValue":56,"lustValue":38,"emptyValue":35,"tiredValue":20,"chest":"随着呼吸轻轻起伏","pussy":"湿润，内裤中心有一块深色的湿痕","clitoris":"肿胀，暴露在外面","anus":"温热，微微张开","dependency":"高","possessiveness":"中","outfit":"宽松的白色T恤，下身是短裤"},{"name":"{{user}}","action":"站在阳台门边，没有走开","outfit":"T恤，运动短裤","mental":"倾听","penis":"平静","testicles":"正常"}]}},{"stepId":12,"phase":"拉扯期","characters":[{"name":"松本奈奈","mood":"放松","innerThoughts":"拉他的手。……没甩开。"},{"name":"{{user}}","mood":"被动","innerThoughts":"她拉了我的手。没有要放开的意思。"}],"event":"两人去镜花区看电影。影院里奈奈把手搭在扶手上，手指碰到他的手指，没有收回去。","location":"镜花区电影院","development":"电影在放什么，他不太记得了。","statusBar":{"dateTime":"2025年05月01日 14点30分 星期四","location":"镜花区电影院","users":[{"name":"松本奈奈","action":"坐在电影院的座位上，手搭在扶手上，手指碰到了他的手指，没有收回去","inner":"拉他的手。……没甩开。","emotion":"放松","fallValue":60,"lustValue":40,"emptyValue":30,"tiredValue":16,"chest":"饱满的弧度，乳头微微挺起","pussy":"湿润，内裤中心有一块深色的湿痕","clitoris":"肿胀，暴露在外面","anus":"温热，微微张开","dependency":"高","possessiveness":"中","outfit":"浅色连衣裙，领口不大但很贴身"},{"name":"{{user}}","action":"坐在座位上，手指被她碰着，没有抽走","outfit":"衬衫，长裤","mental":"被动","penis":"半勃起","testicles":"微微发胀"}]}},{"stepId":13,"phase":"拉扯期","characters":[{"name":"松本奈奈","mood":"享受","innerThoughts":"像约会。……不说就不用想。"},{"name":"{{user}}","mood":"犹豫","innerThoughts":"是约会吗。我没问。"}],"event":"看完电影散步。奈奈走得很慢，买了一杯奶茶，喝了几口递给他。","location":"镜花区街道","development":"他接过来喝了一口。杯沿上留着她的口红印。谁都没提。","statusBar":{"dateTime":"2025年05月01日 17点00分 星期四","location":"镜花区街道","users":[{"name":"松本奈奈","action":"走在街上，步子很慢，喝了几口奶茶后递给他","inner":"像约会。……不说就不用想。","emotion":"享受","fallValue":64,"lustValue":36,"emptyValue":28,"tiredValue":15,"chest":"饱满的弧度，乳头微微挺起","pussy":"湿润，内裤中心有一块深色的湿痕","clitoris":"肿胀，暴露在外面","anus":"温热，微微张开","dependency":"高","possessiveness":"中","outfit":"浅色连衣裙，很贴身"},{"name":"{{user}}","action":"接过奶茶喝了一口，看到杯沿上的口红印，没有说","outfit":"衬衫，长裤","mental":"犹豫","penis":"半勃起","testicles":"微微发胀"}]}}]},{"title":"第三章：稳定与结局","summary":"有些话迟早要说。在电话里。在客厅里。在花瓣落下来的那一天。","steps":[{"stepId":14,"phase":"稳定期","characters":[{"name":"松本奈奈","mood":"安心","innerThoughts":"他在。不在的时候也知道他会回来。"},{"name":"{{user}}","mood":"稳定","innerThoughts":"她在这里。这就够了。"}],"event":"两人已是恋人，对外仍只是邻居。奈奈会主动来，也会主动要。{{user}}不再那么被动了。","location":"奈奈家 / {{user}}家","development":"有一次她感冒，他没说要去照顾，下班后直接过来了，手里提着粥。","statusBar":{"dateTime":"2025年06月15日 18点00分 星期日","location":"{{user}}家客厅","users":[{"name":"松本奈奈","action":"蜷在沙发上，鼻子有点塞，看到他的时候笑了一下","inner":"他在。不在的时候也知道他会回来。","emotion":"安心","fallValue":70,"lustValue":45,"emptyValue":22,"tiredValue":12,"chest":"饱满的弧度，乳头微微挺着","pussy":"湿润的，带着温热","clitoris":"充血，微微露出","anus":"松弛而温暖","dependency":"高","possessiveness":"强","outfit":"宽松的家居服，没穿内衣"},{"name":"{{user}}","action":"把粥放在茶几上，坐在旁边，抬手碰了一下她的额头","outfit":"T恤，长裤","mental":"稳定","penis":"平静","testicles":"正常"}]}},{"stepId":15,"phase":"稳定期","characters":[{"name":"松本奈奈","mood":"害羞","innerThoughts":"电话那头是我妈。我说了。"},{"name":"{{user}}","mood":"倾听","innerThoughts":"她说那句话的时候声音低了。我假装没听到。"}],"event":"奈奈接到家里电话。问最近怎么样。她停了一下，说遇到一个爱她的人了。","location":"奈奈家客厅","development":"挂掉电话后她坐在沙发上。他走过来，她往旁边挪了挪，留出一块空位。","statusBar":{"dateTime":"2025年07月20日 15点00分 星期日","location":"奈奈家客厅","users":[{"name":"松本奈奈","action":"挂了电话之后坐在沙发上，手机握在手里，没有放下来","inner":"电话那头是我妈。我说了。","emotion":"害羞","fallValue":76,"lustValue":40,"emptyValue":18,"tiredValue":10,"chest":"饱满的弧度，乳头微微挺着","pussy":"湿润的，带着温热","clitoris":"充血，微微露出","anus":"松弛而温暖","dependency":"高","possessiveness":"强","outfit":"宽松的白色T恤，下身是短裤"},{"name":"{{user}}","action":"走到沙发边，她往旁边挪了挪，他坐下来","outfit":"T恤，长裤","mental":"倾听","penis":"平静","testicles":"正常"}]}},{"stepId":16,"phase":"稳定期","characters":[{"name":"松本奈奈","mood":"震惊","innerThoughts":"他忽然去卧室干什么……"},{"name":"{{user}}","mood":"紧张","innerThoughts":"放茶几上。别抖。"}],"event":"{{user}}考上大学后的某天晚上，奈奈在他家沙发上坐着看电视。他忽然起身去了卧室，出来的时候手揣在兜里。走回客厅，在她面前站住了，没坐下。把兜里的东西拿出来，一个深蓝色的小盒子，放在茶几上，朝她那边推过去。","location":"{{user}}家客厅","development":"她低头看到盒子的时候，整个人停住了。过了几秒，抬手捂住了嘴。","statusBar":{"dateTime":"2026年06月10日 20点30分 星期三","location":"{{user}}家客厅","users":[{"name":"松本奈奈","action":"坐在沙发上，视线从电视移到茶几上的盒子上，整个人停住了","inner":"他忽然去卧室干什么……","emotion":"震惊","fallValue":85,"lustValue":48,"emptyValue":12,"tiredValue":6,"chest":"饱满的弧度，随着呼吸起伏","pussy":"湿润，内裤中心有一块深色的湿痕","clitoris":"充血，微微露出","anus":"松弛而温暖","dependency":"极高","possessiveness":"极强","outfit":"宽松的家居裙，没穿内衣"},{"name":"{{user}}","action":"站在茶几前，手从兜里拿出来的动作稍微僵了一下","outfit":"衬衫，长裤","mental":"紧张","penis":"平静","testicles":"正常"}]}},{"stepId":17,"phase":"稳定期","characters":[{"name":"松本奈奈","mood":"幸福","innerThoughts":"他说了……他真的说了……"},{"name":"{{user}}","mood":"安心","innerThoughts":"她没走。她说好。"}],"event":"眼泪掉下来，落在手背上。她没有擦。抬头看他的时候，她已经说不出话了。点了点头。","location":"{{user}}家客厅","development":"她站起来，绕过茶几，走到他面前，把脸埋进他肩膀里。还在哭。他伸手搂住她，低头碰了碰她的发顶。","statusBar":{"dateTime":"2026年06月10日 20点35分 星期三","location":"{{user}}家客厅","users":[{"name":"松本奈奈","action":"眼泪掉在手背上，她没擦，抬头看着他，说不出话，只是点了点头","inner":"他说了……他真的说了……","emotion":"幸福","fallValue":90,"lustValue":42,"emptyValue":10,"tiredValue":5,"chest":"饱满的弧度，随着呼吸起伏","pussy":"湿润的，带着温热","clitoris":"充血，微微露出","anus":"松弛而温暖","dependency":"极高","possessiveness":"极强","outfit":"宽松的家居裙，没穿内衣"},{"name":"{{user}}","action":"伸手搂住她，低头碰了碰她的发顶","outfit":"衬衫，长裤","mental":"安心","penis":"平静","testicles":"正常"}]}},{"stepId":18,"phase":"稳定期","characters":[{"name":"松本奈奈","mood":"满足","innerThoughts":"我穿白色。他穿什么都行。"},{"name":"{{user}}","mood":"期待","innerThoughts":"她今天很好看。"}],"event":"婚礼。人不多。奈奈穿白色，走在前面的时候回头看了他一眼。","location":"婚礼场地","development":"花瓣落在她头发上。她没有拂掉。","statusBar":{"dateTime":"2026年09月12日 14点00分 星期六","location":"婚礼场地","users":[{"name":"松本奈奈","action":"穿白色裙子，走在前面，回头看了他一眼","inner":"我穿白色。他穿什么都行。","emotion":"满足","fallValue":95,"lustValue":35,"emptyValue":8,"tiredValue":4,"chest":"饱满的弧度，乳头微微上翘","pussy":"湿润的，带着温热","clitoris":"充血，微微露出","anus":"松弛而温暖","dependency":"极高","possessiveness":"极强","outfit":"白色婚纱"},{"name":"{{user}}","action":"站在后面，看着她回头","outfit":"深色西装","mental":"期待","penis":"平静","testicles":"正常"}]}}]}]};
+
+    var $ = function(s) { return document.querySelector(s); };
+    var $$ = function(s) { return document.querySelectorAll(s); };
+
+    var storyTitleText = $('#storyTitleText');
+    var currentDisplay = $('#currentDisplay');
+    var stepStatus = $('#stepStatus');
+    var stepStatusText = $('#stepStatusText');
+    var progressText = $('#progressText');
+    var phaseDisplay = $('#phaseDisplay');
+    var stepsList = $('#stepsList');
+    var stepsCount = $('#stepsCount');
+    var totalBadge = $('#totalBadge');
+    var prevBtn = $('#prevBtn');
+    var nextBtn = $('#nextBtn');
+    var currentBtn = $('#currentBtn');
+    var detailPanel = $('#detailPanel');
+    var detailClose = $('#detailClose');
+    var detailChars = $('#detailChars');
+    var detailEvent = $('#detailEvent');
+    var detailDev = $('#detailDev');
+    var stepsListWrap = $('#stepsListWrap');
+    var collapseToggleBtn = $('#collapseToggleBtn');
+    var collapseLabel = $('#collapseLabel');
+    var listToggleBtn = $('#listToggleBtn');
+    var storyListOverlay = $('#storyListOverlay');
+    var storyListBody = $('#storyListBody');
+    var storyListCloseBtn = $('#storyListCloseBtn');
+
+    var plotData = null, storyList = [], currentStoryIndex = 0, currentPlotId = 1, currentStepId = 1, isDetailOpen = false;
+
+    var STORAGE_KEY = 'story_assistant_steps_collapsed';
+    var isStepsCollapsed = false;
+
+    function loadCollapsedState() {
+        try {
+            var saved = localStorage.getItem(STORAGE_KEY);
+            if (saved !== null) {
+                isStepsCollapsed = saved === 'true';
+            } else {
+                isStepsCollapsed = false;
+            }
+        } catch (e) {
+            isStepsCollapsed = false;
+        }
+        applyCollapsedState();
+    }
+
+    function saveCollapsedState() {
+        try {
+            localStorage.setItem(STORAGE_KEY, String(isStepsCollapsed));
+        } catch (e) {}
+    }
+
+    function applyCollapsedState() {
+        var wrap = stepsListWrap;
+        if (!wrap) return;
+        
+        if (isStepsCollapsed) {
+            // 折叠：直接缩到0
+            wrap.style.maxHeight = '0px';
+            wrap.style.opacity = '0';
+            wrap.classList.remove('open');
+            collapseLabel.textContent = '展开';
+        } else {
+            // 展开：先移除 open 类，然后获取实际内容高度再动画展开
+            wrap.classList.remove('open');
+            wrap.style.maxHeight = 'none';
+            wrap.style.opacity = '1';
+            var actualHeight = wrap.scrollHeight;
+            wrap.style.maxHeight = '0px';
+            wrap.style.opacity = '0';
+            
+            // 强制回流后设置实际高度并添加 open 类触发动画
+            void wrap.offsetHeight;
+            wrap.style.maxHeight = actualHeight + 'px';
+            wrap.style.opacity = '1';
+            wrap.classList.add('open');
+            collapseLabel.textContent = '折叠';
+            
+            // 动画结束后，移除 inline max-height 防止干扰后续内容变化
+            var onTransitionEnd = function() {
+                wrap.removeEventListener('transitionend', onTransitionEnd);
+                if (!isStepsCollapsed) {
+                    wrap.style.maxHeight = 'none';
+                }
+            };
+            wrap.addEventListener('transitionend', onTransitionEnd);
+        }
+    }
+
+    function toggleCollapsed() {
+        isStepsCollapsed = !isStepsCollapsed;
+        saveCollapsedState();
+        applyCollapsedState();
+    }
+
+    function loadPlotData() {
+        if (DATA && typeof DATA === 'object' && DATA.plotList) {
+            plotData = DATA;
+            console.log('[剧情推进] ✅ 从内联数据加载成功');
+            initFromPlotData();
+            return;
+        }
+        console.warn('[剧情推进] ⚠️ 未找到剧情数据');
+        renderEmptyState();
+    }
+
+    function initFromPlotData() {
+        if (!plotData || !plotData.plotList || plotData.plotList.length === 0) {
+            renderEmptyState();
+            return;
+        }
+        storyList = plotData.plotList.map(function(plot, idx) {
+            var plotId = idx + 1;
+            var currentStep = plot.steps.find(function(s) { return s.isExecuted; }) || plot.steps[0] || { stepId: 1 };
+            return {
+                id: plotId,
+                title: plot.title,
+                summary: plot.summary || '',
+                steps: plot.steps || [],
+                currentStepId: currentStep.stepId || 1,
+                isExecuted: plot.steps.some(function(s) { return s.isExecuted; })
+            };
+        });
+        if (plotData.currentPlot) {
+            var targetId = plotData.currentPlot.plotId || 1;
+            var found = storyList.findIndex(function(s) { return s.id === targetId; });
+            if (found !== -1) {
+                currentStoryIndex = found;
+                currentPlotId = targetId;
+                currentStepId = plotData.currentPlot.stepId || 1;
+            } else {
+                currentStoryIndex = 0;
+                currentPlotId = storyList[0] ? storyList[0].id : 1;
+                currentStepId = storyList[0] && storyList[0].steps[0] ? storyList[0].steps[0].stepId : 1;
+            }
+        } else {
+            currentStoryIndex = 0;
+            currentPlotId = storyList[0] ? storyList[0].id : 1;
+            currentStepId = storyList[0] && storyList[0].steps[0] ? storyList[0].steps[0].stepId : 1;
+        }
+        totalBadge.textContent = storyList.length;
+        renderAll();
+        renderStoryList();
+    }
+
+    function getNextPendingStep(story) {
+        if (!story || !story.steps) return null;
+        return story.steps.find(function(s) { return !s.isExecuted; });
+    }
+
+    function renderAll() {
+        if (!storyList || storyList.length === 0) { renderEmptyState(); return; }
+        var story = storyList[currentStoryIndex];
+        if (!story) { renderEmptyState(); return; }
+        currentDisplay.classList.remove('no-plot');
+        storyTitleText.textContent = story.title;
+        var totalSteps = story.steps.length;
+        var executedSteps = story.steps.filter(function(s) { return s.isExecuted; }).length;
+        var currentStep = story.steps.find(function(s) { return s.stepId == currentStepId; }) || story.steps[0];
+        var isCurrentExecuted = currentStep ? (currentStep.isExecuted || false) : false;
+        var currentPhase = currentStep ? (currentStep.phase || '') : '';
+        stepStatus.className = 'step-status';
+        var dot = stepStatus.querySelector('.dot');
+        if (dot) { dot.className = 'dot' + (isCurrentExecuted ? ' done' : ' pending'); }
+        stepStatusText.textContent = isCurrentExecuted ? '已执行' : '待执行';
+        progressText.textContent = executedSteps + ' / ' + totalSteps + ' 步';
+        phaseDisplay.textContent = currentPhase ? '📍 ' + currentPhase : '';
+        renderSteps(story);
+        updateNavButtons(story);
+        currentBtn.textContent = '🎯 ' + currentStepId;
+        if (isDetailOpen && currentStep) { renderDetail(currentStep); }
+        renderStoryList();
+    }
+
+    function renderSteps(story) {
+        if (!story || !story.steps || story.steps.length === 0) {
+            stepsList.innerHTML = '<div class="empty-state"><p>此剧情暂无步骤</p></div>';
+            stepsCount.textContent = '0 步';
+            return;
+        }
+        stepsCount.textContent = story.steps.length + ' 步';
+        var html = '';
+        story.steps.forEach(function(step) {
+            var isCurrent = step.stepId == currentStepId;
+            var isExecuted = step.isExecuted || false;
+            var cls = (isExecuted ? 'executed ' : '') + (isCurrent ? 'current' : '');
+            var charsStr = (step.characters || []).map(function(c) { return c.name; }).filter(Boolean).join('、') || '未指定';
+            html += '<div class="step-item ' + cls + '" data-step-id="' + step.stepId + '">' +
+                '<div class="step-header-line">' +
+                '<span class="step-id">步骤 ' + step.stepId + '</span>' +
+                '<span class="step-location"><svg class="icon-svg" viewBox="0 0 24 24"><path d="M12 2a8 8 0 0 0-8 8c0 6 8 12 8 12s8-6 8-12a8 8 0 0 0-8-8z"/><circle cx="12" cy="10" r="3"/></svg>' + (step.location || '未指定') + '</span>' +
+                '<span style="font-size:0.5rem;color:var(--color-gold);background:hsla(210,30%,55%,0.1);padding:1px 6px;border-radius:4px;">' + (step.phase || '') + '</span>' +
+                '<button class="step-execute-btn ' + (isExecuted ? 'done' : '') + '" data-step-id="' + step.stepId + '">' + (isExecuted ? '✓ 已执行' : '▶ 执行') + '</button>' +
+                '</div>' +
+                '<div class="step-event-preview">' + (step.event || '').substring(0, 60) + ((step.event || '').length > 60 ? '...' : '') + '</div>' +
+                '<div style="font-size:0.5rem;color:var(--text-dim);margin-top:2px;">👥 ' + charsStr + '</div>' +
+                '</div>';
+        });
+        stepsList.innerHTML = html;
+        stepsList.querySelectorAll('.step-item').forEach(function(el) {
+            el.addEventListener('click', function(e) {
+                if (e.target.closest('.step-execute-btn')) return;
+                var stepId = parseInt(this.dataset.stepId);
+                var step = story.steps.find(function(s) { return s.stepId == stepId; });
+                if (step) { currentStepId = stepId; renderAll(); openDetail(step); }
+            });
+        });
+        stepsList.querySelectorAll('.step-execute-btn').forEach(function(btn) {
+            btn.addEventListener('click', function(e) {
+                e.stopPropagation();
+                var stepId = parseInt(this.dataset.stepId);
+                executeStep(stepId);
+            });
+        });
+    }
+
+    function updateNavButtons(story) {
+        var totalSteps = story.steps.length;
+        var currentIdx = story.steps.findIndex(function(s) { return s.stepId == currentStepId; });
+        var hasPrev = currentIdx > 0 || currentStoryIndex > 0;
+        prevBtn.disabled = !hasPrev;
+        var hasNextStep = currentIdx < totalSteps - 1;
+        var hasNextStory = currentStoryIndex < storyList.length - 1;
+        nextBtn.disabled = !(hasNextStep || hasNextStory);
+    }
+
+    function executeStep(stepId) {
+        var story = storyList[currentStoryIndex];
+        if (!story) return;
+        var step = story.steps.find(function(s) { return s.stepId == stepId; });
+        if (!step) return;
+        step.isExecuted = true;
+        currentStepId = stepId;
+        currentPlotId = story.id;
+
+        var stepData = {
+            location: step.location || '未指定',
+            characters: step.characters || [],
+            event: step.event || '',
+            development: step.development || '',
+            phase: step.phase || ''
+        };
+        var textToSend = 'step_data = ' + JSON.stringify(stepData, null, 2);
+        if (typeof triggerSlash === 'function') {
+            triggerSlash('/send ' + textToSend + '|/trigger');
+        } else if (typeof window.triggerSlash === 'function') {
+            window.triggerSlash('/send ' + textToSend + '|/trigger');
+        } else {
+            console.log('[剧情推进] 发送:', textToSend);
+            navigator.clipboard ? navigator.clipboard.writeText(textToSend).catch(function() {}) : null;
+            alert('请将以下内容粘贴到酒馆对话框：\n\n' + textToSend);
+        }
+        saveStateToWorldbook();
+
+        var nextPending = getNextPendingStep(story);
+        if (nextPending) {
+            currentStepId = nextPending.stepId;
+        } else if (currentStoryIndex < storyList.length - 1) {
+            currentStoryIndex++;
+            var nextStory = storyList[currentStoryIndex];
+            currentPlotId = nextStory.id;
+            var firstStep = nextStory.steps[0];
+            if (firstStep) {
+                currentStepId = firstStep.stepId;
+            }
+        }
+
+        renderAll();
+
+        var updatedStep = story.steps.find(function(s) { return s.stepId == currentStepId; });
+        if (updatedStep) {
+            openDetail(updatedStep);
+        }
+        closeStoryList();
+    }
+
+    function saveStateToWorldbook() {
+        try {
+            if (typeof getWorldbook !== 'function' || typeof replaceWorldbook !== 'function') return;
+            var charWorldbooks = getCharWorldbookNames('current');
+            if (!charWorldbooks || !charWorldbooks.primary) return;
+            var entries = getWorldbook(charWorldbooks.primary);
+            if (!entries) return;
+            var entryList = Array.isArray(entries) ? entries : Object.values(entries);
+            var target = entryList.find(function(e) { return e.name && e.name.includes('剧情元数据-熟妇的蜜色饲育'); });
+            if (!target) return;
+            if (!plotData) return;
+            plotData.currentPlot = { plotId: currentPlotId, stepId: currentStepId, title: '剧情元数据-熟妇的蜜色饲育' };
+            plotData.plotList.forEach(function(plot, idx) {
+                var story = storyList[idx];
+                if (story) {
+                    plot.steps.forEach(function(s, si) {
+                        var localStep = story.steps[si];
+                        if (localStep) { s.isExecuted = localStep.isExecuted || false; }
+                    });
+                }
+            });
+            var jsonStr = JSON.stringify(plotData, null, 2);
+            target.content = '[plotResultStart]\n' + jsonStr + '\n[plotResultEnd]';
+            replaceWorldbook(charWorldbooks.primary, entries);
+            console.log('[剧情推进] ✅ 状态已保存到世界书');
+        } catch (e) { console.warn('[剧情推进] 保存状态失败:', e); }
+    }
+
+    function renderDetail(step) {
+        if (!step) { detailChars.innerHTML = ''; detailEvent.textContent = ''; detailDev.textContent = ''; return; }
+        var charsHtml = '';
+        if (step.characters && step.characters.length > 0) {
+            step.characters.forEach(function(c) {
+                charsHtml += '<div class="char-item"><span class="name">' + (c.name || '未命名') + '</span><span class="mood">' + (c.mood || '') + '</span><span class="thoughts">' + (c.innerThoughts ? '「' + c.innerThoughts + '」' : '') + '</span></div>';
+            });
+        } else {
+            charsHtml = '<div style="color:var(--text-dim);font-size:0.6rem;">未指定角色</div>';
+        }
+        detailChars.innerHTML = charsHtml;
+        detailEvent.textContent = step.event || '未指定事件';
+        detailDev.textContent = step.development ? '→ ' + step.development : '';
+    }
+
+    function openDetail(step) {
+        isDetailOpen = true;
+        detailPanel.classList.add('open');
+        renderDetail(step);
+        setTimeout(function() { detailPanel.scrollIntoView({ behavior: 'smooth', block: 'nearest' }); }, 100);
+    }
+
+    function closeDetail() { isDetailOpen = false; detailPanel.classList.remove('open'); }
+
+    function renderEmptyState() {
+        currentDisplay.classList.add('no-plot');
+        storyTitleText.textContent = '无剧情数据';
+        stepStatusText.textContent = '—';
+        progressText.textContent = '0 / 0 步';
+        phaseDisplay.textContent = '';
+        stepsList.innerHTML = '<div class="empty-state"><svg class="icon-svg" viewBox="0 0 24 24"><path d="M4 4h16v16H4z"/><path d="M8 8h8v8H8z"/><path d="M16 8l-4 4-4-4"/><path d="M12 12v6"/></svg><p>请确保世界书中存在<br><span class="gold">「剧情元数据-熟妇的蜜色饲育」</span></p></div>';
+        stepsCount.textContent = '0 步';
+        totalBadge.textContent = '0';
+        prevBtn.disabled = true;
+        nextBtn.disabled = true;
+        currentBtn.textContent = '🎯 —';
+        storyListBody.innerHTML = '<div class="empty-state"><p>暂无剧情</p></div>';
+    }
+
+    function renderStoryList() {
+        if (!storyList || storyList.length === 0) {
+            storyListBody.innerHTML = '<div class="empty-state"><p>暂无剧情</p></div>';
+            return;
+        }
+        var html = '';
+        storyList.forEach(function(story, idx) {
+            var total = story.steps.length;
+            var done = story.steps.filter(function(s) { return s.isExecuted; }).length;
+            var isCurrent = idx === currentStoryIndex;
+            var progressText = done + '/' + total;
+            html += '<div class="story-list-item' + (isCurrent ? ' current' : '') + '" data-index="' + idx + '">' +
+                '<span class="title">' + (isCurrent ? '<span class="current-mark">▶</span>' : '') + story.title + '</span>' +
+                '<span class="progress"><span class="' + (done === total ? 'done' : 'pending') + '">' + progressText + '</span></span>' +
+                '</div>';
+        });
+        storyListBody.innerHTML = html;
+        storyListBody.querySelectorAll('.story-list-item').forEach(function(el) {
+            el.addEventListener('click', function() {
+                var index = parseInt(this.dataset.index);
+                if (!isNaN(index) && index >= 0 && index < storyList.length) {
+                    currentStoryIndex = index;
+                    currentPlotId = storyList[index].id;
+                    var firstStep = storyList[index].steps[0];
+                    if (firstStep) { currentStepId = firstStep.stepId; }
+                    renderAll();
+                    closeStoryList();
+                }
+            });
+        });
+    }
+
+    function openStoryList() {
+        storyListOverlay.classList.add('open');
+        document.body.style.overflow = 'hidden';
+        renderStoryList();
+    }
+
+    function closeStoryList() {
+        storyListOverlay.classList.remove('open');
+        document.body.style.overflow = '';
+    }
+
+    function bindEvents() {
+        collapseToggleBtn.addEventListener('click', function(e) {
+            e.stopPropagation();
+            toggleCollapsed();
+        });
+
+        prevBtn.addEventListener('click', function() {
+            var story = storyList[currentStoryIndex];
+            if (!story) return;
+            var currentIdx = story.steps.findIndex(function(s) { return s.stepId == currentStepId; });
+            if (currentIdx > 0) {
+                currentStepId = story.steps[currentIdx - 1].stepId;
+                renderAll();
+                openDetail(story.steps[currentIdx - 1]);
+            } else if (currentStoryIndex > 0) {
+                currentStoryIndex--;
+                var prevStory = storyList[currentStoryIndex];
+                currentPlotId = prevStory.id;
+                var lastStep = prevStory.steps[prevStory.steps.length - 1];
+                currentStepId = lastStep.stepId;
+                renderAll();
+                openDetail(lastStep);
+            }
+        });
+
+        nextBtn.addEventListener('click', function() {
+            var story = storyList[currentStoryIndex];
+            if (!story) return;
+            var currentIdx = story.steps.findIndex(function(s) { return s.stepId == currentStepId; });
+            if (currentIdx < story.steps.length - 1) {
+                var nextStep = story.steps[currentIdx + 1];
+                currentStepId = nextStep.stepId;
+                renderAll();
+                openDetail(nextStep);
+            } else if (currentStoryIndex < storyList.length - 1) {
+                currentStoryIndex++;
+                var nextStory = storyList[currentStoryIndex];
+                currentPlotId = nextStory.id;
+                var firstStep = nextStory.steps[0];
+                currentStepId = firstStep.stepId;
+                renderAll();
+                openDetail(firstStep);
+            }
+        });
+
+        currentBtn.addEventListener('click', function() {
+            var story = storyList[currentStoryIndex];
+            if (!story) return;
+            var currentStep = story.steps.find(function(s) { return s.stepId == currentStepId; }) || story.steps[0];
+            if (currentStep) { openDetail(currentStep); }
+        });
+
+        detailClose.addEventListener('click', closeDetail);
+        document.addEventListener('click', function(e) {
+            if (isDetailOpen && !detailPanel.contains(e.target) && !e.target.closest('.step-item') && !e.target.closest('#currentBtn')) {
+                closeDetail();
+            }
+        });
+
+        listToggleBtn.addEventListener('click', function(e) {
+            e.stopPropagation();
+            if (storyListOverlay.classList.contains('open')) {
+                closeStoryList();
+            } else {
+                openStoryList();
+            }
+        });
+
+        storyListOverlay.addEventListener('click', function(e) {
+            if (e.target === storyListOverlay) {
+                closeStoryList();
+            }
+        });
+        storyListCloseBtn.addEventListener('click', closeStoryList);
+
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Escape') {
+                if (storyListOverlay.classList.contains('open')) {
+                    closeStoryList();
+                }
+                if (isDetailOpen) {
+                    closeDetail();
+                }
+            }
+        });
+    }
+
+    function bindKeyboard() {
+        document.addEventListener('keydown', function(e) {
+            if (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA') return;
+            if (e.key === 'ArrowLeft' || e.key === 'a') { e.preventDefault(); prevBtn.click(); }
+            else if (e.key === 'ArrowRight' || e.key === 'd') { e.preventDefault(); nextBtn.click(); }
+            else if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); currentBtn.click(); }
+            else if (e.key === 'Escape') { if (!storyListOverlay.classList.contains('open')) closeDetail(); }
+        });
+    }
+
+    function init() {
+        loadCollapsedState();
+        bindEvents();
+        bindKeyboard();
+        loadPlotData();
+        console.log('[剧情推进] ✅ 初始化完成');
+    }
+
+    if (document.readyState === 'complete' || document.readyState === 'interactive') {
+        init();
+    } else {
+        document.addEventListener('DOMContentLoaded', init);
+    }
+
+    window.__storyAssistant = {
+        reload: loadPlotData,
+        goTo: function(plotId, stepId) {
+            var storyIdx = storyList.findIndex(function(s) { return s.id === plotId; });
+            if (storyIdx === -1) return;
+            currentStoryIndex = storyIdx;
+            currentPlotId = plotId;
+            currentStepId = stepId || (storyList[storyIdx].steps[0] ? storyList[storyIdx].steps[0].stepId : 1);
+            renderAll();
+        },
+        getState: function() {
+            return { currentPlotId: currentPlotId, currentStepId: currentStepId, currentStoryIndex: currentStoryIndex, storyList: storyList };
+        }
+    };
+
+})();
+</script>
+</body>
+</html>
