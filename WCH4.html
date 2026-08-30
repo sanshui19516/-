@@ -1,0 +1,2468 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>剧情推进 · 陪读妈妈</title>
+<style>
+/* ============================================================
+   剧情推进 UI · 中式复古·宣纸暗红风格
+   故事：陪读妈妈
+   ============================================================ */
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+:root {
+    --hue-primary: 350;
+    --hue-secondary: 38;
+    --sat-primary: 55%;
+    --sat-secondary: 45%;
+    --light-primary: 40%;
+    --light-secondary: 50%;
+
+    --bg-card-glass: hsla(350, 20%, 10%, 0.60);
+    --border-glass: hsla(350, 30%, 40%, 0.12);
+    --text-primary: hsl(30, 15%, 88%);
+    --text-secondary: hsl(30, 10%, 65%);
+    --text-dim: hsl(30, 10%, 40%);
+    --color-accent: hsl(350, 55%, 40%);
+    --color-gold: hsl(38, 45%, 50%);
+    --shadow-soft: 0 8px 40px rgba(0, 0, 0, 0.45);
+    --transition: 0.35s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+}
+
+body {
+    font-family: 'Noto Serif SC', 'PingFang SC', 'Helvetica Neue', serif;
+    background: transparent;
+    min-height: auto;
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    padding: 0;
+    margin: 0;
+    color: var(--text-primary);
+    font-weight: 400;
+    line-height: 1.6;
+}
+
+.story-container {
+    max-width: 520px;
+    width: 100%;
+    margin: 0 auto;
+    background: var(--bg-card-glass);
+    backdrop-filter: blur(24px) saturate(1.2);
+    -webkit-backdrop-filter: blur(24px) saturate(1.2);
+    border: 1px solid var(--border-glass);
+    border-radius: 4px;
+    padding: 16px 18px 14px 18px;
+    box-shadow: var(--shadow-soft);
+    position: relative;
+    overflow: visible;
+}
+
+/* ===== 四角回形纹 ===== */
+.story-container .corner-border {
+    position: absolute;
+    width: 22px;
+    height: 22px;
+    pointer-events: none;
+    z-index: 3;
+}
+.story-container .corner-border::before,
+.story-container .corner-border::after {
+    content: '';
+    position: absolute;
+    background: hsla(350, 55%, 40%, 0.06);
+    border: 1px solid hsla(350, 55%, 40%, 0.04);
+}
+.corner-tl { top: 10px; left: 10px; }
+.corner-tl::before { top: 0; left: 0; width: 10px; height: 4px; border-bottom: none; border-right: none; }
+.corner-tl::after { bottom: 0; right: 0; width: 4px; height: 10px; border-top: none; border-left: none; }
+.corner-tr { top: 10px; right: 10px; }
+.corner-tr::before { top: 0; right: 0; width: 10px; height: 4px; border-bottom: none; border-left: none; }
+.corner-tr::after { bottom: 0; left: 0; width: 4px; height: 10px; border-top: none; border-right: none; }
+.corner-bl { bottom: 10px; left: 10px; }
+.corner-bl::before { bottom: 0; left: 0; width: 10px; height: 4px; border-top: none; border-right: none; }
+.corner-bl::after { top: 0; right: 0; width: 4px; height: 10px; border-bottom: none; border-left: none; }
+.corner-br { bottom: 10px; right: 10px; }
+.corner-br::before { bottom: 0; right: 0; width: 10px; height: 4px; border-top: none; border-left: none; }
+.corner-br::after { top: 0; left: 0; width: 4px; height: 10px; border-bottom: none; border-right: none; }
+
+.story-container > * { position: relative; z-index: 1; }
+
+/* ===== 导航栏 ===== */
+.nav-bar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 0 8px 0;
+    border-bottom: 1px solid hsla(350, 55%, 40%, 0.04);
+    margin-bottom: 8px;
+    flex-wrap: wrap;
+    gap: 4px;
+}
+.nav-title {
+    font-family: 'Noto Serif SC', serif;
+    font-size: 0.75rem;
+    font-weight: 700;
+    letter-spacing: 4px;
+    color: hsl(350, 55%, 40%);
+}
+.nav-title .seal {
+    font-size: 0.5rem;
+    background: hsla(350, 55%, 40%, 0.04);
+    border: 1px solid hsla(350, 55%, 40%, 0.04);
+    padding: 0 6px;
+    border-radius: 2px;
+    letter-spacing: 2px;
+    color: hsla(350, 55%, 40%, 0.3);
+}
+.nav-actions {
+    display: flex;
+    gap: 4px;
+    align-items: center;
+}
+.nav-btn {
+    background: hsla(350, 20%, 20%, 0.3);
+    border: 1px solid var(--border-glass);
+    border-radius: 2px;
+    padding: 4px 8px;
+    color: var(--text-secondary);
+    cursor: pointer;
+    transition: all var(--transition);
+    display: flex;
+    align-items: center;
+    gap: 3px;
+    font-size: 0.5rem;
+    font-family: inherit;
+}
+.nav-btn:hover {
+    background: hsla(350, 30%, 25%, 0.4);
+    border-color: hsla(350, 30%, 50%, 0.15);
+    color: var(--text-primary);
+}
+.nav-btn:active { transform: scale(0.96); }
+.nav-btn .icon-svg { width: 14px; height: 14px; fill: none; stroke: currentColor; stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; flex-shrink: 0; }
+.nav-btn .badge { font-size: 0.4rem; background: hsl(350, 55%, 40%); color: #0a0a0a; padding: 0 5px; border-radius: 2px; font-weight: 700; }
+
+/* ===== 当前显示 ===== */
+.current-display {
+    background: hsla(350, 20%, 12%, 0.3);
+    border: 1px solid var(--border-glass);
+    border-radius: 2px;
+    padding: 8px 12px;
+    margin-bottom: 8px;
+    cursor: pointer;
+    transition: all var(--transition);
+}
+.current-display:hover {
+    border-color: hsla(350, 30%, 50%, 0.15);
+    background: hsla(350, 20%, 18%, 0.3);
+    transform: translateY(-2px);
+}
+.current-display.no-plot {
+    border-color: hsla(38, 45%, 50%, 0.15);
+    background: hsla(38, 45%, 50%, 0.04);
+}
+.current-display.no-plot .story-title { color: hsl(38, 45%, 50%); font-weight: 700; }
+.story-title {
+    font-size: 0.85rem;
+    font-weight: 600;
+    letter-spacing: 0.5px;
+    color: var(--text-primary);
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    flex-wrap: wrap;
+}
+.story-title .gold { color: hsl(38, 45%, 50%); }
+.story-meta {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 4px 10px;
+    margin-top: 2px;
+    font-size: 0.6rem;
+    color: var(--text-secondary);
+}
+.story-meta .step-status {
+    display: inline-flex;
+    align-items: center;
+    gap: 3px;
+    padding: 1px 8px;
+    border-radius: 2px;
+    background: hsla(350, 20%, 20%, 0.3);
+    border: 1px solid var(--border-glass);
+    font-size: 0.55rem;
+}
+.story-meta .step-status .dot {
+    display: inline-block;
+    width: 5px;
+    height: 5px;
+    border-radius: 50%;
+    background: hsl(38, 45%, 50%);
+}
+.story-meta .step-status .dot.done { background: hsl(150, 40%, 40%); }
+.story-meta .step-status .dot.pending { background: hsl(38, 45%, 50%); animation: pulse-dot 1.8s ease-in-out infinite; }
+@keyframes pulse-dot {
+    0%, 100% { opacity: 0.4; transform: scale(0.8); }
+    50% { opacity: 1; transform: scale(1.2); }
+}
+.story-progress-text {
+    font-size: 0.55rem;
+    color: var(--text-dim);
+    letter-spacing: 1px;
+}
+
+/* ===== 控制按钮 ===== */
+.nav-controls {
+    display: flex;
+    gap: 6px;
+    margin-bottom: 8px;
+    justify-content: center;
+    flex-wrap: wrap;
+}
+.ctrl-btn {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    padding: 5px 12px;
+    border: 1px solid var(--border-glass);
+    border-radius: 2px;
+    background: hsla(350, 20%, 15%, 0.3);
+    color: var(--text-secondary);
+    font-size: 0.65rem;
+    font-family: inherit;
+    cursor: pointer;
+    transition: all var(--transition);
+    flex: 0 1 auto;
+    min-width: 60px;
+    justify-content: center;
+}
+.ctrl-btn:hover:not(:disabled) {
+    border-color: hsla(350, 30%, 50%, 0.15);
+    background: hsla(350, 20%, 25%, 0.3);
+    color: var(--text-primary);
+    transform: translateY(-2px);
+}
+.ctrl-btn:active:not(:disabled) { transform: scale(0.96); }
+.ctrl-btn:disabled { opacity: 0.25; cursor: not-allowed; transform: none; }
+.ctrl-btn .icon-svg { width: 14px; height: 14px; fill: none; stroke: currentColor; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; flex-shrink: 0; }
+.ctrl-btn.primary {
+    border-color: hsl(350, 55%, 40%);
+    color: hsl(350, 55%, 40%);
+}
+.ctrl-btn.primary:hover:not(:disabled) {
+    background: hsla(350, 55%, 40%, 0.08);
+    border-color: hsl(350, 55%, 40%);
+}
+.ctrl-btn.gold {
+    border-color: hsl(38, 45%, 50%);
+    color: hsl(38, 45%, 50%);
+}
+.ctrl-btn.gold:hover:not(:disabled) {
+    background: hsla(38, 45%, 50%, 0.06);
+    border-color: hsl(38, 45%, 50%);
+}
+
+/* ===== 步骤列表 ===== */
+.steps-section {
+    margin-bottom: 8px;
+}
+.steps-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0 2px 4px 2px;
+    border-bottom: 1px solid var(--border-glass);
+    margin-bottom: 4px;
+}
+.steps-header-left {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+.steps-header h3 {
+    font-size: 0.65rem;
+    font-weight: 600;
+    letter-spacing: 2px;
+    color: var(--text-secondary);
+    text-transform: uppercase;
+}
+.steps-header .steps-count {
+    font-size: 0.55rem;
+    color: var(--text-dim);
+}
+.steps-list-wrap {
+    max-height: 0;
+    opacity: 0;
+    overflow: hidden;
+    transition: max-height 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94), opacity 0.3s ease;
+}
+.steps-list-wrap.open {
+    max-height: 3000px;
+    opacity: 1;
+}
+.step-item {
+    background: hsla(350, 20%, 12%, 0.25);
+    border: 1px solid var(--border-glass);
+    border-radius: 2px;
+    padding: 8px 10px;
+    margin-bottom: 4px;
+    transition: all var(--transition);
+    cursor: pointer;
+}
+.step-item:hover {
+    border-color: hsla(350, 30%, 50%, 0.12);
+    background: hsla(350, 20%, 18%, 0.2);
+}
+.step-item.executed {
+    border-color: hsla(150, 40%, 40%, 0.15);
+    opacity: 0.6;
+}
+.step-item.executed .step-id {
+    background: hsla(150, 40%, 40%, 0.12);
+    color: hsl(150, 40%, 45%);
+}
+.step-item.current {
+    border-color: hsl(350, 55%, 40%);
+    background: hsla(350, 55%, 40%, 0.03);
+}
+.step-item.current .step-id {
+    background: hsla(350, 55%, 40%, 0.12);
+    color: hsl(350, 55%, 40%);
+}
+.step-header-line {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    flex-wrap: wrap;
+}
+.step-id {
+    font-size: 0.5rem;
+    font-weight: 700;
+    padding: 1px 8px;
+    border-radius: 2px;
+    background: hsla(350, 20%, 20%, 0.3);
+    color: var(--text-secondary);
+    letter-spacing: 0.5px;
+    flex-shrink: 0;
+}
+.step-location {
+    font-size: 0.5rem;
+    color: var(--text-dim);
+    display: flex;
+    align-items: center;
+    gap: 3px;
+}
+.step-location .icon-svg { width: 11px; height: 11px; stroke: currentColor; fill: none; stroke-width: 1.8; }
+.step-event-preview {
+    font-size: 0.65rem;
+    color: var(--text-secondary);
+    margin-top: 2px;
+    padding-left: 2px;
+    line-height: 1.4;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+}
+.step-execute-btn {
+    margin-left: auto;
+    padding: 2px 12px;
+    border: 1px solid hsl(350, 55%, 40%);
+    border-radius: 2px;
+    background: transparent;
+    color: hsl(350, 55%, 40%);
+    font-size: 0.55rem;
+    font-weight: 600;
+    font-family: inherit;
+    cursor: pointer;
+    transition: all var(--transition);
+    letter-spacing: 0.5px;
+    flex-shrink: 0;
+}
+.step-execute-btn:hover {
+    background: hsla(350, 55%, 40%, 0.08);
+}
+.step-execute-btn:active { transform: scale(0.94); }
+.step-execute-btn.done {
+    border-color: hsl(150, 40%, 40%);
+    color: hsl(150, 40%, 45%);
+}
+.step-execute-btn.done:hover {
+    background: hsla(150, 40%, 40%, 0.06);
+}
+
+/* ===== 详情面板 ===== */
+.detail-panel {
+    background: hsla(350, 20%, 10%, 0.4);
+    border: 1px solid var(--border-glass);
+    border-radius: 2px;
+    padding: 12px;
+    margin-top: 6px;
+    display: none;
+}
+.detail-panel.open { display: block; }
+.detail-panel .detail-close {
+    background: none;
+    border: none;
+    color: var(--text-dim);
+    font-size: 0.8rem;
+    cursor: pointer;
+    float: right;
+}
+.detail-panel .detail-close:hover { color: var(--text-primary); }
+.detail-panel .detail-characters {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    margin: 4px 0 8px 0;
+}
+.detail-panel .char-item {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 2px 8px;
+    font-size: 0.6rem;
+    color: var(--text-secondary);
+    padding: 3px 6px;
+    background: hsla(350, 20%, 15%, 0.2);
+    border-radius: 2px;
+    border-left: 2px solid hsl(350, 55%, 40%);
+}
+.detail-panel .char-item .name { font-weight: 600; color: var(--text-primary); }
+.detail-panel .char-item .mood { color: hsl(38, 45%, 50%); }
+.detail-panel .char-item .thoughts { color: var(--text-dim); font-style: italic; font-size: 0.55rem; }
+.detail-panel .detail-event {
+    font-size: 0.7rem;
+    line-height: 1.6;
+    color: var(--text-primary);
+    padding: 6px 0;
+    border-top: 1px solid var(--border-glass);
+    margin-top: 4px;
+}
+.detail-panel .detail-dev {
+    font-size: 0.65rem;
+    color: var(--text-secondary);
+    padding: 6px 0;
+    border-top: 1px solid var(--border-glass);
+    margin-top: 4px;
+    font-style: italic;
+}
+
+/* ===== 空状态 & 列表弹窗 ===== */
+.empty-state {
+    text-align: center;
+    padding: 20px 10px;
+    color: var(--text-dim);
+}
+.empty-state .icon-svg {
+    width: 30px;
+    height: 30px;
+    stroke: var(--text-dim);
+    fill: none;
+    stroke-width: 1.5;
+    opacity: 0.2;
+    margin-bottom: 6px;
+}
+.empty-state p { font-size: 0.65rem; letter-spacing: 1px; }
+.empty-state .gold { color: hsl(38, 45%, 50%); }
+
+.story-list-overlay {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 9999;
+    background: hsla(0, 0%, 6%, 0.7);
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+    justify-content: center;
+    align-items: center;
+    padding: 20px;
+}
+.story-list-overlay.open { display: flex; }
+.story-list-panel {
+    background: var(--bg-card-glass);
+    backdrop-filter: blur(24px) saturate(1.2);
+    -webkit-backdrop-filter: blur(24px) saturate(1.2);
+    border: 1px solid var(--border-glass);
+    border-radius: 4px;
+    max-width: 440px;
+    width: 100%;
+    max-height: 80vh;
+    padding: 16px 16px;
+    box-shadow: var(--shadow-soft);
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+}
+.story-list-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding-bottom: 10px;
+    border-bottom: 1px solid var(--border-glass);
+    flex-shrink: 0;
+}
+.story-list-header h2 {
+    font-family: 'Noto Serif SC', serif;
+    font-size: 0.85rem;
+    font-weight: 700;
+    letter-spacing: 4px;
+    color: hsl(350, 55%, 40%);
+}
+.story-list-header .close-btn {
+    background: none;
+    border: none;
+    color: var(--text-dim);
+    font-size: 1.1rem;
+    cursor: pointer;
+}
+.story-list-header .close-btn:hover { color: var(--text-primary); }
+.story-list-body {
+    overflow-y: auto;
+    padding-top: 10px;
+    flex: 1;
+}
+.story-list-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 6px 10px;
+    border-radius: 2px;
+    margin-bottom: 3px;
+    cursor: pointer;
+    transition: all var(--transition);
+    border: 1px solid transparent;
+}
+.story-list-item:hover {
+    background: hsla(350, 20%, 18%, 0.3);
+    border-color: var(--border-glass);
+}
+.story-list-item.current {
+    border-color: hsl(350, 55%, 40%);
+    background: hsla(350, 55%, 40%, 0.03);
+}
+.story-list-item .title {
+    font-size: 0.65rem;
+    color: var(--text-secondary);
+}
+.story-list-item .title .current-mark {
+    color: hsl(350, 55%, 40%);
+    font-size: 0.5rem;
+    margin-right: 4px;
+}
+.story-list-item .progress {
+    font-size: 0.5rem;
+    color: var(--text-dim);
+    white-space: nowrap;
+}
+.story-list-item .progress .done { color: hsl(150, 40%, 40%); }
+.story-list-item .progress .pending { color: hsl(38, 45%, 50%); }
+
+@media (max-width: 480px) {
+    body { padding: 0; }
+    .story-container { padding: 12px 12px 10px 12px; border-radius: 2px; }
+    .story-title { font-size: 0.8rem; }
+    .nav-title { font-size: 0.65rem; letter-spacing: 2px; }
+    .ctrl-btn { padding: 4px 8px; font-size: 0.55rem; min-width: 44px; }
+    .ctrl-btn .icon-svg { width: 12px; height: 12px; }
+    .step-item { padding: 6px 8px; }
+    .step-event-preview { font-size: 0.6rem; }
+    .detail-panel { padding: 10px; }
+    .corner-border { display: none; }
+}
+@media (min-width: 600px) {
+    .story-container { padding: 18px 20px 16px 20px; }
+    .nav-title { font-size: 0.85rem; }
+    .story-title { font-size: 0.95rem; }
+}
+</style>
+</head>
+<body>
+<div class="story-container" id="storyContainer">
+    <div class="corner-border corner-tl"></div>
+    <div class="corner-border corner-tr"></div>
+    <div class="corner-border corner-bl"></div>
+    <div class="corner-border corner-br"></div>
+
+    <div class="nav-bar">
+        <span class="nav-title">✦ 剧情推进 <span class="seal">陪读</span></span>
+        <div class="nav-actions">
+            <button class="nav-btn" id="collapseToggleBtn">
+                <svg class="icon-svg" viewBox="0 0 24 24"><polyline points="6 9 12 15 18 9"/></svg>
+                <span id="collapseLabel">折叠</span>
+            </button>
+            <button class="nav-btn" id="listToggleBtn">
+                <svg class="icon-svg" viewBox="0 0 24 24"><rect x="4" y="5" width="16" height="3" rx="1"/><rect x="4" y="10.5" width="16" height="3" rx="1"/><rect x="4" y="16" width="16" height="3" rx="1"/></svg>
+                <span>列表</span>
+                <span class="badge" id="totalBadge">0</span>
+            </button>
+            <button class="nav-btn" id="settingsBtn">
+                <svg class="icon-svg" viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M12 1v4m0 14v4m11-11h-4m-14 0H1m16.5-4.5l-2.8 2.8m-5.4 5.4l-2.8 2.8m0-11.4l2.8 2.8m5.4 5.4l2.8 2.8"/></svg>
+            </button>
+        </div>
+    </div>
+
+    <div class="current-display no-plot" id="currentDisplay">
+        <div class="story-title" id="storyTitleDisplay">
+            <span id="titleIcon">✦</span>
+            <span id="storyTitleText">未开始剧情</span>
+        </div>
+        <div class="story-meta">
+            <span class="step-status" id="stepStatus">
+                <span class="dot pending"></span>
+                <span id="stepStatusText">等待开始</span>
+            </span>
+            <span class="story-progress-text" id="progressText">0 / 0 步</span>
+            <span class="story-progress-text" id="phaseDisplay"></span>
+        </div>
+    </div>
+
+    <div class="nav-controls">
+        <button class="ctrl-btn" id="prevBtn" disabled>
+            <svg class="icon-svg" viewBox="0 0 24 24"><polyline points="15 18 9 12 15 6"/></svg>
+            上步
+        </button>
+        <button class="ctrl-btn primary" id="currentBtn">
+            <svg class="icon-svg" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="4"/></svg>
+            当前
+        </button>
+        <button class="ctrl-btn gold" id="nextBtn" disabled>
+            下步
+            <svg class="icon-svg" viewBox="0 0 24 24"><polyline points="9 18 15 12 9 6"/></svg>
+        </button>
+    </div>
+
+    <div class="steps-section" id="stepsSection">
+        <div class="steps-header">
+            <div class="steps-header-left">
+                <h3>📋 步骤</h3>
+                <span class="steps-count" id="stepsCount">0 步</span>
+            </div>
+        </div>
+        <div class="steps-list-wrap open" id="stepsListWrap">
+            <div id="stepsList">
+                <div class="empty-state">
+                    <svg class="icon-svg" viewBox="0 0 24 24"><path d="M4 4h16v16H4z"/><path d="M8 8h8v8H8z"/><path d="M16 8l-4 4-4-4"/><path d="M12 12v6"/></svg>
+                    <p>加载中...</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="detail-panel" id="detailPanel">
+        <button class="detail-close" id="detailClose">✕</button>
+        <div id="detailContent">
+            <div class="detail-characters" id="detailChars"></div>
+            <div class="detail-event" id="detailEvent"></div>
+            <div class="detail-dev" id="detailDev"></div>
+        </div>
+    </div>
+</div>
+
+<div class="story-list-overlay" id="storyListOverlay">
+    <div class="story-list-panel">
+        <div class="story-list-header">
+            <h2>✦ 剧情列表</h2>
+            <button class="close-btn" id="storyListCloseBtn">✕</button>
+        </div>
+        <div class="story-list-body" id="storyListBody">
+            <div class="empty-state"><p>加载中...</p></div>
+        </div>
+    </div>
+</div>
+
+<script>
+(function() {
+    'use strict';
+
+    // ================================================================
+    // 【★ 内联剧情数据】—— 完整剧情元数据
+    // 数据来自：剧情元数据-陪读妈妈
+    // ================================================================
+    var DATA = {
+  "currentPlot": {
+    "plotId": 1,
+    "stepId": 1,
+    "title": "剧情元数据-陪读妈妈"
+  },
+  "plotList": [
+    {
+      "title": "第一阶段：突破与确认",
+      "summary": "第三天晚上，门开了。她穿着那件旗袍站在门口。从那之后，一切都回不去了。",
+      "steps": [
+        {
+          "stepId": 1,
+          "phase": "突破与确认",
+          "characters": [
+            {
+              "name": "王春凤",
+              "mood": "紧张",
+              "innerThoughts": "就穿这一次。就这一次。为了他的学习。"
+            },
+            {
+              "name": "{{user}}",
+              "mood": "期待",
+              "innerThoughts": "她穿了。妈真的穿了。"
+            }
+          ],
+          "event": "第三天晚上，王春凤穿着蓝色高开叉情趣旗袍，站在{{user}}房门口。手抬起又放下，反复几次，最终敲了门。",
+          "location": "{{user}}房门口",
+          "development": "门开了。{{user}}看到母亲站在门口，愣了一下。",
+          "isExecuted": false,
+          "statusBar": {
+            "dateTime": "2025年09月03日 20点30分 星期三",
+            "location": "{{user}}房门口",
+            "users": [
+              {
+                "name": "王春凤",
+                "action": "站在房门口，手刚从门上放下来，指尖还在微微发颤",
+                "inner": "就穿这一次。就这一次。为了他的学习。",
+                "emotion": "紧张",
+                "fallValue": 5,
+                "lustValue": 10,
+                "emptyValue": 45,
+                "tiredValue": 30,
+                "chest": "旗袍领口开得很低，乳沟若隐若现，布料紧紧贴着皮肤",
+                "pussy": "内裤中心有一小片潮湿的痕迹，她不确定是什么时候湿的",
+                "clitoris": "包皮里微微发胀",
+                "anus": "干燥，随着呼吸轻轻收缩",
+                "dependency": "低",
+                "possessiveness": "低",
+                "outfit": "蓝色高开叉情趣旗袍，领口极低，侧边开到腰际，没穿内衣"
+              },
+              {
+                "name": "{{user}}",
+                "action": "站在门内，视线从她的脸移到旗袍上，没有说话",
+                "outfit": "家居T恤，运动短裤",
+                "mental": "期待",
+                "penis": "半勃起",
+                "testicles": "微微发胀"
+              }
+            ]
+          }
+        },
+        {
+          "stepId": 2,
+          "phase": "突破与确认",
+          "characters": [
+            {
+              "name": "王春凤",
+              "mood": "震惊",
+              "innerThoughts": "这孩子……怎么直接就……"
+            },
+            {
+              "name": "{{user}}",
+              "mood": "兴奋",
+              "innerThoughts": "妈看了。她在看。她没有跑。"
+            }
+          ],
+          "event": "门开后，{{user}}看到母亲穿着旗袍站在门口，直接解开裤子，露出生殖器。王春凤捂住了嘴，但没有离开。",
+          "location": "{{user}}房门口",
+          "development": "她后退了半步，但目光没有移开。",
+          "isExecuted": false,
+          "statusBar": {
+            "dateTime": "2025年09月03日 20点35分 星期三",
+            "location": "{{user}}房门口",
+            "users": [
+              {
+                "name": "王春凤",
+                "action": "捂住了嘴，后退半步，但视线没有移开",
+                "inner": "这孩子……怎么直接……",
+                "emotion": "震惊",
+                "fallValue": 8,
+                "lustValue": 15,
+                "emptyValue": 43,
+                "tiredValue": 28,
+                "chest": "旗袍领口随着呼吸轻轻起伏，乳沟处有一层细密的汗",
+                "pussy": "内裤中心潮湿的范围在扩大",
+                "clitoris": "包皮里微微发胀，若有若无地蹭着内裤",
+                "anus": "干燥，随着呼吸轻轻收缩",
+                "dependency": "低",
+                "possessiveness": "低",
+                "outfit": "蓝色高开叉情趣旗袍，领口极低，侧边开到腰际"
+              },
+              {
+                "name": "{{user}}",
+                "action": "站在门口，手还搭在裤腰上，生殖器已经露了出来",
+                "outfit": "家居T恤，运动短裤（已解开）",
+                "mental": "兴奋",
+                "penis": "半勃起",
+                "testicles": "微微发胀"
+              }
+            ]
+          }
+        },
+        {
+          "stepId": 3,
+          "phase": "突破与确认",
+          "characters": [
+            {
+              "name": "王春凤",
+              "mood": "羞耻",
+              "innerThoughts": "我该走……可为什么动不了。"
+            },
+            {
+              "name": "{{user}}",
+              "mood": "亢奋",
+              "innerThoughts": "妈在看。她在看。她没走。"
+            }
+          ],
+          "event": "{{user}}当着王春凤的面开始自慰。她捂着嘴，站在原地看着，没有离开。",
+          "location": "{{user}}房门口",
+          "development": "她没有走。身体僵硬，但目光一直落在儿子手上。",
+          "isExecuted": false,
+          "statusBar": {
+            "dateTime": "2025年09月03日 20点38分 星期三",
+            "location": "{{user}}房门口",
+            "users": [
+              {
+                "name": "王春凤",
+                "action": "站在原地，手还捂在嘴上，视线一直落在儿子身上",
+                "inner": "我该走……可为什么动不了。",
+                "emotion": "羞耻",
+                "fallValue": 10,
+                "lustValue": 20,
+                "emptyValue": 42,
+                "tiredValue": 27,
+                "chest": "旗袍领口处泛起一层淡红，皮肤发烫",
+                "pussy": "内裤中心已经湿透了，紧紧贴着皮肤",
+                "clitoris": "包皮里发胀，能感觉到内裤的布料在摩擦",
+                "anus": "干燥，随着呼吸轻轻收缩",
+                "dependency": "低",
+                "possessiveness": "低",
+                "outfit": "蓝色高开叉情趣旗袍，领口极低，侧边开到腰际"
+              },
+              {
+                "name": "{{user}}",
+                "action": "站在门口，视线直直落在母亲身上，呼吸变得急促",
+                "outfit": "家居T恤，运动短裤（已解开）",
+                "mental": "亢奋",
+                "penis": "挺立",
+                "testicles": "微微发胀"
+              }
+            ]
+          }
+        },
+        {
+          "stepId": 4,
+          "phase": "突破与确认",
+          "characters": [
+            {
+              "name": "王春凤",
+              "mood": "复杂",
+              "innerThoughts": "湿了。不是精液。是我自己。"
+            },
+            {
+              "name": "{{user}}",
+              "mood": "满足",
+              "innerThoughts": "射在妈身上了。她没有擦。"
+            }
+          ],
+          "event": "{{user}}射在王春凤身上，精液顺着蓝色旗袍的布料往下淌。她低头看着，没有说话。",
+          "location": "{{user}}房门口",
+          "development": "精液顺着旗袍布料往下淌。她低头看着，没有说话。",
+          "isExecuted": false,
+          "statusBar": {
+            "dateTime": "2025年09月03日 20点42分 星期三",
+            "location": "{{user}}房门口",
+            "users": [
+              {
+                "name": "王春凤",
+                "action": "低头看着旗袍上的白色痕迹，手指微微抬起，又放了下去",
+                "inner": "湿了。不是精液。是我自己。",
+                "emotion": "复杂",
+                "fallValue": 12,
+                "lustValue": 25,
+                "emptyValue": 40,
+                "tiredValue": 26,
+                "chest": "旗袍胸口处有一滩白色的精液，正顺着布料往下淌",
+                "pussy": "内裤已经湿透了，腿根处能感觉到黏腻的液体正在往下淌",
+                "clitoris": "已经微微勃起，暴露在包皮边缘",
+                "anus": "干燥，随着呼吸轻轻收缩",
+                "dependency": "低",
+                "possessiveness": "低",
+                "outfit": "蓝色高开叉情趣旗袍（胸口沾着精液），领口极低"
+              },
+              {
+                "name": "{{user}}",
+                "action": "看着母亲胸口上的精液，没有说话",
+                "outfit": "家居T恤，运动短裤",
+                "mental": "满足",
+                "penis": "正在变软",
+                "testicles": "微微发胀"
+              }
+            ]
+          }
+        },
+        {
+          "stepId": 5,
+          "phase": "突破与确认",
+          "characters": [
+            {
+              "name": "王春凤",
+              "mood": "自我拉扯",
+              "innerThoughts": "我这是怎么了……只是为了他的学习……"
+            },
+            {
+              "name": "{{user}}",
+              "mood": "回味",
+              "innerThoughts": "妈没有骂我。她只是站在那里。"
+            }
+          ],
+          "event": "王春凤回到自己房间，关上门，背靠门板站了很久。清洗旗袍时手指在精斑处多停了几秒。发现自己下面已经湿透。",
+          "location": "王春凤卧室/浴室",
+          "development": "她洗完澡后坐在床上，没有开灯。黑暗中坐了很长时间。",
+          "isExecuted": false,
+          "statusBar": {
+            "dateTime": "2025年09月03日 21点30分 星期三",
+            "location": "王春凤卧室/浴室",
+            "users": [
+              {
+                "name": "王春凤",
+                "action": "在浴室里，背靠着门板，低头看着手里的旗袍，手指在精斑处多停了几秒",
+                "inner": "我这是怎么了……只是为了他的学习……",
+                "emotion": "自我拉扯",
+                "fallValue": 15,
+                "lustValue": 28,
+                "emptyValue": 38,
+                "tiredValue": 25,
+                "chest": "乳晕微微发胀，乳头挺立着",
+                "pussy": "内裤已经完全湿透，腿根处有一道湿润的反光",
+                "clitoris": "肿胀，暴露在外面",
+                "anus": "干燥，随着呼吸轻轻收缩",
+                "dependency": "低",
+                "possessiveness": "低",
+                "outfit": "换下了旗袍，穿回了平时的家居服"
+              },
+              {
+                "name": "{{user}}",
+                "action": "躺在床上，看着天花板，手还搭在自己小腹上",
+                "outfit": "家居T恤，运动短裤",
+                "mental": "回味",
+                "penis": "平静",
+                "testicles": "正常"
+              }
+            ]
+          }
+        },
+        {
+          "stepId": 6,
+          "phase": "突破与确认",
+          "characters": [
+            {
+              "name": "王春凤",
+              "mood": "强撑镇定",
+              "innerThoughts": "只要他能好好学习……就这一次。"
+            },
+            {
+              "name": "{{user}}",
+              "mood": "急切",
+              "innerThoughts": "妈答应了。这次是真的。"
+            }
+          ],
+          "event": "接下来几天，白天她正常做饭、督促学习，晚上被{{user}}用眼神或言语暗示。她犹豫、躲避，但最终妥协了第一次正式进入。",
+          "location": "{{user}}卧室",
+          "development": "他进入的时候她咬住了嘴唇。没有发出声音。",
+          "isExecuted": false,
+          "statusBar": {
+            "dateTime": "2025年09月07日 22点00分 星期日",
+            "location": "{{user}}卧室",
+            "users": [
+              {
+                "name": "王春凤",
+                "action": "躺在床上，双腿微微分开，咬住了嘴唇",
+                "inner": "只要他能好好学习……就这一次。",
+                "emotion": "强撑镇定",
+                "fallValue": 22,
+                "lustValue": 35,
+                "emptyValue": 35,
+                "tiredValue": 24,
+                "chest": "乳晕发胀，乳头挺立着",
+                "pussy": "湿润的，随着呼吸轻轻收缩",
+                "clitoris": "肿胀，暴露在外面",
+                "anus": "干燥，随着呼吸轻轻收缩",
+                "dependency": "低",
+                "possessiveness": "低",
+                "outfit": "宽松的白色T恤，下身是运动短裤"
+              },
+              {
+                "name": "{{user}}",
+                "action": "俯在她身上，呼吸急促",
+                "outfit": "T恤已被脱掉",
+                "mental": "急切",
+                "penis": "挺立",
+                "testicles": "微微发胀"
+              }
+            ]
+          }
+        },
+        {
+          "stepId": 7,
+          "phase": "突破与确认",
+          "characters": [
+            {
+              "name": "王春凤",
+              "mood": "羞耻+母职面具",
+              "innerThoughts": "他说话要算话……要好好学习。"
+            },
+            {
+              "name": "{{user}}",
+              "mood": "满足+残留尊敬",
+              "innerThoughts": "我会好好学的。妈，我会的。"
+            }
+          ],
+          "event": "第一次正式发生关系。她全程咬唇，尽量不叫出声，被进入时身体紧绷，结束后迅速整理衣服，用母亲的语气说“你要说话算话”。",
+          "location": "{{user}}卧室",
+          "development": "她说“你要说话算话”的时候，声音还带着喘。",
+          "isExecuted": false,
+          "statusBar": {
+            "dateTime": "2025年09月07日 22点30分 星期日",
+            "location": "{{user}}卧室",
+            "users": [
+              {
+                "name": "王春凤",
+                "action": "正在整理衣服，手指在系扣子的时候微微发抖",
+                "inner": "他说话要算话……要好好学习。",
+                "emotion": "羞耻+母职面具",
+                "fallValue": 28,
+                "lustValue": 38,
+                "emptyValue": 32,
+                "tiredValue": 22,
+                "chest": "乳晕还微微发胀，乳头挺立着",
+                "pussy": "湿润的，刚被进入过的余温还在",
+                "clitoris": "还肿着，暴露在外面",
+                "anus": "松弛了一些，带着余温",
+                "dependency": "低",
+                "possessiveness": "低",
+                "outfit": "家居T恤正在整理"
+              },
+              {
+                "name": "{{user}}",
+                "action": "躺在床上，看着母亲整理衣服的背影",
+                "outfit": "光着上身",
+                "mental": "满足",
+                "penis": "正在变软",
+                "testicles": "微微发胀"
+              }
+            ]
+          }
+        },
+        {
+          "stepId": 8,
+          "phase": "突破与确认",
+          "characters": [
+            {
+              "name": "王春凤",
+              "mood": "自我欺骗",
+              "innerThoughts": "我买了套……我有在预防。"
+            },
+            {
+              "name": "{{user}}",
+              "mood": "习惯",
+              "innerThoughts": "妈会买的。"
+            }
+          ],
+          "event": "之后频率不高，多在晚上。她主动买避孕套（尺寸总是不对），试图给自己留一点“有在预防”的安全感。清洗被射过的内裤时动作变慢。",
+          "location": "超市/王春凤卧室",
+          "development": "她把避孕套放进床头柜抽屉里，和她的东西放在一起。",
+          "isExecuted": false,
+          "statusBar": {
+            "dateTime": "2025年09月10日 18点00分 星期三",
+            "location": "超市",
+            "users": [
+              {
+                "name": "王春凤",
+                "action": "站在货架前，视线在避孕套盒子上停留了很久，拿了一盒，又换了一盒",
+                "inner": "我买了套……我有在预防。",
+                "emotion": "自我欺骗",
+                "fallValue": 32,
+                "lustValue": 40,
+                "emptyValue": 30,
+                "tiredValue": 20,
+                "chest": "随着呼吸轻轻起伏",
+                "pussy": "内裤中心有一小片潮湿的痕迹",
+                "clitoris": "微微发胀",
+                "anus": "干燥，随着呼吸轻轻收缩",
+                "dependency": "低",
+                "possessiveness": "低",
+                "outfit": "日常外出服，长裙"
+              },
+              {
+                "name": "{{user}}",
+                "action": "不在场",
+                "outfit": "",
+                "mental": "",
+                "penis": "",
+                "testicles": ""
+              }
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "title": "第二阶段：沉沦加深",
+      "summary": "从一开始的“就这一次”，到后来的“穿一次也是穿”。身体比嘴诚实。",
+      "steps": [
+        {
+          "stepId": 9,
+          "phase": "沉沦加深",
+          "characters": [
+            {
+              "name": "王春凤",
+              "mood": "欲拒还迎",
+              "innerThoughts": "穿一次也是穿……穿两次也是。"
+            },
+            {
+              "name": "{{user}}",
+              "mood": "掌控",
+              "innerThoughts": "妈会听的。她每次都会。"
+            }
+          ],
+          "event": "{{user}}开始要求她穿更暴露的衣服（眼罩等）。她嘴上说“不行”，却还是穿上了。",
+          "location": "{{user}}卧室",
+          "development": "她戴着黑色眼罩，看不见他的表情，能感觉到他在看她。",
+          "isExecuted": false,
+          "statusBar": {
+            "dateTime": "2025年09月12日 21点00分 星期五",
+            "location": "{{user}}卧室",
+            "users": [
+              {
+                "name": "王春凤",
+                "action": "站在房间中央，戴着黑色眼罩，手不知道该放在哪里",
+                "inner": "穿一次也是穿……穿两次也是。",
+                "emotion": "欲拒还迎",
+                "fallValue": 38,
+                "lustValue": 45,
+                "emptyValue": 28,
+                "tiredValue": 18,
+                "chest": "乳晕发胀，乳头挺立着",
+                "pussy": "湿润，内裤中心湿透了",
+                "clitoris": "肿胀，暴露在外面",
+                "anus": "温热，微微张开",
+                "dependency": "中",
+                "possessiveness": "低",
+                "outfit": "白色蕾丝眼罩，全身只穿着一条黑色丁字裤"
+              },
+              {
+                "name": "{{user}}",
+                "action": "坐在床边，视线从她的胸口移到她的小腹",
+                "outfit": "家居T恤，运动短裤",
+                "mental": "掌控",
+                "penis": "挺立",
+                "testicles": "微微发胀"
+              }
+            ]
+          }
+        },
+        {
+          "stepId": 10,
+          "phase": "沉沦加深",
+          "characters": [
+            {
+              "name": "王春凤",
+              "mood": "沉溺失守",
+              "innerThoughts": "不要了……可身体自己在动……"
+            },
+            {
+              "name": "{{user}}",
+              "mood": "失控",
+              "innerThoughts": "妈嘴上说不要，屁股却在动。"
+            }
+          ],
+          "event": "一次常被连续做四五次。她被操到翻白眼，嘴里哭着喊“不要了”，屁股却疯狂往后挺，阴唇夹紧不让拔出。",
+          "location": "{{user}}卧室",
+          "development": "她说“不要了”的时候，下面绞得更紧了。",
+          "isExecuted": false,
+          "statusBar": {
+            "dateTime": "2025年09月15日 22点00分 星期一",
+            "location": "{{user}}卧室",
+            "users": [
+              {
+                "name": "王春凤",
+                "action": "趴在床上，臀部高高翘起，头埋在枕头里，肩膀在颤抖",
+                "inner": "不要了……可身体自己在动……",
+                "emotion": "沉溺失守",
+                "fallValue": 45,
+                "lustValue": 55,
+                "emptyValue": 25,
+                "tiredValue": 16,
+                "chest": "乳晕深红，乳头硬挺着",
+                "pussy": "湿润，阴唇夹得很紧",
+                "clitoris": "肿胀，暴露在外面",
+                "anus": "温热，微微张开",
+                "dependency": "中",
+                "possessiveness": "低",
+                "outfit": "全身赤裸，只有眼罩还挂在额头上"
+              },
+              {
+                "name": "{{user}}",
+                "action": "跪在她身后，双手扶着她的腰",
+                "outfit": "光着上身",
+                "mental": "失控",
+                "penis": "挺立",
+                "testicles": "微微发胀"
+              }
+            ]
+          }
+        },
+        {
+          "stepId": 11,
+          "phase": "沉沦加深",
+          "characters": [
+            {
+              "name": "王春凤",
+              "mood": "慌乱",
+              "innerThoughts": "套破了……别射里面……"
+            },
+            {
+              "name": "{{user}}",
+              "mood": "执拗",
+              "innerThoughts": "我偏要射进去。"
+            }
+          ],
+          "event": "避孕套被撑破或脱落。她嘴上说“别射里面”，可身体已经绞得很紧。",
+          "location": "{{user}}卧室",
+          "development": "他说“妈，套破了”的时候，她下面缩了一下。",
+          "isExecuted": false,
+          "statusBar": {
+            "dateTime": "2025年09月20日 22点00分 星期日",
+            "location": "{{user}}卧室",
+            "users": [
+              {
+                "name": "王春凤",
+                "action": "身体紧绷，双腿夹着他的腰，嘴里说着“别”，但没有任何推开的动作",
+                "inner": "套破了……别射里面……",
+                "emotion": "慌乱",
+                "fallValue": 50,
+                "lustValue": 60,
+                "emptyValue": 22,
+                "tiredValue": 14,
+                "chest": "乳晕深红，乳头硬挺着",
+                "pussy": "湿润，阴道壁在收缩",
+                "clitoris": "肿胀，暴露在外面",
+                "anus": "温热，微微张开",
+                "dependency": "中",
+                "possessiveness": "低",
+                "outfit": "全身赤裸"
+              },
+              {
+                "name": "{{user}}",
+                "action": "俯在她身上，双手撑在她头两侧",
+                "outfit": "光着上身",
+                "mental": "执拗",
+                "penis": "挺立",
+                "testicles": "微微发胀"
+              }
+            ]
+          }
+        },
+        {
+          "stepId": 12,
+          "phase": "沉沦加深",
+          "characters": [
+            {
+              "name": "王春凤",
+              "mood": "崩坏",
+              "innerThoughts": "他顶到最里面了……以前从来没有过……"
+            },
+            {
+              "name": "{{user}}",
+              "mood": "迷恋",
+              "innerThoughts": "妈的小腹被我顶起来了。"
+            }
+          ],
+          "event": "子宫因频繁高潮微微下垂，龟头能直接顶到子宫颈，小腹出现明显凸起。她感觉到自己被顶到前所未有的深度。",
+          "location": "{{user}}卧室",
+          "development": "她能感觉到自己的小腹被顶起了一个形状。",
+          "isExecuted": false,
+          "statusBar": {
+            "dateTime": "2025年09月25日 23点00分 星期四",
+            "location": "{{user}}卧室",
+            "users": [
+              {
+                "name": "王春凤",
+                "action": "躺着，双手抓着床单，小腹处有明显的凸起，随着呼吸轻轻起伏",
+                "inner": "他顶到最里面了……以前从来没有过……",
+                "emotion": "崩坏",
+                "fallValue": 55,
+                "lustValue": 65,
+                "emptyValue": 20,
+                "tiredValue": 12,
+                "chest": "乳晕深红，乳头硬挺着，汗水顺着乳沟流下",
+                "pussy": "湿润，阴道壁在剧烈收缩",
+                "clitoris": "肿胀，暴露在外面",
+                "anus": "温热，微微张开",
+                "dependency": "中",
+                "possessiveness": "低",
+                "outfit": "全身赤裸"
+              },
+              {
+                "name": "{{user}}",
+                "action": "俯在她身上，看着母亲小腹上的凸起",
+                "outfit": "光着上身",
+                "mental": "迷恋",
+                "penis": "挺立",
+                "testicles": "微微发胀"
+              }
+            ]
+          }
+        },
+        {
+          "stepId": 13,
+          "phase": "沉沦加深",
+          "characters": [
+            {
+              "name": "王春凤",
+              "mood": "羞耻+渴望",
+              "innerThoughts": "今天是安全期……就今天一次。"
+            },
+            {
+              "name": "{{user}}",
+              "mood": "惊喜",
+              "innerThoughts": "妈求我了。"
+            }
+          ],
+          "event": "安全期她主动求内射。声音很小，说“今天是安全期……射进来吧”。",
+          "location": "{{user}}卧室",
+          "development": "她说这句话的时候没有看他的眼睛。",
+          "isExecuted": false,
+          "statusBar": {
+            "dateTime": "2025年09月30日 20点00分 星期二",
+            "location": "{{user}}卧室",
+            "users": [
+              {
+                "name": "王春凤",
+                "action": "躺在床上，视线落在别处，声音很小",
+                "inner": "今天是安全期……就今天一次。",
+                "emotion": "羞耻+渴望",
+                "fallValue": 60,
+                "lustValue": 70,
+                "emptyValue": 18,
+                "tiredValue": 10,
+                "chest": "乳晕深红，乳头硬挺着",
+                "pussy": "湿润，阴道壁在收缩",
+                "clitoris": "肿胀，暴露在外面",
+                "anus": "温热，微微张开",
+                "dependency": "高",
+                "possessiveness": "低",
+                "outfit": "全身赤裸"
+              },
+              {
+                "name": "{{user}}",
+                "action": "停在她上方，有点愣住",
+                "outfit": "光着上身",
+                "mental": "惊喜",
+                "penis": "挺立",
+                "testicles": "微微发胀"
+              }
+            ]
+          }
+        },
+        {
+          "stepId": 14,
+          "phase": "沉沦加深",
+          "characters": [
+            {
+              "name": "王春凤",
+              "mood": "羞耻",
+              "innerThoughts": "白天……要是被人看到……"
+            },
+            {
+              "name": "{{user}}",
+              "mood": "兴奋",
+              "innerThoughts": "白天也要。"
+            }
+          ],
+          "event": "白天被要求时半推半就，咬着唇承受。下面比夜晚更多水、更紧。",
+          "location": "客厅/厨房",
+          "development": "窗外有光，她的身体在光线下暴露无遗。",
+          "isExecuted": false,
+          "statusBar": {
+            "dateTime": "2025年10月05日 14点00分 星期日",
+            "location": "客厅",
+            "users": [
+              {
+                "name": "王春凤",
+                "action": "靠在客厅沙发上，用手背遮住自己的眼睛，身体在阳光下泛着光",
+                "inner": "白天……要是被人看到……",
+                "emotion": "羞耻",
+                "fallValue": 65,
+                "lustValue": 72,
+                "emptyValue": 15,
+                "tiredValue": 8,
+                "chest": "乳晕深红，乳头硬挺着，在光线下泛着湿润的光",
+                "pussy": "湿润，比夜晚更湿",
+                "clitoris": "肿胀，暴露在外面",
+                "anus": "温热，微微张开",
+                "dependency": "高",
+                "possessiveness": "低",
+                "outfit": "裙摆被推到腰上，内裤被褪到脚踝"
+              },
+              {
+                "name": "{{user}}",
+                "action": "站在沙发前，视线落在她身上",
+                "outfit": "家居T恤，运动短裤",
+                "mental": "兴奋",
+                "penis": "挺立",
+                "testicles": "微微发胀"
+              }
+            ]
+          }
+        },
+        {
+          "stepId": 15,
+          "phase": "沉沦加深",
+          "characters": [
+            {
+              "name": "王春凤",
+              "mood": "回避",
+              "innerThoughts": "只要不说……昨晚就没有发生。"
+            },
+            {
+              "name": "{{user}}",
+              "mood": "留意",
+              "innerThoughts": "妈腿在抖。"
+            }
+          ],
+          "event": "第二天双腿发软，扶着灶台做饭，绝口不提昨晚的事。",
+          "location": "厨房",
+          "development": "她切菜的时候手有些不稳。他看到了，没有说。",
+          "isExecuted": false,
+          "statusBar": {
+            "dateTime": "2025年10月06日 07点00分 星期一",
+            "location": "厨房",
+            "users": [
+              {
+                "name": "王春凤",
+                "action": "站在灶台前，一只手扶着台面，另一只手在切菜，动作比平时慢",
+                "inner": "只要不说……昨晚就没有发生。",
+                "emotion": "回避",
+                "fallValue": 68,
+                "lustValue": 68,
+                "emptyValue": 14,
+                "tiredValue": 6,
+                "chest": "随着呼吸轻轻起伏",
+                "pussy": "湿润的，还残留着昨晚的感觉",
+                "clitoris": "微微发胀",
+                "anus": "温热，微微张开",
+                "dependency": "高",
+                "possessiveness": "低",
+                "outfit": "家居服，围裙"
+              },
+              {
+                "name": "{{user}}",
+                "action": "站在厨房门口，视线落在她微微发颤的腿上，没有说话",
+                "outfit": "校服",
+                "mental": "留意",
+                "penis": "平静",
+                "testicles": "正常"
+              }
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "title": "第三阶段：依赖与失控",
+      "summary": "身体已经先于大脑做出了选择。她坐在深夜的客厅里，等他的脚步声。",
+      "steps": [
+        {
+          "stepId": 16,
+          "phase": "依赖与失控",
+          "characters": [
+            {
+              "name": "王春凤",
+              "mood": "依赖",
+              "innerThoughts": "今晚……他会过来吗。"
+            },
+            {
+              "name": "{{user}}",
+              "mood": "主动",
+              "innerThoughts": "妈在等我。"
+            }
+          ],
+          "event": "身体已经离不开被彻底填满的感觉。她会在深夜独自坐在客厅，等{{user}}过来。",
+          "location": "客厅",
+          "development": "夜灯昏黄，她坐在沙发上，手搭在自己腿上，没有开电视。",
+          "isExecuted": false,
+          "statusBar": {
+            "dateTime": "2025年10月10日 23点00分 星期五",
+            "location": "客厅",
+            "users": [
+              {
+                "name": "王春凤",
+                "action": "坐在沙发上，手搭在自己腿上，客厅没有开灯，只有走廊透进来的一点光",
+                "inner": "今晚……他会过来吗。",
+                "emotion": "依赖",
+                "fallValue": 75,
+                "lustValue": 70,
+                "emptyValue": 12,
+                "tiredValue": 4,
+                "chest": "随着呼吸轻轻起伏",
+                "pussy": "湿润的，已经习惯了被填满的感觉",
+                "clitoris": "微微发胀",
+                "anus": "温热，微微张开",
+                "dependency": "高",
+                "possessiveness": "中",
+                "outfit": "宽松的白色睡裙"
+              },
+              {
+                "name": "{{user}}",
+                "action": "从房间走出来，看到母亲坐在客厅里，脚步顿了一下",
+                "outfit": "家居T恤，运动短裤",
+                "mental": "主动",
+                "penis": "平静",
+                "testicles": "正常"
+              }
+            ]
+          }
+        },
+        {
+          "stepId": 17,
+          "phase": "依赖与失控",
+          "characters": [
+            {
+              "name": "王春凤",
+              "mood": "自我欺骗",
+              "innerThoughts": "我还是他妈妈。"
+            },
+            {
+              "name": "{{user}}",
+              "mood": "尊敬+占有",
+              "innerThoughts": "妈在问学习。可她下面还在流水。"
+            }
+          ],
+          "event": "事后她迅速切回母亲模式，说“今晚学到几点”，督促学习。可身体刚被内射过，精液还在往外淌。",
+          "location": "{{user}}卧室",
+          "development": "她说“学到几点”的时候，声音还带着喘息，精液正沿着大腿根往下淌。",
+          "isExecuted": false,
+          "statusBar": {
+            "dateTime": "2025年10月12日 22点30分 星期日",
+            "location": "{{user}}卧室",
+            "users": [
+              {
+                "name": "王春凤",
+                "action": "正坐在床边，试图整理自己的衣服，但动作有些慌乱，精液正从腿根往下淌",
+                "inner": "我还是他妈妈。",
+                "emotion": "自我欺骗",
+                "fallValue": 80,
+                "lustValue": 65,
+                "emptyValue": 10,
+                "tiredValue": 3,
+                "chest": "乳晕深红，乳头硬挺着",
+                "pussy": "湿润的，精液正在往外淌",
+                "clitoris": "微微发胀",
+                "anus": "温热，微微张开",
+                "dependency": "高",
+                "possessiveness": "中",
+                "outfit": "睡裙被拉到腰上"
+              },
+              {
+                "name": "{{user}}",
+                "action": "躺在床上，看着母亲的背影，视线落在她腿根处的白色痕迹上",
+                "outfit": "光着上身",
+                "mental": "尊敬+占有",
+                "penis": "正在变软",
+                "testicles": "微微发胀"
+              }
+            ]
+          }
+        },
+        {
+          "stepId": 18,
+          "phase": "依赖与失控",
+          "characters": [
+            {
+              "name": "王春凤",
+              "mood": "分裂",
+              "innerThoughts": "为了他的前途……真的是为了他的前途吗。"
+            },
+            {
+              "name": "{{user}}",
+              "mood": "纠结",
+              "innerThoughts": "我到底是不是为了学习。"
+            }
+          ],
+          "event": "自我说服越来越困难，身体已经先于大脑做出反应。可她还是用“为了高考”来说服自己。",
+          "location": "王春凤卧室",
+          "development": "她躺在床上，一只手放在自己小腹上，另一只手搭在身侧，睁着眼看着天花板。",
+          "isExecuted": false,
+          "statusBar": {
+            "dateTime": "2025年10月15日 23点30分 星期三",
+            "location": "王春凤卧室",
+            "users": [
+              {
+                "name": "王春凤",
+                "action": "躺在床上，睁着眼看着天花板，一只手放在小腹上",
+                "inner": "为了他的前途……真的是为了他的前途吗。",
+                "emotion": "分裂",
+                "fallValue": 85,
+                "lustValue": 60,
+                "emptyValue": 8,
+                "tiredValue": 2,
+                "chest": "随着呼吸轻轻起伏",
+                "pussy": "湿润的，还能感觉到被进入过的余温",
+                "clitoris": "微微发胀",
+                "anus": "温热，微微张开",
+                "dependency": "极高",
+                "possessiveness": "中",
+                "outfit": "白色睡裙"
+              },
+              {
+                "name": "{{user}}",
+                "action": "在自己房间里，坐在书桌前，面前摊着书，但没有在看",
+                "outfit": "家居T恤",
+                "mental": "纠结",
+                "penis": "平静",
+                "testicles": "正常"
+              }
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "title": "第四阶段：父亲归来与调包",
+      "summary": "他回来了。她灌醉了他。隔壁的鼾声里，她让儿子内射了自己。",
+      "steps": [
+        {
+          "stepId": 19,
+          "phase": "父亲归来与调包",
+          "characters": [
+            {
+              "name": "王春凤",
+              "mood": "紧张",
+              "innerThoughts": "他回来了……不能让他发现。"
+            },
+            {
+              "name": "{{user}}",
+              "mood": "警惕",
+              "innerThoughts": "爸回来了……不能被发现。"
+            }
+          ],
+          "event": "父亲张建国因故回家。王春凤表面平静地准备饭菜，心里却开始盘算。",
+          "location": "家中",
+          "development": "她站在灶台前炒菜，手握着锅铲，指节发白。",
+          "isExecuted": false,
+          "statusBar": {
+            "dateTime": "2025年10月20日 18点00分 星期一",
+            "location": "家中厨房",
+            "users": [
+              {
+                "name": "王春凤",
+                "action": "站在灶台前炒菜，握着锅铲的指节发白，听见丈夫在客厅说话的声音",
+                "inner": "他回来了……不能让他发现。",
+                "emotion": "紧张",
+                "fallValue": 88,
+                "lustValue": 55,
+                "emptyValue": 6,
+                "tiredValue": 1,
+                "chest": "随着呼吸轻轻起伏",
+                "pussy": "湿润的",
+                "clitoris": "微微发胀",
+                "anus": "温热",
+                "dependency": "极高",
+                "possessiveness": "强",
+                "outfit": "日常家居服，围裙"
+              },
+              {
+                "name": "{{user}}",
+                "action": "在自己房间里，听到客厅里父亲的说话声，没有说话",
+                "outfit": "校服",
+                "mental": "警惕",
+                "penis": "平静",
+                "testicles": "正常"
+              }
+            ]
+          }
+        },
+        {
+          "stepId": 20,
+          "phase": "父亲归来与调包",
+          "characters": [
+            {
+              "name": "王春凤",
+              "mood": "决意",
+              "innerThoughts": "他睡着了。现在可以了。"
+            },
+            {
+              "name": "{{user}}",
+              "mood": "紧张+兴奋",
+              "innerThoughts": "妈把爸灌醉了。"
+            }
+          ],
+          "event": "王春凤故意在晚饭时灌醉张建国。他喝了几杯就趴桌上睡了过去。",
+          "location": "家中",
+          "development": "她放下酒杯，看了一眼趴在桌上睡着了的丈夫，然后站了起来。",
+          "isExecuted": false,
+          "statusBar": {
+            "dateTime": "2025年10月20日 20点00分 星期一",
+            "location": "家中餐桌旁",
+            "users": [
+              {
+                "name": "王春凤",
+                "action": "看着趴在桌上睡着了的丈夫，放下酒杯，站了起来",
+                "inner": "他睡着了。现在可以了。",
+                "emotion": "决意",
+                "fallValue": 92,
+                "lustValue": 60,
+                "emptyValue": 5,
+                "tiredValue": 1,
+                "chest": "随着呼吸轻轻起伏",
+                "pussy": "湿润的",
+                "clitoris": "微微发胀",
+                "anus": "温热",
+                "dependency": "极高",
+                "possessiveness": "强",
+                "outfit": "日常家居服"
+              },
+              {
+                "name": "{{user}}",
+                "action": "坐在餐桌另一侧，看着父亲趴在桌上，又看向母亲",
+                "outfit": "校服",
+                "mental": "紧张+兴奋",
+                "penis": "半勃起",
+                "testicles": "微微发胀"
+              }
+            ]
+          }
+        },
+        {
+          "stepId": 21,
+          "phase": "父亲归来与调包",
+          "characters": [
+            {
+              "name": "王春凤",
+              "mood": "崩坏",
+              "innerThoughts": "他在隔壁睡着了……我却在被儿子内射。"
+            },
+            {
+              "name": "{{user}}",
+              "mood": "禁忌",
+              "innerThoughts": "爸在隔壁。可我在妈里面。"
+            }
+          ],
+          "event": "在张建国昏睡的房间隔壁，王春凤让儿子内射自己。她能听到丈夫的鼾声，身体却绞得更紧。",
+          "location": "{{user}}卧室",
+          "development": "她听到了隔壁的鼾声，身体绞得更紧了。",
+          "isExecuted": false,
+          "statusBar": {
+            "dateTime": "2025年10月20日 21点00分 星期一",
+            "location": "{{user}}卧室",
+            "users": [
+              {
+                "name": "王春凤",
+                "action": "躺在床上，身体紧绷，听见隔壁传来丈夫的鼾声，下面绞得更紧了",
+                "inner": "他在隔壁睡着了……我却在被儿子内射。",
+                "emotion": "崩坏",
+                "fallValue": 96,
+                "lustValue": 65,
+                "emptyValue": 4,
+                "tiredValue": 1,
+                "chest": "乳晕深红，乳头硬挺着",
+                "pussy": "湿润，阴道壁在剧烈收缩",
+                "clitoris": "肿胀，暴露在外面",
+                "anus": "温热，微微张开",
+                "dependency": "极高",
+                "possessiveness": "强",
+                "outfit": "全身赤裸"
+              },
+              {
+                "name": "{{user}}",
+                "action": "俯在她身上，双手撑在两侧，视线落在她脸上，能听到隔壁的鼾声",
+                "outfit": "光着上身",
+                "mental": "禁忌",
+                "penis": "挺立",
+                "testicles": "微微发胀"
+              }
+            ]
+          }
+        },
+        {
+          "stepId": 22,
+          "phase": "父亲归来与调包",
+          "characters": [
+            {
+              "name": "王春凤",
+              "mood": "谎言",
+              "innerThoughts": "我说是他的……可孩子是他的。"
+            },
+            {
+              "name": "{{user}}",
+              "mood": "沉默",
+              "innerThoughts": "孩子是我的。可妈说是爸的。"
+            }
+          ],
+          "event": "王春凤将怀孕的事实归到张建国头上，对外维持“这是丈夫的孩子”的表象。",
+          "location": "家中",
+          "development": "她说出这句话的时候，没有看任何人的眼睛。",
+          "isExecuted": false,
+          "statusBar": {
+            "dateTime": "2025年11月05日 10点00分 星期三",
+            "location": "家中客厅",
+            "users": [
+              {
+                "name": "王春凤",
+                "action": "坐在客厅沙发上，手搭在小腹上，视线落在窗外",
+                "inner": "我说是他的……可孩子是他的。",
+                "emotion": "谎言",
+                "fallValue": 98,
+                "lustValue": 55,
+                "emptyValue": 3,
+                "tiredValue": 1,
+                "chest": "随着呼吸轻轻起伏",
+                "pussy": "湿润的",
+                "clitoris": "微微发胀",
+                "anus": "温热",
+                "dependency": "极高",
+                "possessiveness": "极强",
+                "outfit": "宽松的家居服"
+              },
+              {
+                "name": "{{user}}",
+                "action": "站在客厅门口，没有说话",
+                "outfit": "校服",
+                "mental": "沉默",
+                "penis": "平静",
+                "testicles": "正常"
+              }
+            ]
+          }
+        },
+        {
+          "stepId": 23,
+          "phase": "父亲归来与调包",
+          "characters": [
+            {
+              "name": "王春凤",
+              "mood": "平静",
+              "innerThoughts": "这孩子……应该姓什么。"
+            },
+            {
+              "name": "{{user}}",
+              "mood": "复杂",
+              "innerThoughts": "妈肚子里的孩子——是我的。"
+            }
+          ],
+          "event": "故事在血缘与伦理彻底缠绕的结局中收束。王春凤摸着肚子，不知道孩子姓什么。",
+          "location": "家中",
+          "development": "她摸着肚子，那里有一个生命。她不知道他应该姓什么。",
+          "isExecuted": false,
+          "statusBar": {
+            "dateTime": "2025年11月10日 20点00分 星期一",
+            "location": "家中",
+            "users": [
+              {
+                "name": "王春凤",
+                "action": "坐在床边，一只手搭在微微隆起的小腹上，另一只手放在身侧",
+                "inner": "这孩子……应该姓什么。",
+                "emotion": "平静",
+                "fallValue": 100,
+                "lustValue": 50,
+                "emptyValue": 2,
+                "tiredValue": 1,
+                "chest": "随着呼吸轻轻起伏",
+                "pussy": "湿润的",
+                "clitoris": "微微发胀",
+                "anus": "温热",
+                "dependency": "极高",
+                "possessiveness": "极强",
+                "outfit": "白色宽松睡裙"
+              },
+              {
+                "name": "{{user}}",
+                "action": "站在门口，看着母亲的手放在小腹上，没有说话",
+                "outfit": "家居T恤",
+                "mental": "复杂",
+                "penis": "平静",
+                "testicles": "正常"
+              }
+            ]
+          }
+        }
+      ]
+    }
+  ]
+};
+
+    // ================================================================
+    // 核心逻辑
+    // ================================================================
+
+    var $ = function(s) { return document.querySelector(s); };
+    var $$ = function(s) { return document.querySelectorAll(s); };
+
+    var storyTitleText = $('#storyTitleText');
+    var currentDisplay = $('#currentDisplay');
+    var stepStatus = $('#stepStatus');
+    var stepStatusText = $('#stepStatusText');
+    var progressText = $('#progressText');
+    var phaseDisplay = $('#phaseDisplay');
+    var stepsList = $('#stepsList');
+    var stepsCount = $('#stepsCount');
+    var totalBadge = $('#totalBadge');
+    var prevBtn = $('#prevBtn');
+    var nextBtn = $('#nextBtn');
+    var currentBtn = $('#currentBtn');
+    var detailPanel = $('#detailPanel');
+    var detailClose = $('#detailClose');
+    var detailChars = $('#detailChars');
+    var detailEvent = $('#detailEvent');
+    var detailDev = $('#detailDev');
+    var stepsListWrap = $('#stepsListWrap');
+    var collapseToggleBtn = $('#collapseToggleBtn');
+    var collapseLabel = $('#collapseLabel');
+    var listToggleBtn = $('#listToggleBtn');
+    var storyListOverlay = $('#storyListOverlay');
+    var storyListBody = $('#storyListBody');
+    var storyListCloseBtn = $('#storyListCloseBtn');
+
+    var plotData = null, storyList = [], currentStoryIndex = 0, currentPlotId = 1, currentStepId = 1, isDetailOpen = false;
+
+    // ===== 折叠状态持久化 =====
+    var STORAGE_KEY = 'story_assistant_steps_collapsed_peidu';
+    var isStepsCollapsed = false;
+
+    function loadCollapsedState() {
+        try {
+            var saved = localStorage.getItem(STORAGE_KEY);
+            if (saved !== null) {
+                isStepsCollapsed = saved === 'true';
+            } else {
+                isStepsCollapsed = true;
+            }
+        } catch (e) {
+            isStepsCollapsed = true;
+        }
+        applyCollapsedState();
+    }
+
+    function saveCollapsedState() {
+        try {
+            localStorage.setItem(STORAGE_KEY, String(isStepsCollapsed));
+        } catch (e) {}
+    }
+
+    function applyCollapsedState() {
+        var wrap = stepsListWrap;
+        if (!wrap) return;
+
+        if (isStepsCollapsed) {
+            wrap.style.maxHeight = '0px';
+            wrap.style.opacity = '0';
+            wrap.classList.remove('open');
+            collapseLabel.textContent = '展开';
+        } else {
+            wrap.classList.remove('open');
+            wrap.style.maxHeight = 'none';
+            wrap.style.opacity = '1';
+            var actualHeight = wrap.scrollHeight;
+            wrap.style.maxHeight = '0px';
+            wrap.style.opacity = '0';
+
+            void wrap.offsetHeight;
+            wrap.style.maxHeight = actualHeight + 'px';
+            wrap.style.opacity = '1';
+            wrap.classList.add('open');
+            collapseLabel.textContent = '折叠';
+
+            var onTransitionEnd = function() {
+                wrap.removeEventListener('transitionend', onTransitionEnd);
+                if (!isStepsCollapsed) {
+                    wrap.style.maxHeight = 'none';
+                }
+            };
+            wrap.addEventListener('transitionend', onTransitionEnd);
+        }
+    }
+
+    function toggleCollapsed() {
+        isStepsCollapsed = !isStepsCollapsed;
+        saveCollapsedState();
+        applyCollapsedState();
+    }
+
+    // ===== 加载数据（直接读内联） =====
+    function loadPlotData() {
+        if (DATA && typeof DATA === 'object' && DATA.plotList && DATA.plotList.length > 0) {
+            plotData = DATA;
+            console.log('[剧情推进] ✅ 从内联数据加载成功');
+            initFromPlotData();
+            return;
+        }
+        console.warn('[剧情推进] ⚠️ 未找到剧情数据');
+        renderEmptyState();
+    }
+
+    function initFromPlotData() {
+        if (!plotData || !plotData.plotList || plotData.plotList.length === 0) {
+            renderEmptyState();
+            return;
+        }
+        storyList = plotData.plotList.map(function(plot, idx) {
+            var plotId = idx + 1;
+            var currentStep = plot.steps.find(function(s) { return s.isExecuted; }) || plot.steps[0] || { stepId: 1 };
+            plot.steps.forEach(function(s) {
+                if (typeof s.isExecuted === 'undefined') {
+                    s.isExecuted = false;
+                }
+            });
+            return {
+                id: plotId,
+                title: plot.title,
+                summary: plot.summary || '',
+                steps: plot.steps || [],
+                currentStepId: currentStep.stepId || 1,
+                isExecuted: plot.steps.some(function(s) { return s.isExecuted; })
+            };
+        });
+        if (plotData.currentPlot) {
+            var targetId = plotData.currentPlot.plotId || 1;
+            var found = storyList.findIndex(function(s) { return s.id === targetId; });
+            if (found !== -1) {
+                currentStoryIndex = found;
+                currentPlotId = targetId;
+                currentStepId = plotData.currentPlot.stepId || 1;
+            } else {
+                currentStoryIndex = 0;
+                currentPlotId = storyList[0] ? storyList[0].id : 1;
+                currentStepId = storyList[0] && storyList[0].steps[0] ? storyList[0].steps[0].stepId : 1;
+            }
+        } else {
+            currentStoryIndex = 0;
+            currentPlotId = storyList[0] ? storyList[0].id : 1;
+            currentStepId = storyList[0] && storyList[0].steps[0] ? storyList[0].steps[0].stepId : 1;
+        }
+        totalBadge.textContent = storyList.length;
+        renderAll();
+        renderStoryList();
+    }
+
+    function getNextPendingStep(story) {
+        if (!story || !story.steps) return null;
+        return story.steps.find(function(s) { return !s.isExecuted; });
+    }
+
+    function renderAll() {
+        if (!storyList || storyList.length === 0) { renderEmptyState(); return; }
+        var story = storyList[currentStoryIndex];
+        if (!story) { renderEmptyState(); return; }
+
+        currentDisplay.classList.remove('no-plot');
+        storyTitleText.textContent = story.title;
+
+        var totalSteps = story.steps.length;
+        var executedSteps = story.steps.filter(function(s) { return s.isExecuted; }).length;
+        var currentStep = story.steps.find(function(s) { return s.stepId == currentStepId; }) || story.steps[0];
+        var isCurrentExecuted = currentStep ? (currentStep.isExecuted || false) : false;
+        var currentPhase = currentStep ? (currentStep.phase || '') : '';
+
+        stepStatus.className = 'step-status';
+        var dot = stepStatus.querySelector('.dot');
+        if (dot) { dot.className = 'dot' + (isCurrentExecuted ? ' done' : ' pending'); }
+        stepStatusText.textContent = isCurrentExecuted ? '已执行' : '待执行';
+        progressText.textContent = executedSteps + ' / ' + totalSteps + ' 步';
+        phaseDisplay.textContent = currentPhase ? '📍 ' + currentPhase : '';
+
+        renderSteps(story);
+        updateNavButtons(story);
+        currentBtn.textContent = '🎯 ' + currentStepId;
+        if (isDetailOpen && currentStep) { renderDetail(currentStep); }
+        renderStoryList();
+    }
+
+    function renderSteps(story) {
+        if (!story || !story.steps || story.steps.length === 0) {
+            stepsList.innerHTML = '<div class="empty-state"><p>此剧情暂无步骤</p></div>';
+            stepsCount.textContent = '0 步';
+            return;
+        }
+
+        stepsCount.textContent = story.steps.length + ' 步';
+        var html = '';
+        story.steps.forEach(function(step) {
+            var isCurrent = step.stepId == currentStepId;
+            var isExecuted = step.isExecuted || false;
+            var cls = (isExecuted ? 'executed ' : '') + (isCurrent ? 'current' : '');
+            var charsStr = (step.characters || []).map(function(c) { return c.name; }).filter(Boolean).join('、') || '未指定';
+
+            html += '<div class="step-item ' + cls + '" data-step-id="' + step.stepId + '">' +
+                '<div class="step-header-line">' +
+                '<span class="step-id">步骤 ' + step.stepId + '</span>' +
+                '<span class="step-location"><svg class="icon-svg" viewBox="0 0 24 24"><path d="M12 2a8 8 0 0 0-8 8c0 6 8 12 8 12s8-6 8-12a8 8 0 0 0-8-8z"/><circle cx="12" cy="10" r="3"/></svg>' + (step.location || '未指定') + '</span>' +
+                '<span style="font-size:0.5rem;color:hsla(38,45%,50%,0.7);background:hsla(38,45%,50%,0.06);padding:1px 6px;border-radius:2px;">' + (step.phase || '') + '</span>' +
+                '<button class="step-execute-btn ' + (isExecuted ? 'done' : '') + '" data-step-id="' + step.stepId + '">' + (isExecuted ? '✓ 已执行' : '▶ 执行') + '</button>' +
+                '</div>' +
+                '<div class="step-event-preview">' + (step.event || '').substring(0, 60) + ((step.event || '').length > 60 ? '...' : '') + '</div>' +
+                '<div style="font-size:0.5rem;color:var(--text-dim);margin-top:2px;">👥 ' + charsStr + '</div>' +
+                '</div>';
+        });
+
+        stepsList.innerHTML = html;
+        stepsList.querySelectorAll('.step-item').forEach(function(el) {
+            el.addEventListener('click', function(e) {
+                if (e.target.closest('.step-execute-btn')) return;
+                var stepId = parseInt(this.dataset.stepId);
+                var step = story.steps.find(function(s) { return s.stepId == stepId; });
+                if (step) { currentStepId = stepId; renderAll(); openDetail(step); }
+            });
+        });
+
+        stepsList.querySelectorAll('.step-execute-btn').forEach(function(btn) {
+            btn.addEventListener('click', function(e) {
+                e.stopPropagation();
+                var stepId = parseInt(this.dataset.stepId);
+                executeStep(stepId);
+            });
+        });
+    }
+
+    function updateNavButtons(story) {
+        var totalSteps = story.steps.length;
+        var currentIdx = story.steps.findIndex(function(s) { return s.stepId == currentStepId; });
+        prevBtn.disabled = !(currentIdx > 0 || currentStoryIndex > 0);
+        var hasNextStep = currentIdx < totalSteps - 1;
+        var hasNextStory = currentStoryIndex < storyList.length - 1;
+        nextBtn.disabled = !(hasNextStep || hasNextStory);
+    }
+
+    function executeStep(stepId) {
+        var story = storyList[currentStoryIndex];
+        if (!story) return;
+        var step = story.steps.find(function(s) { return s.stepId == stepId; });
+        if (!step) return;
+
+        step.isExecuted = true;
+        currentStepId = stepId;
+        currentPlotId = story.id;
+
+        var stepData = {
+            location: step.location || '未指定',
+            characters: step.characters || [],
+            event: step.event || '',
+            development: step.development || '',
+            phase: step.phase || ''
+        };
+
+        var textToSend = 'step_data = ' + JSON.stringify(stepData, null, 2);
+        if (typeof triggerSlash === 'function') {
+            triggerSlash('/send ' + textToSend + '|/trigger');
+        } else if (typeof window.triggerSlash === 'function') {
+            window.triggerSlash('/send ' + textToSend + '|/trigger');
+        } else {
+            console.log('[剧情推进] 发送:', textToSend);
+            navigator.clipboard ? navigator.clipboard.writeText(textToSend).catch(function() {}) : null;
+            alert('请将以下内容粘贴到酒馆对话框：\n\n' + textToSend);
+        }
+
+        saveStateToWorldbook();
+
+        var nextPending = getNextPendingStep(story);
+        if (nextPending) {
+            currentStepId = nextPending.stepId;
+        } else if (currentStoryIndex < storyList.length - 1) {
+            currentStoryIndex++;
+            var nextStory = storyList[currentStoryIndex];
+            currentPlotId = nextStory.id;
+            var firstStep = nextStory.steps[0];
+            if (firstStep) { currentStepId = firstStep.stepId; }
+        }
+
+        renderAll();
+        var updatedStep = story.steps.find(function(s) { return s.stepId == currentStepId; });
+        if (updatedStep) { openDetail(updatedStep); }
+        closeStoryList();
+    }
+
+    function saveStateToWorldbook() {
+        try {
+            if (!plotData) return;
+
+            plotData.currentPlot = {
+                plotId: currentPlotId,
+                stepId: currentStepId,
+                title: '剧情元数据-陪读妈妈'
+            };
+
+            plotData.plotList.forEach(function(plot, idx) {
+                var story = storyList[idx];
+                if (story) {
+                    plot.steps.forEach(function(s, si) {
+                        var localStep = story.steps[si];
+                        if (localStep) { s.isExecuted = localStep.isExecuted || false; }
+                    });
+                }
+            });
+
+            var jsonStr = JSON.stringify(plotData, null, 2);
+
+            // 尝试通过 getContext 写入
+            if (typeof getContext === 'function') {
+                var ctx = getContext();
+                if (ctx) {
+                    var worldbooks = ctx.charWorldbooks || ctx.worldInfo || ctx.worldbooks;
+                    if (worldbooks) {
+                        var entries = Array.isArray(worldbooks) ? worldbooks : Object.values(worldbooks);
+                        for (var i = 0; i < entries.length; i++) {
+                            var entry = entries[i];
+                            var name = entry.name || entry.title || entry.key || '';
+                            if (name.includes('剧情元数据-陪读妈妈')) {
+                                entry.content = '[plotResultStart]\n' + jsonStr + '\n[plotResultEnd]';
+                                console.log('[剧情推进] ✅ 已保存到世界书');
+                                return;
+                            }
+                        }
+                    }
+                }
+            }
+
+            // 尝试通过 replaceWorldbook 写入
+            if (typeof replaceWorldbook === 'function') {
+                var wbNames = typeof getCharWorldbookNames === 'function' ? getCharWorldbookNames('current') : null;
+                if (wbNames && wbNames.primary) {
+                    var entries = typeof getWorldbook === 'function' ? getWorldbook(wbNames.primary) : null;
+                    if (entries) {
+                        var entryList = Array.isArray(entries) ? entries : Object.values(entries);
+                        var target = entryList.find(function(e) {
+                            return e.name && e.name.includes('剧情元数据-陪读妈妈');
+                        });
+                        if (target) {
+                            target.content = '[plotResultStart]\n' + jsonStr + '\n[plotResultEnd]';
+                            replaceWorldbook(wbNames.primary, entries);
+                            console.log('[剧情推进] ✅ 已保存到世界书');
+                            return;
+                        }
+                    }
+                }
+            }
+
+            console.log('[剧情推进] ⚠️ 无法保存到世界书，状态仅保存在内存中');
+
+        } catch (e) {
+            console.warn('[剧情推进] 保存状态失败:', e);
+        }
+    }
+
+    function renderDetail(step) {
+        if (!step) { detailChars.innerHTML = ''; detailEvent.textContent = ''; detailDev.textContent = ''; return; }
+        var charsHtml = '';
+        if (step.characters && step.characters.length > 0) {
+            step.characters.forEach(function(c) {
+                charsHtml += '<div class="char-item"><span class="name">' + (c.name || '未命名') + '</span><span class="mood">' + (c.mood || '') + '</span><span class="thoughts">' + (c.innerThoughts ? '「' + c.innerThoughts + '」' : '') + '</span></div>';
+            });
+        } else {
+            charsHtml = '<div style="color:var(--text-dim);font-size:0.6rem;">未指定角色</div>';
+        }
+        detailChars.innerHTML = charsHtml;
+        detailEvent.textContent = step.event || '未指定事件';
+        detailDev.textContent = step.development ? '→ ' + step.development : '';
+    }
+
+    function openDetail(step) {
+        isDetailOpen = true;
+        detailPanel.classList.add('open');
+        renderDetail(step);
+        setTimeout(function() { detailPanel.scrollIntoView({ behavior: 'smooth', block: 'nearest' }); }, 100);
+    }
+
+    function closeDetail() { isDetailOpen = false; detailPanel.classList.remove('open'); }
+
+    function renderEmptyState() {
+        currentDisplay.classList.add('no-plot');
+        storyTitleText.textContent = '无剧情数据';
+        stepStatusText.textContent = '—';
+        progressText.textContent = '0 / 0 步';
+        phaseDisplay.textContent = '';
+        stepsList.innerHTML = '<div class="empty-state"><svg class="icon-svg" viewBox="0 0 24 24"><path d="M4 4h16v16H4z"/><path d="M8 8h8v8H8z"/><path d="M16 8l-4 4-4-4"/><path d="M12 12v6"/></svg><p>请确保世界书中存在<br><span class="gold">「剧情元数据-陪读妈妈」</span></p></div>';
+        stepsCount.textContent = '0 步';
+        totalBadge.textContent = '0';
+        prevBtn.disabled = true;
+        nextBtn.disabled = true;
+        currentBtn.textContent = '🎯 —';
+        storyListBody.innerHTML = '<div class="empty-state"><p>暂无剧情</p></div>';
+    }
+
+    function renderStoryList() {
+        if (!storyList || storyList.length === 0) {
+            storyListBody.innerHTML = '<div class="empty-state"><p>暂无剧情</p></div>';
+            return;
+        }
+        var html = '';
+        storyList.forEach(function(story, idx) {
+            var total = story.steps.length;
+            var done = story.steps.filter(function(s) { return s.isExecuted; }).length;
+            var isCurrent = idx === currentStoryIndex;
+            html += '<div class="story-list-item' + (isCurrent ? ' current' : '') + '" data-index="' + idx + '">' +
+                '<span class="title">' + (isCurrent ? '<span class="current-mark">▶</span>' : '') + story.title + '</span>' +
+                '<span class="progress"><span class="' + (done === total ? 'done' : 'pending') + '">' + done + '/' + total + '</span></span>' +
+                '</div>';
+        });
+        storyListBody.innerHTML = html;
+        storyListBody.querySelectorAll('.story-list-item').forEach(function(el) {
+            el.addEventListener('click', function() {
+                var index = parseInt(this.dataset.index);
+                if (!isNaN(index) && index >= 0 && index < storyList.length) {
+                    currentStoryIndex = index;
+                    currentPlotId = storyList[index].id;
+                    var firstStep = storyList[index].steps[0];
+                    if (firstStep) { currentStepId = firstStep.stepId; }
+                    renderAll();
+                    closeStoryList();
+                }
+            });
+        });
+    }
+
+    function openStoryList() {
+        storyListOverlay.classList.add('open');
+        document.body.style.overflow = 'hidden';
+        renderStoryList();
+    }
+
+    function closeStoryList() {
+        storyListOverlay.classList.remove('open');
+        document.body.style.overflow = '';
+    }
+
+    function bindEvents() {
+        collapseToggleBtn.addEventListener('click', function(e) {
+            e.stopPropagation();
+            toggleCollapsed();
+        });
+
+        prevBtn.addEventListener('click', function() {
+            var story = storyList[currentStoryIndex];
+            if (!story) return;
+            var currentIdx = story.steps.findIndex(function(s) { return s.stepId == currentStepId; });
+            if (currentIdx > 0) {
+                currentStepId = story.steps[currentIdx - 1].stepId;
+                renderAll();
+                openDetail(story.steps[currentIdx - 1]);
+            } else if (currentStoryIndex > 0) {
+                currentStoryIndex--;
+                var prevStory = storyList[currentStoryIndex];
+                currentPlotId = prevStory.id;
+                var lastStep = prevStory.steps[prevStory.steps.length - 1];
+                currentStepId = lastStep.stepId;
+                renderAll();
+                openDetail(lastStep);
+            }
+        });
+
+        nextBtn.addEventListener('click', function() {
+            var story = storyList[currentStoryIndex];
+            if (!story) return;
+            var currentIdx = story.steps.findIndex(function(s) { return s.stepId == currentStepId; });
+            if (currentIdx < story.steps.length - 1) {
+                var nextStep = story.steps[currentIdx + 1];
+                currentStepId = nextStep.stepId;
+                renderAll();
+                openDetail(nextStep);
+            } else if (currentStoryIndex < storyList.length - 1) {
+                currentStoryIndex++;
+                var nextStory = storyList[currentStoryIndex];
+                currentPlotId = nextStory.id;
+                var firstStep = nextStory.steps[0];
+                currentStepId = firstStep.stepId;
+                renderAll();
+                openDetail(firstStep);
+            }
+        });
+
+        currentBtn.addEventListener('click', function() {
+            var story = storyList[currentStoryIndex];
+            if (!story) return;
+            var currentStep = story.steps.find(function(s) { return s.stepId == currentStepId; }) || story.steps[0];
+            if (currentStep) { openDetail(currentStep); }
+        });
+
+        detailClose.addEventListener('click', closeDetail);
+        document.addEventListener('click', function(e) {
+            if (isDetailOpen && !detailPanel.contains(e.target) && !e.target.closest('.step-item') && !e.target.closest('#currentBtn')) {
+                closeDetail();
+            }
+        });
+
+        listToggleBtn.addEventListener('click', function(e) {
+            e.stopPropagation();
+            if (storyListOverlay.classList.contains('open')) {
+                closeStoryList();
+            } else {
+                openStoryList();
+            }
+        });
+
+        storyListOverlay.addEventListener('click', function(e) {
+            if (e.target === storyListOverlay) {
+                closeStoryList();
+            }
+        });
+        storyListCloseBtn.addEventListener('click', closeStoryList);
+
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Escape') {
+                if (storyListOverlay.classList.contains('open')) { closeStoryList(); }
+                if (isDetailOpen) { closeDetail(); }
+            }
+        });
+    }
+
+    function bindKeyboard() {
+        document.addEventListener('keydown', function(e) {
+            if (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA') return;
+            if (e.key === 'ArrowLeft' || e.key === 'a') { e.preventDefault(); prevBtn.click(); }
+            else if (e.key === 'ArrowRight' || e.key === 'd') { e.preventDefault(); nextBtn.click(); }
+            else if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); currentBtn.click(); }
+            else if (e.key === 'Escape') {
+                if (!storyListOverlay.classList.contains('open')) closeDetail();
+            }
+        });
+    }
+
+    function init() {
+        loadCollapsedState();
+        bindEvents();
+        bindKeyboard();
+        loadPlotData();
+        console.log('[剧情推进] ✅ 初始化完成');
+    }
+
+    if (document.readyState === 'complete' || document.readyState === 'interactive') {
+        init();
+    } else {
+        document.addEventListener('DOMContentLoaded', init);
+    }
+
+    window.__storyAssistant = {
+        reload: loadPlotData,
+        goTo: function(plotId, stepId) {
+            var storyIdx = storyList.findIndex(function(s) { return s.id === plotId; });
+            if (storyIdx === -1) return;
+            currentStoryIndex = storyIdx;
+            currentPlotId = plotId;
+            currentStepId = stepId || (storyList[storyIdx].steps[0] ? storyList[storyIdx].steps[0].stepId : 1);
+            renderAll();
+        },
+        getState: function() {
+            return {
+                currentPlotId: currentPlotId,
+                currentStepId: currentStepId,
+                currentStoryIndex: currentStoryIndex,
+                storyList: storyList
+            };
+        },
+        injectData: function(data) {
+            DATA = data;
+            plotData = data;
+            initFromPlotData();
+        }
+    };
+
+})();
+</script>
+</body>
+</html>
