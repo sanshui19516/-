@@ -1,0 +1,1133 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+    <title>为了让我考上高校 · 作者介绍</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;14..32,400;14..32,600;14..32,700&family=Noto+Serif+SC:wght@400;700;900&display=swap" rel="stylesheet" />
+
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        /* ===== 中式复古 · 宣纸暗红（与状态栏完全一致） ===== */
+        :root {
+            --paper: 45, 18%, 88%;
+            --paper-dark: 42, 15%, 78%;
+            --ink: 0, 0%, 8%;
+            --ink-light: 0, 0%, 35%;
+            --cinnabar: 350, 55%, 40%;
+            --cinnabar-light: 350, 45%, 55%;
+            --old-gold: 38, 45%, 50%;
+            --old-gold-light: 38, 35%, 65%;
+            --bg-dark: 0, 0%, 6%;
+            --bg-card: 350, 20%, 10%;
+            --text-main: 30, 15%, 88%;
+            --text-muted: 30, 10%, 50%;
+        }
+
+        body {
+            min-height: 100vh;
+            background: transparent;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-family: 'Inter', 'PingFang SC', 'Noto Serif SC', system-ui, sans-serif;
+            padding: 20px;
+            /* 方案C：背景图明显 */
+            background-image: url('https://testingcf.jsdelivr.net/gh/sanshui19516/CG@main/%E7%8E%8B%E6%98%A5%E9%A3%8E.png');
+            background-size: cover;
+            background-position: center top;
+            background-attachment: fixed;
+            position: relative;
+        }
+
+        /* ===== Canvas 装饰层 ===== */
+        #canvas-deco {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            pointer-events: none;
+            z-index: 0;
+            opacity: 0.8;
+        }
+
+        .container {
+            max-width: 580px;
+            width: 100%;
+            /* 方案C：背景透明度0.40，模糊12px */
+            background: hsla(var(--bg-dark), 0.40);
+            backdrop-filter: blur(12px) saturate(1.2);
+            -webkit-backdrop-filter: blur(12px) saturate(1.2);
+            border-radius: 4px;
+            border: 1px solid hsla(var(--cinnabar), 0.15);
+            box-shadow: 0 30px 80px rgba(0, 0, 0, 0.7);
+            padding: 32px 28px 24px;
+            position: relative;
+            overflow: hidden;
+            z-index: 1;
+            opacity: 0;
+            transform: translateY(24px) scale(0.98);
+            animation: containerIn 0.8s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+        }
+
+        @keyframes containerIn {
+            to { opacity: 1; transform: translateY(0) scale(1); }
+        }
+
+        .container::before {
+            content: '';
+            position: absolute;
+            top: -30%; right: -20%;
+            width: 70%; height: 80%;
+            background: radial-gradient(ellipse, hsla(var(--cinnabar), 0.08), transparent 60%);
+            pointer-events: none;
+            animation: drift 14s infinite alternate ease-in-out;
+        }
+        .container::after {
+            content: '';
+            position: absolute;
+            bottom: -30%; left: -20%;
+            width: 60%; height: 70%;
+            background: radial-gradient(ellipse, hsla(var(--old-gold), 0.05), transparent 60%);
+            pointer-events: none;
+            animation: drift2 18s infinite alternate-reverse ease-in-out;
+        }
+
+        @keyframes drift {
+            0% { transform: translate(0,0) scale(1); opacity: 0.3; }
+            100% { transform: translate(-10%, 8%) scale(1.3); opacity: 0.7; }
+        }
+        @keyframes drift2 {
+            0% { transform: translate(0,0) scale(1); opacity: 0.2; }
+            100% { transform: translate(8%, -6%) scale(1.3); opacity: 0.6; }
+        }
+
+        .container > * { position: relative; z-index: 2; }
+
+        /* ===== 四角回形纹（与状态栏一致） ===== */
+        .corner-border {
+            position: absolute;
+            width: 22px;
+            height: 22px;
+            z-index: 3;
+            pointer-events: none;
+        }
+        .corner-border::before,
+        .corner-border::after {
+            content: '';
+            position: absolute;
+            background: hsla(var(--cinnabar), 0.12);
+            border: 1px solid hsla(var(--cinnabar), 0.08);
+        }
+        .corner-tl {
+            top: 10px;
+            left: 10px;
+        }
+        .corner-tl::before {
+            top: 0;
+            left: 0;
+            width: 10px;
+            height: 4px;
+            border-bottom: none;
+            border-right: none;
+        }
+        .corner-tl::after {
+            bottom: 0;
+            right: 0;
+            width: 4px;
+            height: 10px;
+            border-top: none;
+            border-left: none;
+        }
+        .corner-tr {
+            top: 10px;
+            right: 10px;
+        }
+        .corner-tr::before {
+            top: 0;
+            right: 0;
+            width: 10px;
+            height: 4px;
+            border-bottom: none;
+            border-left: none;
+        }
+        .corner-tr::after {
+            bottom: 0;
+            left: 0;
+            width: 4px;
+            height: 10px;
+            border-top: none;
+            border-right: none;
+        }
+        .corner-bl {
+            bottom: 10px;
+            left: 10px;
+        }
+        .corner-bl::before {
+            bottom: 0;
+            left: 0;
+            width: 10px;
+            height: 4px;
+            border-top: none;
+            border-right: none;
+        }
+        .corner-bl::after {
+            top: 0;
+            right: 0;
+            width: 4px;
+            height: 10px;
+            border-bottom: none;
+            border-left: none;
+        }
+        .corner-br {
+            bottom: 10px;
+            right: 10px;
+        }
+        .corner-br::before {
+            bottom: 0;
+            right: 0;
+            width: 10px;
+            height: 4px;
+            border-top: none;
+            border-left: none;
+        }
+        .corner-br::after {
+            top: 0;
+            left: 0;
+            width: 4px;
+            height: 10px;
+            border-bottom: none;
+            border-right: none;
+        }
+
+        /* ===== 顶部装饰线 ===== */
+        .header-deco {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 6px;
+            margin-bottom: 14px;
+            padding-bottom: 8px;
+            border-bottom: 1px solid hsla(var(--cinnabar), 0.06);
+            position: relative;
+        }
+        .header-deco .line-left,
+        .header-deco .line-right {
+            flex: 1;
+            height: 1px;
+            background: linear-gradient(90deg, transparent, hsla(var(--cinnabar), 0.10) 30%, hsla(var(--cinnabar), 0.10) 70%,
+                    transparent);
+        }
+        .header-deco .diamond {
+            width: 5px;
+            height: 5px;
+            background: hsla(var(--cinnabar), 0.08);
+            transform: rotate(45deg);
+            flex-shrink: 0;
+            border: 1px solid hsla(var(--cinnabar), 0.02);
+        }
+        .header-deco .dot {
+            width: 2.5px;
+            height: 2.5px;
+            border-radius: 50%;
+            background: hsla(var(--cinnabar), 0.04);
+            flex-shrink: 0;
+        }
+
+        /* ===== 标题区 · 主视图横幅图 ===== */
+        .title-wrapper {
+            position: relative;
+            margin-bottom: 18px;
+            border-radius: 4px;
+            overflow: hidden;
+            border: 1px solid hsla(var(--cinnabar), 0.08);
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.4);
+            aspect-ratio: 16 / 5;
+        }
+        .title-bg {
+            position: absolute;
+            inset: 0;
+            background-image: url('https://testingcf.jsdelivr.net/gh/sanshui19516/-@main/IMG_20260529_062318.jpg');
+            background-size: cover;
+            background-position: center 30%;
+            background-repeat: no-repeat;
+        }
+        .title-overlay {
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(135deg, hsla(0, 0%, 0%, 0.20), hsla(var(--cinnabar), 0.04));
+        }
+        .title-content {
+            position: relative;
+            z-index: 2;
+            padding: 20px 16px 18px;
+            text-align: center;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            height: 100%;
+        }
+        .title-main {
+            font-family: 'Noto Serif SC', serif;
+            font-weight: 900;
+            font-size: clamp(1.0rem, 4vw, 1.8rem);
+            letter-spacing: 0.04em;
+            color: hsl(30, 15%, 92%);
+            text-shadow: 0 2px 20px rgba(0, 0, 0, 0.6);
+            line-height: 1.3;
+        }
+        .title-main .accent { color: hsl(var(--old-gold)); }
+        .title-sub {
+            font-size: clamp(0.45rem, 1.2vw, 0.6rem);
+            font-weight: 300;
+            color: hsla(30, 10%, 70%, 0.5);
+            letter-spacing: 4px;
+            margin-top: 2px;
+            text-shadow: 0 1px 12px rgba(0, 0, 0, 0.5);
+        }
+        .title-author {
+            font-size: clamp(0.4rem, 0.9vw, 0.5rem);
+            color: hsla(30, 10%, 60%, 0.4);
+            letter-spacing: 4px;
+            margin-top: 4px;
+            font-weight: 300;
+            text-shadow: 0 1px 10px rgba(0, 0, 0, 0.5);
+        }
+        .title-author strong {
+            color: hsl(var(--old-gold), 0.6);
+            font-weight: 600;
+        }
+
+        .divider {
+            border: none;
+            border-top: 1px solid hsla(var(--cinnabar), 0.06);
+            margin: 0 0 16px 0;
+            position: relative;
+        }
+        .divider::after {
+            content: '';
+            position: absolute;
+            top: -1px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 40px;
+            height: 1px;
+            background: linear-gradient(90deg, transparent, hsla(var(--old-gold), 0.15), transparent);
+        }
+
+        .grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+            margin-bottom: 12px;
+        }
+        .card {
+            background: hsla(var(--bg-card), 0.25);
+            border: 1px solid hsla(var(--cinnabar), 0.04);
+            border-radius: 4px;
+            padding: 14px 14px 12px;
+            backdrop-filter: blur(4px);
+            -webkit-backdrop-filter: blur(4px);
+            transition: all 0.35s cubic-bezier(0.25, 0.8, 0.25, 1);
+        }
+        .card:hover {
+            background: hsla(var(--bg-card), 0.35);
+            border-color: hsla(var(--cinnabar), 0.08);
+            transform: translateY(-2px);
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.2);
+        }
+        .card-label {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 0.45rem;
+            font-weight: 600;
+            letter-spacing: 2px;
+            color: hsla(30, 10%, 65%, 0.4);
+            text-transform: uppercase;
+            margin-bottom: 6px;
+            padding-bottom: 4px;
+            border-bottom: 1px solid hsla(var(--cinnabar), 0.03);
+        }
+        .card-label svg {
+            width: 13px;
+            height: 13px;
+            fill: none;
+            stroke: hsla(var(--old-gold), 0.3);
+            stroke-width: 1.8;
+            stroke-linecap: round;
+            stroke-linejoin: round;
+            flex-shrink: 0;
+        }
+        .card-list {
+            list-style: none;
+            padding: 0;
+        }
+        .card-list li {
+            font-size: clamp(0.5rem, 1vw, 0.6rem);
+            color: hsla(30, 10%, 80%, 0.6);
+            line-height: 1.8;
+            padding-left: 12px;
+            position: relative;
+        }
+        .card-list li::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 0.6em;
+            width: 3px;
+            height: 3px;
+            border-radius: 50%;
+            background: hsla(var(--old-gold), 0.15);
+        }
+        .card-list .tag-allow { color: hsla(140, 35%, 50%, 0.7); }
+        .card-list .tag-warn { color: hsla(350, 45%, 55%, 0.7); }
+        .card-list .tag-note { color: hsla(30, 10%, 65%, 0.5); }
+
+        .author-card {
+            background: hsla(var(--bg-card), 0.25);
+            border: 1px solid hsla(var(--cinnabar), 0.04);
+            border-radius: 4px;
+            padding: 16px 14px 12px;
+            margin-bottom: 10px;
+            text-align: center;
+            transition: all 0.35s ease;
+        }
+        .author-card:hover {
+            border-color: hsla(var(--cinnabar), 0.08);
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
+        }
+        .author-avatar {
+            width: 64px;
+            height: 64px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 1px solid hsla(var(--old-gold), 0.15);
+            box-shadow: 0 0 30px hsla(var(--cinnabar), 0.04);
+            margin: 0 auto 8px auto;
+            display: block;
+            transition: all 0.4s ease;
+        }
+        .author-avatar:hover {
+            transform: scale(1.04);
+            border-color: hsla(var(--old-gold), 0.25);
+        }
+        .author-name {
+            font-family: 'Noto Serif SC', serif;
+            font-weight: 700;
+            font-size: 0.9rem;
+            color: hsl(30, 15%, 92%);
+            letter-spacing: 2px;
+        }
+        .author-badge {
+            font-size: 0.45rem;
+            color: hsla(30, 10%, 65%, 0.4);
+            letter-spacing: 3px;
+            margin-bottom: 10px;
+            font-weight: 300;
+        }
+        .author-links {
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+        }
+        .author-link-item {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            background: hsla(0, 0%, 6%, 0.3);
+            border: 1px solid hsla(var(--cinnabar), 0.04);
+            border-radius: 4px;
+            padding: 10px 14px;
+            color: hsla(30, 10%, 75%, 0.5);
+            text-decoration: none;
+            font-size: 0.6rem;
+            letter-spacing: 1px;
+            transition: all 0.3s ease;
+        }
+        .author-link-item:hover {
+            background: hsla(0, 0%, 8%, 0.5);
+            border-color: hsla(var(--cinnabar), 0.10);
+            box-shadow: 0 0 30px hsla(var(--cinnabar), 0.03);
+            transform: translateY(-2px);
+            color: hsl(30, 15%, 92%);
+        }
+        .author-link-item .link-icon {
+            width: 16px;
+            height: 16px;
+            fill: none;
+            stroke: hsla(var(--old-gold), 0.3);
+            stroke-width: 1.8;
+            stroke-linecap: round;
+            stroke-linejoin: round;
+            flex-shrink: 0;
+            transition: stroke 0.3s ease;
+        }
+        .author-link-item:hover .link-icon {
+            stroke: hsla(var(--old-gold), 0.6);
+        }
+        .author-link-item .link-label {
+            font-weight: 600;
+            color: hsla(var(--old-gold), 0.5);
+            margin-right: 2px;
+        }
+        .author-link-item:hover .link-label {
+            color: hsla(var(--old-gold), 0.7);
+        }
+        .author-link-item .link-url {
+            opacity: 0.3;
+            font-size: 0.5rem;
+            max-width: 160px;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+        @media (max-width: 480px) {
+            .author-link-item .link-url { max-width: 100px; }
+        }
+
+        .notice-block {
+            background: hsla(0, 0%, 6%, 0.20);
+            border: 1px solid hsla(var(--cinnabar), 0.03);
+            border-radius: 4px;
+            padding: 12px 14px;
+            margin-bottom: 10px;
+            text-align: left;
+        }
+        .notice-block .notice-label {
+            font-size: 0.4rem;
+            font-weight: 600;
+            letter-spacing: 2px;
+            color: hsla(30, 10%, 65%, 0.25);
+            text-transform: uppercase;
+            margin-bottom: 4px;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+        .notice-block .notice-label svg {
+            width: 11px;
+            height: 11px;
+            fill: none;
+            stroke: hsla(var(--old-gold), 0.12);
+            stroke-width: 2;
+            stroke-linecap: round;
+            stroke-linejoin: round;
+        }
+        .notice-block .notice-text {
+            font-size: 0.45rem;
+            color: hsla(30, 10%, 65%, 0.4);
+            line-height: 1.7;
+            letter-spacing: 0.3px;
+        }
+        .notice-block .notice-text .hl {
+            color: hsla(var(--old-gold), 0.45);
+        }
+
+        .action { text-align: center; margin: 16px 0 12px; }
+
+        .btn-enter {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 14px;
+            width: 100%;
+            padding: 16px 24px;
+            border-radius: 4px;
+            background: hsla(var(--cinnabar), 0.08);
+            border: 1px solid hsla(var(--cinnabar), 0.12);
+            color: hsl(30, 15%, 92%);
+            font-size: clamp(0.7rem, 1.5vw, 0.85rem);
+            font-weight: 500;
+            letter-spacing: 4px;
+            cursor: pointer;
+            transition: all 0.4s cubic-bezier(0.25, 0.8, 0.25, 1);
+            backdrop-filter: blur(6px);
+            -webkit-backdrop-filter: blur(6px);
+            font-family: 'Inter', 'Noto Serif SC', sans-serif;
+            position: relative;
+            overflow: hidden;
+        }
+        .btn-enter::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(135deg, hsla(var(--cinnabar), 0.05), hsla(var(--old-gold), 0.02));
+            pointer-events: none;
+            opacity: 0;
+            transition: opacity 0.5s ease;
+        }
+        .btn-enter:hover::before { opacity: 1; }
+        .btn-enter:hover {
+            background: hsla(var(--cinnabar), 0.12);
+            border-color: hsla(var(--cinnabar), 0.20);
+            box-shadow: 0 0 40px hsla(var(--cinnabar), 0.05);
+            transform: translateY(-2px);
+        }
+        .btn-enter:active {
+            transform: scale(0.97) translateY(0);
+            transition-duration: 0.05s;
+        }
+        .btn-enter svg {
+            width: 18px;
+            height: 18px;
+            fill: none;
+            stroke: hsla(var(--old-gold), 0.4);
+            stroke-width: 1.8;
+            stroke-linecap: round;
+            stroke-linejoin: round;
+            transition: all 0.4s ease;
+            flex-shrink: 0;
+        }
+        .btn-enter:hover svg {
+            stroke: hsla(var(--old-gold), 0.7);
+            transform: translateX(4px);
+        }
+        .btn-enter .btn-glow-ring {
+            position: absolute;
+            inset: -1px;
+            border-radius: 4px;
+            padding: 1px;
+            background: linear-gradient(135deg, hsla(var(--cinnabar), 0.08), transparent 60%, hsla(var(--old-gold), 0.04));
+            -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+            -webkit-mask-composite: xor;
+            mask-composite: exclude;
+            pointer-events: none;
+            opacity: 0;
+            transition: opacity 0.5s ease;
+        }
+        .btn-enter:hover .btn-glow-ring { opacity: 1; }
+
+        .footer {
+            text-align: center;
+            padding-top: 12px;
+            border-top: 1px solid hsla(var(--cinnabar), 0.03);
+            font-size: 0.4rem;
+            color: hsla(30, 10%, 45%, 0.2);
+            letter-spacing: 3px;
+            font-weight: 300;
+        }
+        .footer .footer-deco {
+            font-size: 0.55rem;
+            opacity: 0.2;
+            margin-bottom: 2px;
+            letter-spacing: 4px;
+            animation: pulseDeco 3s ease-in-out infinite;
+        }
+        @keyframes pulseDeco {
+            0%, 100% { opacity: 0.1; }
+            50% { opacity: 0.35; }
+        }
+        .footer span { color: hsla(30, 10%, 50%, 0.2); }
+
+        @media (max-width: 640px) {
+            body { padding: 10px; align-items: flex-start; padding-top: 12px; }
+            .container {
+                max-width: 100%;
+                border-radius: 4px;
+                padding: 20px 14px 16px;
+                background: hsla(var(--bg-dark), 0.35);
+                backdrop-filter: blur(10px) saturate(1.2);
+                -webkit-backdrop-filter: blur(10px) saturate(1.2);
+            }
+            .corner-border { display: none; }
+            .title-wrapper { border-radius: 4px; aspect-ratio: 16 / 5; margin-bottom: 14px; }
+            .title-content { padding: 16px 10px 14px; }
+            .grid { grid-template-columns: 1fr; gap: 8px; }
+            .card { padding: 12px 12px 10px; border-radius: 4px; }
+            .card-label { font-size: 0.4rem; }
+            .card-list li { font-size: 0.5rem; line-height: 1.6; }
+            .author-card { padding: 14px 12px 10px; border-radius: 4px; }
+            .author-avatar { width: 56px; height: 56px; margin: 0 auto 8px auto; }
+            .author-name { font-size: 0.8rem; }
+            .btn-enter {
+                padding: 14px 18px;
+                font-size: 0.65rem;
+                letter-spacing: 3px;
+                gap: 10px;
+                border-radius: 4px;
+            }
+            .btn-enter svg { width: 17px; height: 17px; }
+            .notice-block { padding: 10px 12px; }
+            .notice-block .notice-text { font-size: 0.4rem; }
+            .footer { font-size: 0.35rem; padding-top: 10px; }
+        }
+
+        @media (max-width: 400px) {
+            .container { padding: 14px 10px 12px; border-radius: 4px; background: hsla(var(--bg-dark), 0.30); backdrop-filter: blur(8px) saturate(1.2); -webkit-backdrop-filter: blur(8px) saturate(1.2); }
+            .title-content { padding: 12px 8px 10px; }
+            .title-main { font-size: 0.9rem; }
+            .title-sub { font-size: 0.4rem; letter-spacing: 3px; }
+            .card-list li { font-size: 0.45rem; }
+            .btn-enter {
+                padding: 12px 14px;
+                font-size: 0.55rem;
+                letter-spacing: 2px;
+                gap: 8px;
+                border-radius: 4px;
+            }
+        }
+
+        @media (min-width: 641px) and (max-width: 900px) {
+            .container { padding: 28px 22px 20px; }
+        }
+    </style>
+</head>
+<body>
+
+    <canvas id="canvas-deco"></canvas>
+
+    <div class="container">
+
+        <!-- 四角回形纹 -->
+        <div class="corner-border corner-tl"></div>
+        <div class="corner-border corner-tr"></div>
+        <div class="corner-border corner-bl"></div>
+        <div class="corner-border corner-br"></div>
+
+        <!-- 顶部装饰线 -->
+        <div class="header-deco">
+            <span class="line-left"></span>
+            <span class="diamond"></span>
+            <span class="dot"></span>
+            <span class="diamond"></span>
+            <span class="dot"></span>
+            <span class="diamond"></span>
+            <span class="line-right"></span>
+        </div>
+
+        <div class="title-wrapper">
+            <div class="title-bg"></div>
+            <div class="title-overlay"></div>
+            <div class="title-content">
+                <div class="title-main">
+                    为了让我考上高校
+                </div>
+                <div class="title-sub">—— 妈妈成为了我的性处理肉便器母狗 ——</div>
+                <div class="title-author">作者 · <strong>三年的水</strong></div>
+            </div>
+        </div>
+
+        <hr class="divider" />
+
+        <div class="grid">
+
+            <div class="card">
+                <div class="card-label">
+                    <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M12 8v4l3 3"/></svg>
+                    发布信息
+                </div>
+                <ul class="card-list">
+                    <li>仅发布于 <span style="color:hsla(var(--old-gold),0.5);">Discord 类脑</span></li>
+                    <li>作者：<span style="color:hsla(var(--old-gold),0.5);">三年的水</span></li>
+                </ul>
+            </div>
+
+            <div class="card">
+                <div class="card-label">
+                    <svg viewBox="0 0 24 24"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><polyline points="9 12 11 14 15 10"/></svg>
+                    授权说明
+                </div>
+                <ul class="card-list">
+                    <li><span class="tag-allow">允许二改（署名）</span></li>
+                    <li><span class="tag-allow">二改后需标注出处</span></li>
+                    <li><span class="tag-warn">禁止商用</span></li>
+                    <li><span class="tag-warn">禁止墙内二传</span></li>
+                </ul>
+            </div>
+
+            <div class="card">
+                <div class="card-label">
+                    <svg viewBox="0 0 24 24"><rect x="2" y="3" width="20" height="18" rx="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg>
+                    本卡包含
+                </div>
+                <ul class="card-list">
+                    <li>完整剧情树</li>
+                    <li>状态栏UI</li>
+                    <li>选项栏UI</li>
+                    <li>2005世界观</li>
+                </ul>
+            </div>
+
+            <div class="card">
+                <div class="card-label">
+                    <svg viewBox="0 0 24 24"><path d="M12 2L2 7l10 5 10-5-10-5z"/><path d="M2 17l10 5 10-5"/><path d="M2 12l10 5 10-5"/></svg>
+                    使用说明
+                </div>
+                <ul class="card-list">
+                    <li>导入角色卡到 SillyTavern</li>
+                    <li>配置状态栏与选项栏正则</li>
+                    <li>开始对话体验</li>
+                </ul>
+            </div>
+
+        </div>
+
+        <div class="author-card">
+            <img class="author-avatar" src="https://cdn.jsdelivr.net/gh/sanshui19516/CG@main/%E5%A4%B4%E5%83%8F.png" alt="作者头像" />
+            <div class="author-name">三年的水</div>
+            <div class="author-badge">✦ 为了让我考上高校 ✦</div>
+            <div class="author-links">
+                <a class="author-link-item" href="{{原帖链接}}" target="_blank" rel="noopener noreferrer">
+                    <svg class="link-icon" viewBox="0 0 24 24"><path d="M4 4h16v16H4z"/><path d="M8 8h8v8H8z"/><path d="M16 8l-4 4-4-4"/><path d="M12 12v6"/></svg>
+                    <span class="link-label">原帖链接</span>
+                    <span class="link-url">Discord 原帖</span>
+                </a>
+                <a class="author-link-item" href="https://discord.com/channels/1134557553011998840/1516980193195987075/1516980193195987075" target="_blank" rel="noopener noreferrer">
+                    <svg class="link-icon" viewBox="0 0 24 24"><path d="M4 4h16v16H4z"/><path d="M8 8h8v8H8z"/><path d="M16 8l-4 4-4-4"/><path d="M12 12v6"/></svg>
+                    <span class="link-label">作品集锦</span>
+                    <span class="link-url">Discord 频道</span>
+                </a>
+                <a class="author-link-item" href="https://discord.com/channels/1134557553011998840/1516980193195987075/1516980470871621794" target="_blank" rel="noopener noreferrer">
+                    <svg class="link-icon" viewBox="0 0 24 24"><path d="M21 11.5L12 2 3 11.5"/><path d="M5 10v10a2 2 0 002 2h10a2 2 0 002-2V10"/><path d="M12 15v4"/></svg>
+                    <span class="link-label">关注作者</span>
+                    <span class="link-url">Discord 频道</span>
+                </a>
+            </div>
+        </div>
+
+        <div class="card" style="background:hsla(var(--bg-card),0.25);border:1px solid hsla(var(--cinnabar),0.04);border-radius:4px;padding:12px 14px;margin-bottom:10px;">
+            <div class="card-label">
+                <svg viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+                故事标签
+            </div>
+            <ul class="card-list">
+                <li><span class="tag-note">背德沉沦</span></li>
+                <li><span class="tag-note">陪读妈妈</span></li>
+                <li><span class="tag-note">母子禁忌</span></li>
+            </ul>
+        </div>
+
+        <div class="notice-block">
+            <div class="notice-label">
+                <svg viewBox="0 0 24 24"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><circle cx="12" cy="12" r="2"/></svg>
+                禁止商用 · 公益声明
+            </div>
+            <div class="notice-text">
+                本角色卡为作者 <span class="hl">三年的水</span> 免费分享的公益作品，仅供个人娱乐与创作交流使用。<br />
+                严禁任何形式的商业用途，包括转卖、收费下载、打包售卖或用于盈利性直播/视频。<br />
+                如通过付费渠道获得，请立即退款并举报贩卖者。<br />
+                感谢您的支持与理解。
+            </div>
+        </div>
+
+        <div class="action">
+            <button class="btn-enter" onclick="switchOpening(2)">
+                <span>开始体验</span>
+                <svg viewBox="0 0 24 24"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+                <span class="btn-glow-ring"></span>
+            </button>
+        </div>
+
+        <div class="footer">
+            <div class="footer-deco">✦ 请多多评论 ✦</div>
+            <span>by 三年的水</span>
+        </div>
+
+    </div>
+
+    <script>
+        async function switchOpening(swipeId) {
+            var clickedCard = event.currentTarget;
+            clickedCard.style.opacity = '0.6';
+            clickedCard.style.pointerEvents = 'none';
+            try {
+                var messages;
+                try {
+                    messages = await getChatMessages?.('0', { include_swipe: true });
+                } catch (e) {
+                    var context = window.SillyTavern?.getContext?.();
+                    messages = context?.chat?.messages;
+                }
+                if (!messages || messages.length === 0) throw new Error('没有找到聊天消息。');
+                var userMessage = messages[0];
+                if (!userMessage.swipes) throw new Error('第一条消息没有滑动条。');
+                if (userMessage.swipes.length <= swipeId) throw new Error('滑动条 ' + swipeId + ' 不存在。');
+                var targetSwipe = userMessage.swipes[swipeId];
+                var setChatMessage = window.setChatMessage || window.SillyTavern?.getContext?.()?.setChatMessage;
+                if (typeof setChatMessage === 'function') {
+                    await setChatMessage(targetSwipe, 0, { swipe_id: swipeId, refresh: 'display_and_render_current' });
+                } else if (typeof userMessage.setSwipe === 'function') {
+                    userMessage.setSwipe(swipeId);
+                }
+            } catch (error) {
+                console.error('切换失败:', error);
+            } finally {
+                clickedCard.style.opacity = '1';
+                clickedCard.style.pointerEvents = 'auto';
+            }
+        }
+
+        // ============================================================
+        // Canvas 装饰花纹绘制 — 与状态栏一致
+        // ============================================================
+        (function() {
+            var canvas = document.getElementById('canvas-deco');
+            if (!canvas) return;
+
+            function resize() {
+                canvas.width = window.innerWidth;
+                canvas.height = window.innerHeight;
+                draw();
+            }
+
+            function draw() {
+                var ctx = canvas.getContext('2d');
+                var w = canvas.width;
+                var h = canvas.height;
+                ctx.clearRect(0, 0, w, h);
+
+                var hue = 350;
+                var sat = 40;
+                var light = 28;
+
+                // ---- 1. 四角中式纹样 ----
+                ctx.save();
+                var corners = [
+                    { x: 30, y: 30, dx: 1, dy: 1 },
+                    { x: w - 30, y: 30, dx: -1, dy: 1 },
+                    { x: 30, y: h - 30, dx: 1, dy: -1 },
+                    { x: w - 30, y: h - 30, dx: -1, dy: -1 }
+                ];
+
+                corners.forEach(function(c) {
+                    var cx = c.x;
+                    var cy = c.y;
+                    var size = 80;
+                    var strokeColor = 'hsla(' + hue + ', ' + sat + '%, ' + light + '%, 0.25)';
+                    var fillColor = 'hsla(' + hue + ', ' + sat + '%, ' + light + '%, 0.04)';
+                    ctx.strokeStyle = strokeColor;
+                    ctx.lineWidth = 1.2;
+                    ctx.fillStyle = fillColor;
+
+                    ctx.beginPath();
+                    ctx.rect(cx - size/2, cy - size/2, size, size);
+                    ctx.fill();
+                    ctx.stroke();
+
+                    ctx.beginPath();
+                    ctx.rect(cx - size/3, cy - size/3, size*2/3, size*2/3);
+                    ctx.stroke();
+
+                    ctx.beginPath();
+                    ctx.moveTo(cx - size/2, cy - size/2);
+                    ctx.lineTo(cx + size/2, cy + size/2);
+                    ctx.moveTo(cx + size/2, cy - size/2);
+                    ctx.lineTo(cx - size/2, cy + size/2);
+                    ctx.stroke();
+
+                    var dotR = 3;
+                    var dotPos = [
+                        [-size/2, -size/2],
+                        [size/2, -size/2],
+                        [-size/2, size/2],
+                        [size/2, size/2]
+                    ];
+                    dotPos.forEach(function(dp) {
+                        ctx.beginPath();
+                        ctx.arc(cx + dp[0], cy + dp[1], dotR, 0, Math.PI*2);
+                        ctx.fillStyle = 'hsla(' + hue + ', ' + sat + '%, ' + light + '%, 0.15)';
+                        ctx.fill();
+                        ctx.strokeStyle = 'hsla(' + hue + ', ' + sat + '%, ' + light + '%, 0.25)';
+                        ctx.stroke();
+                    });
+
+                    var innerPos = [
+                        [-size/4, -size/4],
+                        [size/4, -size/4],
+                        [-size/4, size/4],
+                        [size/4, size/4]
+                    ];
+                    innerPos.forEach(function(dp) {
+                        ctx.beginPath();
+                        ctx.arc(cx + dp[0], cy + dp[1], 1.5, 0, Math.PI*2);
+                        ctx.fillStyle = 'hsla(' + hue + ', ' + sat + '%, ' + light + '%, 0.10)';
+                        ctx.fill();
+                    });
+
+                    var ext = 8;
+                    var extPos = [
+                        [0, -1], [0, 1], [-1, 0], [1, 0]
+                    ];
+                    extPos.forEach(function(ep) {
+                        ctx.beginPath();
+                        ctx.moveTo(cx + ep[0] * (size/2), cy + ep[1] * (size/2));
+                        ctx.lineTo(cx + ep[0] * (size/2 + ext), cy + ep[1] * (size/2 + ext));
+                        ctx.stroke();
+                    });
+                });
+
+                ctx.restore();
+
+                // ---- 2. 顶部装饰线 ----
+                ctx.save();
+                var topY = 16;
+                ctx.strokeStyle = 'hsla(' + hue + ', ' + sat + '%, ' + light + '%, 0.12)';
+                ctx.lineWidth = 0.8;
+
+                for (var i = 0; i < 3; i++) {
+                    var yPos = topY + i * 6;
+                    var segLen = 60 + i * 10;
+                    var startX = w/2 - segLen * 2 - i * 10;
+                    ctx.beginPath();
+                    ctx.moveTo(startX, yPos);
+                    ctx.lineTo(startX + segLen, yPos);
+                    ctx.stroke();
+                    ctx.beginPath();
+                    ctx.moveTo(w - startX - segLen, yPos);
+                    ctx.lineTo(w - startX, yPos);
+                    ctx.stroke();
+
+                    if (i === 1) {
+                        ctx.beginPath();
+                        ctx.arc(w/2, yPos, 2, 0, Math.PI*2);
+                        ctx.fillStyle = 'hsla(' + hue + ', ' + sat + '%, ' + light + '%, 0.06)';
+                        ctx.fill();
+                    }
+                }
+                ctx.restore();
+
+                // ---- 3. 侧边装饰线 ----
+                ctx.save();
+                ctx.strokeStyle = 'hsla(' + hue + ', ' + sat + '%, ' + light + '%, 0.10)';
+                ctx.lineWidth = 0.8;
+
+                var margin = 50;
+                var lineCount = 7;
+                for (var j = 0; j < lineCount; j++) {
+                    var yPos = margin + (h - margin*2) * (j / (lineCount-1));
+                    ctx.beginPath();
+                    ctx.moveTo(18, yPos);
+                    ctx.lineTo(36, yPos);
+                    ctx.stroke();
+                    ctx.beginPath();
+                    ctx.moveTo(w-18, yPos);
+                    ctx.lineTo(w-36, yPos);
+                    ctx.stroke();
+
+                    if (j % 2 === 0) {
+                        ctx.beginPath();
+                        ctx.moveTo(12, yPos-5);
+                        ctx.lineTo(12, yPos+5);
+                        ctx.stroke();
+                        ctx.beginPath();
+                        ctx.moveTo(w-12, yPos-5);
+                        ctx.lineTo(w-12, yPos+5);
+                        ctx.stroke();
+                    }
+                }
+                ctx.restore();
+
+                // ---- 4. 底部装饰 ----
+                ctx.save();
+                var bY = h - 26;
+                var cx = w/2;
+                var sz = 12;
+                ctx.strokeStyle = 'hsla(' + hue + ', ' + sat + '%, ' + light + '%, 0.12)';
+                ctx.lineWidth = 0.8;
+
+                ctx.beginPath();
+                ctx.moveTo(cx, bY - sz);
+                ctx.lineTo(cx + sz, bY);
+                ctx.lineTo(cx, bY + sz);
+                ctx.lineTo(cx - sz, bY);
+                ctx.closePath();
+                ctx.stroke();
+
+                ctx.beginPath();
+                ctx.moveTo(cx, bY - sz*0.6);
+                ctx.lineTo(cx + sz*0.6, bY);
+                ctx.lineTo(cx, bY + sz*0.6);
+                ctx.lineTo(cx - sz*0.6, bY);
+                ctx.closePath();
+                ctx.stroke();
+
+                var lx1 = 30,
+                    lx2 = w - 30;
+                ctx.beginPath();
+                ctx.moveTo(lx1, bY);
+                ctx.lineTo(lx1 + 20, bY);
+                ctx.stroke();
+                ctx.beginPath();
+                ctx.moveTo(lx2, bY);
+                ctx.lineTo(lx2 - 20, bY);
+                ctx.stroke();
+                ctx.restore();
+
+                // ---- 5. 缠绕纹样 ----
+                ctx.save();
+                var wrapX = w/2;
+                var wrapY = h/2 - 80;
+                var wrapW = 140;
+                var wrapH = 60;
+                ctx.strokeStyle = 'hsla(' + hue + ', ' + sat + '%, ' + light + '%, 0.06)';
+                ctx.lineWidth = 1.2;
+
+                for (var k = 0; k < 2; k++) {
+                    var offsetY = wrapY - 10 + k * 20;
+                    ctx.beginPath();
+                    for (var t = -1; t <= 1; t += 0.02) {
+                        var x1 = wrapX + t * wrapW;
+                        var y1 = offsetY + Math.sin(t * Math.PI * 1.5 + k * 0.8) * wrapH * 0.4;
+                        if (t === -1) ctx.moveTo(x1, y1);
+                        else ctx.lineTo(x1, y1);
+                    }
+                    ctx.stroke();
+                }
+                ctx.restore();
+
+                // ---- 6. 锁纹样 ----
+                ctx.save();
+                var lockSize = 18;
+                var lockPos = [
+                    { x: w - 50, y: 100, rot: 0 },
+                    { x: 50, y: h - 100, rot: Math.PI }
+                ];
+                ctx.strokeStyle = 'hsla(' + hue + ', ' + sat + '%, ' + light + '%, 0.08)';
+                ctx.lineWidth = 1.2;
+
+                lockPos.forEach(function(lp) {
+                    var lx = lp.x,
+                        ly = lp.y;
+                    ctx.beginPath();
+                    ctx.rect(lx - lockSize / 2, ly - lockSize / 4, lockSize, lockSize * 0.75);
+                    ctx.stroke();
+                    ctx.beginPath();
+                    ctx.arc(lx, ly - lockSize * 0.15, lockSize / 3, Math.PI, 0, false);
+                    ctx.stroke();
+                });
+                ctx.restore();
+
+                // ---- 7. 零散细线 ----
+                ctx.save();
+                ctx.strokeStyle = 'hsla(' + hue + ', ' + sat + '%, ' + light + '%, 0.04)';
+                ctx.lineWidth = 0.5;
+                for (var m = 0; m < 8; m++) {
+                    var x = 60 + Math.random() * (w - 120);
+                    var y = 80 + Math.random() * (h - 160);
+                    var len = 20 + Math.random() * 30;
+                    var ang = Math.random() * Math.PI;
+                    ctx.beginPath();
+                    ctx.moveTo(x, y);
+                    ctx.lineTo(x + Math.cos(ang) * len, y + Math.sin(ang) * len);
+                    ctx.stroke();
+                }
+                ctx.restore();
+            }
+
+            window.addEventListener('resize', function() {
+                clearTimeout(window._resizeTimer);
+                window._resizeTimer = setTimeout(resize, 100);
+            });
+            resize();
+        })();
+    </script>
+
+</body>
+</html>
