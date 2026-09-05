@@ -1,0 +1,864 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>秋季转校生竟然是我的青梅竹马</title>
+    <style>
+        /* ===== 导入字体 ===== */
+        @import url("https://fontsapi.zeoseven.com/100/main/result.css");
+
+        /* ===== 全局重置 ===== */
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        html, body {
+            width: 100%;
+            background: transparent;
+            font-family: 'PingFang SC', 'Microsoft YaHei', 'Helvetica Neue', sans-serif;
+        }
+
+        /* ============================================================
+           配色：继承状态栏 · 秋季金色毛玻璃 (35°)
+           ============================================================ */
+        :root {
+            --gold: hsl(35, 60%, 55%);
+            --gold-bright: hsl(35, 70%, 70%);
+            --gold-dim: hsla(35, 60%, 55%, 0.2);
+            --gold-glow: hsla(35, 60%, 55%, 0.06);
+            --bg-glass: hsla(240, 20%, 8%, 0.65);
+            --text-light: #ffffff;
+            --radius: 32px;
+            --blur: 16px;
+            --font: "Inter", "PingFang SC", "Microsoft YaHei", sans-serif;
+        }
+
+        /* ============================================================
+           第一层：欢迎卡片
+           ============================================================ */
+        .hero-card {
+            width: 100vw;
+            position: relative;
+            left: 50%;
+            transform: translateX(-50%);
+            aspect-ratio: 16 / 9;
+            overflow: hidden;
+            border-radius: 12px;
+            background: radial-gradient(ellipse at 30% 40%, #1a1410 0%, #0b0a08 100%);
+            box-shadow: 0 8px 40px rgba(0,0,0,0.6);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding: 1.2rem 1.5rem;
+            position: relative;
+        }
+
+        /* 3D 图片环 */
+        .scene, .a3d { display: grid; }
+        .scene {
+            perspective: 55em;
+            mask: linear-gradient(90deg, #0000, #000 12% 88%, #0000);
+            width: min(85%, 480px);
+            aspect-ratio: 1/1;
+            position: relative;
+            margin-bottom: 0.4rem;
+        }
+        .a3d {
+            place-self: center;
+            transform-style: preserve-3d;
+            animation: ry 28s linear infinite;
+            width: 100%;
+            height: 100%;
+        }
+        @keyframes ry { to { rotate: y 1turn; } }
+        .card {
+            --w: min(14vw, 130px);
+            --ba: 1turn / var(--n, 6);
+            grid-area: 1/1;
+            width: var(--w);
+            aspect-ratio: 7/10;
+            object-fit: cover;
+            border-radius: 1.2em;
+            backface-visibility: hidden;
+            transform: rotatey(calc(var(--i) * var(--ba))) translatez(calc(-1 * (0.5 * var(--w) + 0.5em) / tan(0.5 * var(--ba))));
+            box-shadow: 0 6px 30px rgba(0,0,0,0.55);
+            border: 1px solid var(--gold-dim);
+            transition: transform 0.3s, box-shadow 0.3s;
+            cursor: default;
+        }
+        .card:hover {
+            transform: rotatey(calc(var(--i) * var(--ba))) translatez(calc(-1 * (0.5 * var(--w) + 0.5em) / tan(0.5 * var(--ba)) - 18px));
+            box-shadow: 0 12px 50px var(--gold-dim);
+        }
+
+        /* 标题 — 秋季金色 */
+        .main-title {
+            font-size: clamp(1.4rem, 4vw, 3.2rem);
+            font-weight: 900;
+            letter-spacing: 0.06em;
+            text-align: center;
+            color: #ece4d9;
+            text-shadow: 0 0 40px var(--gold-dim), 0 4px 20px rgba(0,0,0,0.5);
+            user-select: none;
+            line-height: 1.2;
+        }
+        .main-title .highlight {
+            background: linear-gradient(135deg, #f7d9a6 0%, #e8c48a 30%, #d4a86a 70%, #c49a5a 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            font-size: 1.15em;
+            display: inline-block;
+        }
+        .sub-title {
+            font-size: clamp(0.5rem, 1.1vw, 0.85rem);
+            color: rgba(200,190,180,0.35);
+            letter-spacing: 0.4em;
+            margin-top: 0.05rem;
+            font-weight: 300;
+            text-transform: uppercase;
+            user-select: none;
+        }
+
+        /* 按钮 — 金色系 */
+        .btn-wrap {
+            filter: drop-shadow(-3px -3px 6px rgba(255,255,255,0.04));
+            transition: filter 0.25s ease, translate 0.25s ease;
+            padding: 6px 10px;
+            margin: -6px -10px;
+            cursor: pointer;
+            margin-top: 0.4rem;
+        }
+        .btn-wrap:hover {
+            filter: drop-shadow(0 0 10px var(--gold-dim));
+            translate: -3px -3px;
+        }
+        @property --c1 { syntax: "<color>"; inherits: false; initial-value: #3a2a1a; }
+        @property --c2 { syntax: "<color>"; inherits: false; initial-value: #5a4a2a; }
+        @property --ag { syntax: "<angle>"; inherits: false; initial-value: 135deg; }
+        .btn-squircle {
+            --c1: #3a2a1a; --c2: #5a4a2a; --ag: 135deg;
+            width: clamp(140px, 25vw, 260px);
+            height: clamp(44px, 6vh, 64px);
+            background-image: linear-gradient(var(--ag), var(--c1), var(--c2));
+            mask-image: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 80"><rect x="0" y="0" width="200" height="80" rx="40" ry="40" fill="black" /></svg>');
+            mask-size: cover;
+            mask-repeat: no-repeat;
+            position: relative;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: #f0ece8;
+            font-size: clamp(0.8rem, 1.6vw, 1.2rem);
+            font-weight: 700;
+            letter-spacing: 0.15em;
+            transition: --ag 0.25s ease, --c1 0.25s ease, --c2 0.25s ease;
+            text-shadow: 0 2px 12px rgba(0,0,0,0.3);
+            user-select: none;
+        }
+        .btn-squircle::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            background-color: rgba(255,255,255,0.05);
+            mask-image: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 80"><rect x="4" y="4" width="192" height="72" rx="36" ry="36" fill="black" stroke="black" stroke-width="4" /></svg>');
+            mask-size: cover;
+            mask-repeat: no-repeat;
+            z-index: 1;
+            transition: opacity 0.25s ease;
+            opacity: 1;
+        }
+        .btn-squircle:hover { --c1: #5a4a2a; --c2: #2a1a0a; --ag: 110deg; }
+        .btn-squircle:hover::before { opacity: 0; }
+        .btn-squircle .btn-text { position: relative; z-index: 2; pointer-events: none; }
+        .btn-squircle .btn-icon { position: relative; z-index: 2; font-size: 0.6em; margin-left: 0.3em; opacity: 0.6; pointer-events: none; }
+
+        /* ============================================================
+           第二层：过场动画（全屏覆盖）
+           ============================================================ */
+        #transition-overlay {
+            position: fixed;
+            top: 0; left: 0;
+            width: 100vw; height: 100vh;
+            z-index: 99999;
+            background: #000;
+            display: none;
+            justify-content: center;
+            align-items: center;
+            opacity: 0;
+            transition: opacity 0.6s ease;
+            pointer-events: none;
+        }
+        #transition-overlay.active {
+            display: flex;
+            opacity: 1;
+            pointer-events: auto;
+        }
+        #transition-overlay canvas {
+            width: 100%; height: 100%;
+            display: block;
+            background: #000;
+        }
+
+        .transition-text-container {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            pointer-events: none;
+            z-index: 10;
+            font-family: "Tiejili SC", "PingFang SC", sans-serif;
+        }
+
+        .transition-title {
+            font-size: clamp(2.8rem, 8vw, 5.5rem);
+            font-weight: 900;
+            color: #fff;
+            text-shadow: 0 0 60px var(--gold-dim);
+            letter-spacing: 0.15em;
+            opacity: 0;
+            transform: scale(1.05);
+            transition: opacity 1.2s ease, transform 1.2s ease;
+            margin-bottom: 0.2em;
+        }
+        .transition-title.show {
+            opacity: 1;
+            transform: scale(1);
+        }
+        .transition-title.fade-out {
+            opacity: 0;
+            transform: scale(0.95);
+        }
+
+        .transition-sub {
+            font-size: clamp(1.4rem, 3.5vw, 2.8rem);
+            font-weight: 700;
+            color: rgba(255,255,255,0.7);
+            text-shadow: 0 0 30px var(--gold-dim);
+            letter-spacing: 0.3em;
+            opacity: 0;
+            transform: translateY(12px);
+            transition: opacity 1s ease, transform 1s ease;
+            margin-top: 0.1em;
+        }
+        .transition-sub.show {
+            opacity: 1;
+            transform: translateY(0);
+        }
+        .transition-sub.fade-out {
+            opacity: 0;
+            transform: translateY(-8px);
+        }
+
+        .credit-scroll-wrap {
+            position: absolute;
+            bottom: 10%;
+            left: 0;
+            width: 100%;
+            display: flex;
+            justify-content: flex-end;
+            padding: 0 5%;
+            overflow: hidden;
+            opacity: 0;
+            transition: opacity 0.8s ease;
+        }
+        .credit-scroll-wrap.show {
+            opacity: 1;
+        }
+        .credit-scroll-wrap.fade-out {
+            opacity: 0;
+            transition: opacity 0.6s ease;
+        }
+
+        .credit-line {
+            font-family: "Tiejili SC", "PingFang SC", sans-serif;
+            font-size: clamp(0.5rem, 1.2vw, 0.9rem);
+            color: rgba(255,255,255,0.45);
+            line-height: 1.6;
+            text-align: right;
+            letter-spacing: 0.04em;
+            direction: rtl;
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: flex-end;
+            max-width: 80%;
+        }
+
+        .credit-char {
+            display: inline-block;
+            opacity: 0;
+            transform: translateX(8px);
+            animation: charReveal 0.5s ease forwards;
+        }
+        @keyframes charReveal {
+            0% { opacity: 0; transform: translateX(8px); }
+            100% { opacity: 0.8; transform: translateX(0); }
+        }
+
+        .transition-skip-hint {
+            position: absolute;
+            bottom: 2.5rem;
+            left: 50%;
+            transform: translateX(-50%);
+            color: rgba(255,255,255,0.10);
+            font-size: 0.6rem;
+            letter-spacing: 0.2em;
+            pointer-events: none;
+            opacity: 0;
+            transition: opacity 1s ease 3s;
+            font-family: 'PingFang SC', sans-serif;
+            z-index: 15;
+        }
+        .transition-skip-hint.show { opacity: 1; }
+
+        /* 响应式 */
+        @media (max-width: 480px) {
+            .hero-card { aspect-ratio: 4/3; border-radius: 8px; padding: 0.8rem 1rem; }
+            .scene { width: min(70%, 200px); }
+            .card { --w: min(18vw, 70px); }
+            .main-title { font-size: 1.2rem; }
+            .sub-title { font-size: 0.5rem; letter-spacing: 0.3em; }
+            .btn-squircle { width: clamp(110px, 40vw, 160px); height: clamp(38px, 5.5vh, 50px); font-size: 0.75rem; }
+            .credit-line { font-size: clamp(0.4rem, 1.6vw, 0.6rem); max-width: 92%; }
+        }
+        @media (prefers-reduced-motion: reduce) {
+            .a3d { animation-duration: 128s; }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- ============================================================
+    欢迎卡片
+    ============================================================ -->
+    <div class="hero-card" id="cardRoot">
+        <div class="scene" style="--n: 6;">
+            <div class="a3d" style="--n: 6;">
+                <img class="card" src="{{欢迎图_1}}" style="--i: 0" alt="" loading="eager" />
+                <img class="card" src="{{欢迎图_2}}" style="--i: 1" alt="" loading="eager" />
+                <img class="card" src="{{欢迎图_3}}" style="--i: 2" alt="" loading="eager" />
+                <img class="card" src="{{欢迎图_4}}" style="--i: 3" alt="" loading="eager" />
+                <img class="card" src="{{欢迎图_5}}" style="--i: 4" alt="" loading="eager" />
+                <img class="card" src="{{欢迎图_6}}" style="--i: 5" alt="" loading="eager" />
+            </div>
+        </div>
+
+        <div class="main-title">
+            秋季转校生<span class="highlight">竟然是</span>我的青梅竹马
+        </div>
+        <div class="sub-title">✦ 那年秋天 · 她推开了教室的门 ✦</div>
+
+        <div class="btn-wrap" id="enterBtn">
+            <div class="btn-squircle">
+                <span class="btn-text">开始故事</span>
+                <span class="btn-icon">✦</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- ============================================================
+    过场动画
+    ============================================================ -->
+    <div id="transition-overlay">
+        <canvas id="transitionCanvas"></canvas>
+
+        <div class="transition-text-container" id="transitionTextContainer">
+            <div class="transition-title" id="transitionTitle">三 年 的 水</div>
+            <div class="transition-sub" id="transitionSub">请多多评论</div>
+
+            <div class="credit-scroll-wrap" id="creditWrap">
+                <div class="credit-line" id="creditLine"></div>
+            </div>
+        </div>
+
+        <div class="transition-skip-hint" id="skipHint">— 点击任意处跳过 —</div>
+    </div>
+
+    <!-- ============================================================
+    外链数据容器（外链模式专用）
+    ============================================================ -->
+    <div id="welcome-data" style="display:none;">$1</div>
+
+    <script>
+        // ============================================================
+        // 1. 跳转函数
+        // ============================================================
+        async function switchOpening(swipeId) {
+            console.log('[欢迎页] 尝试跳转到索引:', swipeId);
+            try {
+                let messages;
+                try {
+                    messages = await getChatMessages?.('0', { include_swipe: true });
+                } catch (e) {
+                    const context = window.SillyTavern?.getContext?.();
+                    messages = context?.chat?.messages;
+                }
+                if (messages && messages.length > 0) {
+                    const userMessage = messages[0];
+                    if (userMessage && userMessage.swipes && userMessage.swipes.length > swipeId) {
+                        const targetSwipe = userMessage.swipes[swipeId];
+                        const setChatMessage = window.setChatMessage || window.SillyTavern?.getContext?.()?.setChatMessage;
+                        if (typeof setChatMessage === 'function') {
+                            await setChatMessage(targetSwipe, 0, { swipe_id: swipeId, refresh: 'display_and_render_current' });
+                            console.log('[欢迎页] 跳转成功（setChatMessage）');
+                            return;
+                        }
+                        if (typeof userMessage.setSwipe === 'function') {
+                            userMessage.setSwipe(swipeId);
+                            console.log('[欢迎页] 跳转成功（setSwipe）');
+                            return;
+                        }
+                    }
+                }
+            } catch (e) {
+                console.warn('[欢迎页] 方法1失败:', e);
+            }
+
+            try {
+                if (typeof window.parent.triggerSlash === 'function') {
+                    window.parent.triggerSlash('/trigger');
+                    console.log('[欢迎页] 跳转触发（triggerSlash）');
+                    return;
+                }
+                if (typeof window.parent.fillInput === 'function') {
+                    window.parent.fillInput('/trigger');
+                    console.log('[欢迎页] 跳转触发（fillInput）');
+                    return;
+                }
+                if (typeof window.triggerSlash === 'function') {
+                    window.triggerSlash('/trigger');
+                    console.log('[欢迎页] 跳转触发（本地triggerSlash）');
+                    return;
+                }
+            } catch (e) {
+                console.warn('[欢迎页] 备用跳转失败:', e);
+            }
+
+            console.warn('[欢迎页] 所有跳转方式均失败');
+        }
+
+        // ============================================================
+        // 2. 高度同步
+        // ============================================================
+        var heightSynced = false;
+
+        function syncHeightOnce() {
+            if (heightSynced) return;
+            heightSynced = true;
+            try {
+                var card = document.getElementById('cardRoot');
+                if (!card) return;
+                var height = card.offsetHeight + 4;
+                var frame = window.frameElement;
+                if (frame && frame.tagName === 'IFRAME') {
+                    frame.style.height = height + 'px';
+                    frame.style.minHeight = 'unset';
+                } else {
+                    var iframes = window.parent.document.querySelectorAll('iframe');
+                    for (var i = 0; i < iframes.length; i++) {
+                        var ifr = iframes[i];
+                        try {
+                            if (ifr.contentWindow === window) {
+                                ifr.style.height = height + 'px';
+                                ifr.style.minHeight = 'unset';
+                                break;
+                            }
+                        } catch (e) {}
+                    }
+                }
+            } catch (e) {}
+        }
+        window.addEventListener('load', function() { setTimeout(syncHeightOnce, 250); });
+        if (document.readyState === 'complete') { setTimeout(syncHeightOnce, 150); }
+
+        // ============================================================
+        // 3. 过场动画（WebGL2 Shader）
+        // ============================================================
+        var transitionLayer = document.getElementById('transition-overlay');
+        var canvas = document.getElementById('transitionCanvas');
+        var transitionTitle = document.getElementById('transitionTitle');
+        var transitionSub = document.getElementById('transitionSub');
+        var creditWrap = document.getElementById('creditWrap');
+        var creditLine = document.getElementById('creditLine');
+        var skipHint = document.getElementById('skipHint');
+
+        var gl, program, startTime = 0, elapsed = 0, animId = null;
+        var isTransitionPlaying = false;
+        var transitionDone = false;
+        var creditChars = [];
+
+        var creditText =
+            '本角色卡为作者"三年的水"免费分享的公益作品，仅供个人娱乐与创作交流使用。' +
+            '严禁任何形式的商业用途，包括转卖、收费下载、打包售卖或用于盈利性直播/视频。' +
+            '如通过付费渠道获得，请立即退款并举报贩卖者，维护创作者与您自身的权益。' +
+            '感谢您的支持与理解。—— 作者：三年的水。';
+
+        function prepareCreditChars() {
+            creditLine.innerHTML = '';
+            creditChars = [];
+            var chars = creditText.split('');
+            chars.forEach(function(ch) {
+                var span = document.createElement('span');
+                span.className = 'credit-char';
+                span.textContent = ch;
+                creditLine.appendChild(span);
+                creditChars.push(span);
+            });
+        }
+
+        var fragmentShaderSource = `#version 300 es
+        /*********
+        * made by Matthias Hurrle (@atzedent)
+        */
+        precision highp float;
+        out vec4 O;
+        uniform float time;
+        uniform vec2 resolution;
+        uniform vec2 move;
+        uniform vec2 wheel;
+        #define FC gl_FragCoord.xy
+        #define R resolution
+        #define T (time+113.+.2*wheel.y/MN)
+        #define S smoothstep
+        #define N normalize
+        #define MN min(R.x,R.y)
+        #define hue(a) (.5+.5*sin(3.14*(a)+vec3(1,2,3)))
+        #define LP vec3(1.+1.*sin(-T),2.-2.*cos(T),-3.-4.*sin(sin(T)))
+        vec3 render(vec2 uv);
+        void main() { O=vec4(render((FC-.5*R)/MN),1); } 
+        float smin(float a, float b, float k) {
+          k*=log(2.);
+          float x=b-a;
+          return a+x/(1.-exp2(x/k));
+        }
+        float box(vec3 p, vec3 s, float r) {
+          p=abs(p)-s+r;
+          return length(max(p,.0))+min(.0,max(max(p.x,p.y),p.z))-r;
+        }
+        float glow;
+        float map(vec3 p, bool g) {
+          float d=5e5;
+          if (g) {
+            d=length(p-LP+vec3(.2,.2,0))-.02;
+            glow+=.05/(.05+d*d*80.);
+          }
+          p.z-=T*3.5;
+          p=fract(p)-.5;
+          vec4 k=vec4(1,.05,.03,.1);
+          float r=1e-2;
+          return min(d,smin(
+            box(p,k.www,r),
+            min(
+              box(p,k.zxz,r),
+              min(box(p,k.xyz,r),box(p,k.yzx,r))
+            ),.01
+          ));
+        }
+        vec3 norm(vec3 p) {
+          float h=1e-3; vec2 k=vec2(-1,1);
+          return N(
+            k.xyy*map(p+k.xyy*h,false)+
+            k.yxy*map(p+k.yxy*h,false)+
+            k.yyx*map(p+k.yyx*h,false)+
+            k.xxx*map(p+k.xxx*h,false)
+          );
+        }
+        bool march(inout vec3 p, vec3 rd, out float dd, out float at) {
+          for (float i; i++<400.;) {
+            float d=map(p,true);
+            if (abs(d)<1e-3) return true;
+            if (d>100.) return false;
+            p+=rd*d;
+            dd+=d;
+            at+=.05*(.05/dd);
+          }
+        }
+        vec3 dir(vec2 uv, vec3 p, vec3 t, float z) {
+          vec3 up=vec3(0,1,0),
+          f=N(t-p),
+          r=N(cross(up,f)),
+          u=N(cross(f,r));
+          return mat3(r,u,f)*N(vec3(uv,z));
+        }
+        mat3 rotX(float a) {
+          float s=sin(a), c=cos(a);
+          return mat3(vec3(1,0,0),vec3(0,c,-s),vec3(0,s,c));
+        }
+        mat3 rotY(float a) {
+          float s=sin(a), c=cos(a);
+          return mat3(vec3(c,0,s),vec3(0,1,0),vec3(-s,0,c));
+        }
+        float rnd(float a) {
+          vec2 p=fract(a*vec2(12.9898,78.233));
+          p+=dot(p,p+34.56);
+          return fract(p.x*p.y);
+        }
+        float curve(float t, float e) {
+          t/=e;
+          return mix(
+            rnd(floor(t)),
+            rnd(floor(t)+1.),
+            pow(S(.0,1.,fract(t)),10.)
+          );
+        }
+        vec3 org() {
+          float k=-.2*sin(sin(T)), drama=3.14*curve(T*.2,2.);
+          vec2 m=move/R;
+          vec3 ro=vec3(0,0,.1);
+          ro*=rotX(m.y*6.3-k-.1+drama/12.)*rotY(m.x*6.3-.45-sin(cos(T*.2-k+drama)));
+          return ro;
+        }
+        float shadow(vec3 p, vec3 lp) {
+          float shd=1., maxd=length(lp-p);
+          vec3 l=N(lp-p);
+          for (float i=1e-3; i<maxd;) {
+            float d=map(p+l*i,false);
+            if (d<1e-3) {
+              shd=.0;
+              break;
+            }
+            shd=min(shd,64.*d/i);
+            i+=d;
+          }
+          return shd;
+        }
+        float calcAO(vec3 p, vec3 n) {
+          float occ=.0, sca=1.;
+          for (float i=.0; i<5.; i++) {
+            float
+            h=.01+i*.09,
+            d=map(p+h*n,false);
+            occ+=(h-d)*sca;
+            sca*=.55;
+            if (occ>.35) break;
+          }
+          return clamp(1.-3.*occ,.0,1.)*(.5+.5*n.y);
+        }
+        vec3 render(vec2 uv) {
+          vec3 col=vec3(0),
+          p=org(), ro=p,
+          rd=dir(uv,p,vec3(0),1.);
+          float dd, at;
+          if (march(p,rd,dd,at)) {
+            vec3 n=norm(p), lp=LP, l=N(lp-p),
+            e=N(ro-p), r=reflect(-l,n);
+            float ld=distance(lp,p), atten=1./(1.+ld*.25+ld*ld*.125),
+            ao=calcAO(p,n), shd=shadow(p+n*5e-2,lp);
+            col+=shd*atten*vec3(.1,.095,.09)+clamp(dot(l,n),.0,1.)*atten*ao*shd;
+            col+=pow(max(.0,dot(r,e)),8.)*atten*ao*shd;
+            col+=clamp(dot(-rd,l),.0,1.)*ao*atten*1.2;
+          }
+          float k=mix(max(.2,1.-distance(LP,ro)),.25,fract(sin(dot(ro,vec3(12.9898,78.233,156.345)))*345678.)),
+          f=S(1.,.0,clamp(dd/200.,.0,1.));
+          vec3 tint=vec3(1.2,.95,.9);
+          col+=tint*at*k;
+          col+=hue(3.14*k+f*f*f)*k*k;
+          col=mix(col,vec3(1,.95,.9),S(.0,50.,distance(p,ro)));
+          col=tanh(col*col);
+          col=sqrt(col);
+          col=mix(sqrt(col)*1.2,col,clamp(S(-.1,.2,dot(uv,uv)),.0,1.));
+          col+=tanh(tint*glow);
+          vec2 c=FC/R;
+          c*=1.-c.yx;
+          float vig=c.x*c.y*25.;
+          vig=pow(vig,.25);
+          col*=vig;
+          return col;
+        }`;
+
+        function initTransitionShader() {
+            try {
+                var gl_ = canvas.getContext('webgl2');
+                if (!gl_) return false;
+                gl = gl_;
+                var vs = gl.createShader(gl.VERTEX_SHADER);
+                gl.shaderSource(vs, '#version 300 es\nprecision highp float;\nin vec4 position;\nvoid main(){ gl_Position=position; }');
+                gl.compileShader(vs);
+                var fs = gl.createShader(gl.FRAGMENT_SHADER);
+                gl.shaderSource(fs, fragmentShaderSource);
+                gl.compileShader(fs);
+                if (!gl.getShaderParameter(fs, gl.COMPILE_STATUS)) return false;
+                program = gl.createProgram();
+                gl.attachShader(program, vs);
+                gl.attachShader(program, fs);
+                gl.linkProgram(program);
+                if (!gl.getProgramParameter(program, gl.LINK_STATUS)) return false;
+                var vertices = new Float32Array([-1,1,-1,-1,1,1,1,-1]);
+                var buffer = gl.createBuffer();
+                gl.bindBuffer(gl.ARRAY_BUFFER, buffer);
+                gl.bufferData(gl.ARRAY_BUFFER, vertices, gl.STATIC_DRAW);
+                var posLoc = gl.getAttribLocation(program, 'position');
+                gl.enableVertexAttribArray(posLoc);
+                gl.vertexAttribPointer(posLoc, 2, gl.FLOAT, false, 0, 0);
+                program.uniforms = {
+                    resolution: gl.getUniformLocation(program, 'resolution'),
+                    time: gl.getUniformLocation(program, 'time'),
+                    move: gl.getUniformLocation(program, 'move'),
+                    wheel: gl.getUniformLocation(program, 'wheel')
+                };
+                resizeTransitionCanvas();
+                return true;
+            } catch(e) { return false; }
+        }
+
+        function resizeTransitionCanvas() {
+            var rect = transitionLayer.getBoundingClientRect();
+            canvas.width = rect.width * window.devicePixelRatio;
+            canvas.height = rect.height * window.devicePixelRatio;
+            canvas.style.width = rect.width + 'px';
+            canvas.style.height = rect.height + 'px';
+            if (gl) gl.viewport(0, 0, canvas.width, canvas.height);
+        }
+
+        function renderTransitionFrame(now) {
+            if (!isTransitionPlaying) return;
+            if (!startTime) startTime = now;
+            elapsed = (now - startTime) / 1000;
+            if (gl && program) {
+                gl.clearColor(0,0,0,1);
+                gl.clear(gl.COLOR_BUFFER_BIT);
+                gl.useProgram(program);
+                gl.uniform2f(program.uniforms.resolution, canvas.width, canvas.height);
+                gl.uniform1f(program.uniforms.time, elapsed);
+                gl.uniform2f(program.uniforms.move, 0, 0);
+                gl.uniform2f(program.uniforms.wheel, 0, 0);
+                gl.drawArrays(gl.TRIANGLE_STRIP, 0, 4);
+            }
+            animId = requestAnimationFrame(renderTransitionFrame);
+        }
+
+        function startTextSequence() {
+            transitionTitle.classList.remove('show', 'fade-out');
+            transitionSub.classList.remove('show', 'fade-out');
+            creditWrap.classList.remove('show', 'fade-out');
+
+            creditChars.forEach(function(el) {
+                el.style.opacity = '0';
+                el.style.transform = 'translateX(8px)';
+                el.style.animation = 'none';
+            });
+
+            clearTimeout(titleTimer);
+            clearTimeout(subTimer);
+            clearTimeout(creditTimer);
+            clearTimeout(fadeTimer);
+
+            setTimeout(function() {
+                transitionTitle.classList.add('show');
+            }, 100);
+
+            setTimeout(function() {
+                transitionTitle.classList.remove('show');
+                transitionTitle.classList.add('fade-out');
+            }, 1600);
+
+            setTimeout(function() {
+                transitionSub.classList.add('show');
+            }, 2000);
+
+            setTimeout(function() {
+                creditWrap.classList.add('show');
+                creditChars.forEach(function(el, index) {
+                    var delay = index * 0.035;
+                    setTimeout(function() {
+                        el.style.opacity = '0.8';
+                        el.style.transform = 'translateX(0)';
+                    }, delay * 1000);
+                });
+            }, 3500);
+
+            setTimeout(function() {
+                transitionSub.classList.remove('show');
+                transitionSub.classList.add('fade-out');
+            }, 9000);
+
+            setTimeout(function() {
+                creditWrap.classList.add('fade-out');
+                transitionTitle.style.opacity = '0';
+                transitionTitle.style.transform = 'scale(0.95)';
+                skipHint.classList.remove('show');
+            }, 9200);
+
+            setTimeout(function() {
+                finishTransition();
+            }, 10200);
+        }
+
+        var titleTimer, subTimer, creditTimer, fadeTimer;
+
+        function startTransition() {
+            if (transitionDone) return;
+            transitionDone = true;
+            transitionLayer.classList.add('active');
+
+            if (!gl) {
+                if (!initTransitionShader()) { finishTransition(); return; }
+            }
+            resizeTransitionCanvas();
+            window.addEventListener('resize', resizeTransitionCanvas);
+            if (animId) cancelAnimationFrame(animId);
+            startTime = 0;
+            elapsed = 0;
+            isTransitionPlaying = true;
+            renderTransitionFrame(performance.now());
+
+            prepareCreditChars();
+
+            setTimeout(function() {
+                skipHint.classList.add('show');
+            }, 2200);
+
+            startTextSequence();
+        }
+
+        function finishTransition() {
+            if (!isTransitionPlaying && transitionDone) return;
+            isTransitionPlaying = false;
+            if (animId) { cancelAnimationFrame(animId);
+                animId = null; }
+            transitionLayer.classList.remove('active');
+            transitionTitle.classList.remove('show', 'fade-out');
+            transitionSub.classList.remove('show', 'fade-out');
+            creditWrap.classList.remove('show', 'fade-out');
+            skipHint.classList.remove('show');
+
+            console.log('[过场] 结束，调用 switchOpening(1)');
+            switchOpening(1);
+
+            transitionDone = true;
+        }
+
+        transitionLayer.addEventListener('click', function() {
+            if (isTransitionPlaying) finishTransition();
+        });
+
+        document.getElementById('enterBtn').addEventListener('click', function(e) {
+            e.stopPropagation();
+            if (this.dataset.triggered === 'true') return;
+            this.dataset.triggered = 'true';
+            startTransition();
+        });
+
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Enter') {
+                var btn = document.getElementById('enterBtn');
+                if (btn && btn.dataset.triggered !== 'true') { btn.click(); }
+            }
+        });
+
+        window.addEventListener('pagehide', function() {
+            if (animId) cancelAnimationFrame(animId);
+            isTransitionPlaying = false;
+        });
+
+        console.log('[欢迎页·外链适配版] 已加载 — 秋季转校生竟然是我的青梅竹马');
+        console.log('[流程] 欢迎页(索引0) → 点击「开始故事」→ 过场动画(10秒) → switchOpening(1) → 索引1');
+    </script>
+
+</body>
+</html>
